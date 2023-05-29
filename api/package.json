@@ -1,0 +1,19 @@
+{
+  "name": "TeamTasker",
+  "version": "1.0.0",
+  "description": "TeamTasker is a web-based application that aims to streamline task management and collaboration within teams.",
+  "main": "app.js",
+  "scripts": {
+    "server": "nodemon app.js"
+  },
+  "repository": "https://github.com/lbihani9/TeamTasker",
+  "author": "lbihani9",
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^3.12.0",
+    "graphql": "^16.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
