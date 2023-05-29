@@ -1,5 +1,5 @@
 {
-  "name": "TeamTasker",
+  "name": "api",
   "version": "1.0.0",
   "description": "TeamTasker is a web-based application that aims to streamline task management and collaboration within teams.",
   "main": "app.js",
