@@ -2,12 +2,13 @@
 
 # api
 /api/node_modules
-
+/api/yarn.lock
 
 # frontend
 /frontend/node_modules
 /frontend/.pnp
 /frontend/.pnp.js
+/frontend/yarn.lock
 
 # testing
 /frontent/coverage
