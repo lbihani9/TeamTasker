@@ -1,7 +1,5 @@
-import * as dotenv from 'dotenv';
-dotenv.config();
-
-import sequelize from './db/index.js';
+require('dotenv').config();
+const { sequelize } = require('./db');
 
 
 sequelize.sync();

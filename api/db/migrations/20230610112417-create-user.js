@@ -1,13 +1,12 @@
 'use strict';
 
-/** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
     await queryInterface.createTable('users', {
       id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.UUID,
+        defaultValue: Sequelize.UUIDV4,
         primaryKey: true,
-        autoIncrement: true,
       },
       name: {
         type: Sequelize.STRING,
@@ -30,6 +29,14 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING,
         allowNull: true
+      },
+      createdAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
+      },
+      updatedAt: {
+        type: Sequelize.DATE,
+        defaultValue: Sequelize.NOW
       }
     });
   },
@@ -37,4 +44,4 @@ module.exports = {
   async down (queryInterface, Sequelize) {
     await queryInterface.dropTable('users')
   }
-};
+}
