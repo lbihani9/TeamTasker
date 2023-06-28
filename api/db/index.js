@@ -1,4 +1,4 @@
-const { Sequelize, DataTypes } = require('sequelize');
+const { Sequelize } = require('sequelize');
 
 // https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
 
@@ -15,10 +15,10 @@ const sequelize = new Sequelize(
       freezeTableName: true, // stops auto-pluralization by sequelize
       timestamps: true, // automatically adds createdAt, and updatedAt fields to the models
       underscored: false,
-    }
-  },
+    },
+  }
 );
 
 module.exports = {
-  sequelize
-}
+  sequelize,
+};
