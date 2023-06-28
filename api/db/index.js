@@ -1,4 +1,6 @@
-import { Sequelize, DataTypes } from 'sequelize';
+const { Sequelize } = require('sequelize');
+
+// https://sequelize.org/api/v6/class/src/sequelize.js~sequelize#instance-constructor-constructor
 
 const sequelize = new Sequelize(
   process.env.DB_DATABASE,
@@ -8,14 +10,15 @@ const sequelize = new Sequelize(
     host: process.env.DB_IP,
     port: process.env.DB_PORT,
     dialect: 'mysql',
-    pool: { max: 5, min: 0, idle: 10000 },
     benchmark: true, // logs query execution time.
     define: {
-      freezeTableName: true,
-      timestamps: true,
+      freezeTableName: true, // stops auto-pluralization by sequelize
+      timestamps: true, // automatically adds createdAt, and updatedAt fields to the models
       underscored: false,
-    }
-  },
+    },
+  }
 );
 
-export default sequelize;
+module.exports = {
+  sequelize,
+};

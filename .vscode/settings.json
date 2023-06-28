@@ -1,0 +1,7 @@
+{
+  "eslint.workingDirectories": [
+    "./TeamTasker"
+  ],
+  "prettier.singleQuote": true,
+  "prettier.jsxSingleQuote": true
+}
