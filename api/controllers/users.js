@@ -2,7 +2,7 @@ const { db } = require('../db/models/models');
 
 const getUser = async (req, res) => {
   try {
-    const user = db.models.Users.findByPk(req.params.id);
+    const user = await db.models.Users.findByPk(req.params.id);
     res.status(200).json({
       data: {
         user,
