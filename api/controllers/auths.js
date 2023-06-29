@@ -1,5 +1,7 @@
 const { default: axios } = require('axios');
 const { v4: uuidv4 } = require('uuid');
+const { db } = require('../db/models/models');
+const { redisClient } = require('../app');
 
 const login = async (req, res) => {
   try {
@@ -36,7 +38,6 @@ const oAuthCallback = async (req, res) => {
    * }
    */
   const { code } = req.query;
-
   const client_id = process.env.GOOGLE_CLIENT_ID;
   const redirect_uri = process.env.GOOGLE_REDIRECT_URI;
   const client_secret = process.env.GOOGLE_CLIENT_SECRET;
@@ -79,12 +80,54 @@ const oAuthCallback = async (req, res) => {
     const userInfo = await axios.get(
       `https://www.googleapis.com/oauth2/v3/userinfo?alt=json&access_token=${access_token}`
     );
-    const sessionId = uuidv4();
+    const { email, name, picture, given_name } = userInfo;
 
-    req.session.session_id = sessionId;
+    const user = db.models.Users.findOne({ where: { email } });
+    if (!user) {
+      /**
+       * uuids are very large (36 characters) and we only want to use it to make usernames unique.
+       * We can use the first 9 characters of uuidv4 because the probability of two uuids having same
+       * initial 9 characters is infinitesimally small, so we're good to go.
+       */
+      const usernameUUID = uuidv4().split('-')[0];
+      user = await db.models.Users.create({
+        email,
+        name,
+        username: `${given_name} #${usernameUUID}`,
+        avatar: picture,
+      });
+    }
 
-    res.cookie('session_id', sessionId);
+    // Restricting to one session per user.
+    const session = db.models.Session.findOne({ where: { email } });
+    if (session) {
+      const key = `session:${session.sessionId}`;
+      redisClient.del(key, (err, reply) => {
+        if (err) {
+          console.log(err);
+          throw new Error(`Couldn't delete previous session with key = ${key}`);
+        }
+      });
+
+      await session.destroy();
+    }
+
+    await db.models.sessions.create({
+      email,
+      sessionId: req.sessionID,
+      expiresIn: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+    });
+
+    req.session.data = {
+      email,
+      id: user.id,
+      username: user.username,
+      name: user.name,
+    };
+
     res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+
+    // TODO: Send email to notify about login attempt.
   } catch (error) {
     console.log('Google OAuth login failed: ', error);
     res.status(401).json({
@@ -97,7 +140,48 @@ const oAuthCallback = async (req, res) => {
   }
 };
 
-const logout = async (req, res) => {};
+const logout = async (req, res) => {
+  try {
+    
+    /**
+     * We should not try to delete the entry from sessions table for for followin reason:
+     * We don't have session id, so we can't actually identify this person. Ideally, there
+     * should be a middleware that would redirect the user back to login route if req.session.data isn't
+     * present in the request. (This restriction is released for /login and /google/callback routes).
+     */
+    if (!req.session.data) {
+      res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+      return;
+    }
+
+    const { email } = req.session.data;
+
+    const user = db.models.Users.findOne({ where: { email } });
+    if (!user) {
+      // this case is possible if user deleted their account, but for some reason we couldn't
+      // invalidate the cache.
+      res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+      return;
+    }
+
+    const session = db.models.Sessions.findOne({ where: { email }});
+    if (session) {
+      await session.destroy();
+    }
+
+    const key = `session:${req.sessionID}`;
+    redisClient.del(key, (err, reply) => {
+      if (err) {
+        console.log(err);
+      }
+    });
+
+    res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+  } catch (error) {
+    console.log(err);
+    res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+  }
+};
 
 module.exports = {
   login,
