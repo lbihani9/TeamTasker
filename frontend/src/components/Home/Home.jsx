@@ -1,16 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react'
+import axios from 'axios';
 
-export const Home = () => {
+function Home() {
+  useEffect(() => {
+    axios.get('/api/v1/users')
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }, []);
+
   return (
-    <div
-      style={{
-        height: '100vh',
-        width: '100vw'
-      }}
-    >
-      <button>
-        Login
-      </button>
-    </div>
-  );
+    <div>Home</div>
+  )
 }
+
+export default Home

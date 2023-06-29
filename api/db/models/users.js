@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const { sequelize } = require('..');
 
 const Users = sequelize.define('users', {
   id: {
@@ -36,10 +37,10 @@ const Users = sequelize.define('users', {
   avatar: {
     type: DataTypes.STRING,
     allowNull: true,
-  },
-  validate: {
-    isUrl: true,
-    notEmpty: true, // don't allow empty strings
+    validate: {
+      isUrl: true,
+      notEmpty: true, // don't allow empty strings
+    },
   },
 });
 
