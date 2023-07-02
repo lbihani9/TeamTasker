@@ -7,7 +7,7 @@ const db = {
 db.sequelize = sequelize;
 
 db.models.Users = require('./users').Users;
-db.models.Sessions = require('./auths').Sessions;
+db.models.Sessions = require('./sessions').Sessions;
 
 module.exports = {
   db,

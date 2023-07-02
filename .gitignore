@@ -4,6 +4,8 @@
 /api/node_modules
 /api/yarn.lock
 /api/.env
+redis
+mysql
 
 # frontend
 /frontend/node_modules

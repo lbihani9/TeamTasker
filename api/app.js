@@ -3,8 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const session = require('express-session');
-const redis = require('redis');
-const RedisStore = require('connect-redis').default;
+const { redisStore } = require('./redis');
 const { sequelize } = require('./db');
 const { router: v1Router } = require('./routers/routers');
 const { authRouter } = require('./routers/auths');
@@ -19,23 +18,6 @@ app.use(
     origin: 'http://localhost:3000',
   })
 );
-
-const redisURL = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_IP}:${process.env.REDIS_PORT}`;
-const redisClient = redis.createClient({
-  url: redisURL,
-});
-
-redisClient
-  .connect()
-  .then(() => console.log(`Redis server is listening on ${redisURL}`))
-  .catch((err) =>
-    console.log('Could not establish connection with redis' + err)
-  );
-
-const redisStore = new RedisStore({
-  client: redisClient,
-  prefix: 'session:',
-});
 
 app.use(
   session({
@@ -53,10 +35,6 @@ app.use(
 );
 
 sequelize.sync();
-
-module.exports = {
-  redisClient
-}
 
 app.use('/auth', authRouter);
 
