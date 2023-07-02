@@ -1,37 +1,12 @@
-import React, { useEffect } from 'react'
-import axios from 'axios';
+import React from 'react';
+import Navbar from './Navbar';
 
-function Home() {
-  useEffect(() => {
-    axios.get('/api/v1/users')
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }, []);
-
-  const handleLogout = () => {
-    axios.get('/auth/logout')
-    .then(res => {
-      console.log(res);
-    })
-    .catch(err => {
-      console.log(err);
-    })
-  }
-
+const Home = () => {
   return (
-    <div>
-      Home
-      <button
-        onClick={handleLogout}
-      >
-        Logout
-      </button>
-    </div>
-  )
-}
+    <>
+      <Navbar />
+    </>
+  );
+};
 
-export default Home
+export default Home;
