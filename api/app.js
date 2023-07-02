@@ -41,12 +41,22 @@ app.use(
   session({
     store: redisStore,
     saveUninitialized: false,
-    secret: 'very-very-secret',
+    secret: process.env.SESSION_SECRET,
     resave: false,
+    cookie: {
+      path: '/', 
+      httpOnly: true, 
+      secure: false, 
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds 
+    }
   })
 );
 
 sequelize.sync();
+
+module.exports = {
+  redisClient
+}
 
 app.use('/auth', authRouter);
 

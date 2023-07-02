@@ -12,8 +12,25 @@ function Home() {
     })
   }, []);
 
+  const handleLogout = () => {
+    axios.get('/auth/logout')
+    .then(res => {
+      console.log(res);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
   return (
-    <div>Home</div>
+    <div>
+      Home
+      <button
+        onClick={handleLogout}
+      >
+        Logout
+      </button>
+    </div>
   )
 }
 

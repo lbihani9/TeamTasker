@@ -6,7 +6,7 @@ function Login() {
   const handleClick = (e) => {
     axios.get('/auth/login')
     .then(res => {
-      window.location.href = res.data.url;
+      window.location.href = res.data.data.url;
     })
     .catch(err => {
       console.log(err);
