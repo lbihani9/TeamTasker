@@ -3,6 +3,7 @@ import TeamTaskerLogo from '../../assets/TeamTasker-4.png';
 import Grid from '@mui/material/Grid';
 import { Paper } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
+import axios from 'axios';
 
 const Home = props => {
   const [randomBgColor, setRandomBgColor] = useState('#F5C5BE');
@@ -13,12 +14,37 @@ const Home = props => {
     const interval = setInterval(() => {
       const index = Math.floor(Math.random() * colors.length);
       setRandomBgColor(colors[index]);
-    }, 200000); // 20 seconds
+    }, 10000); // 10 seconds
 
     return () => {
       clearInterval(interval);
     };
   }, []);
+
+  useEffect(() => {
+    getLoginStatus();
+    return () => {};
+  }, []);
+
+  const handleLogIn = async () => {
+    try {
+      const { data } = await axios.get(`/auth/login`);
+      window.location.href = data.data.url;
+    } catch (err) {
+      console.log(err);
+      // TODO: Toast notification
+    }
+  }
+
+  const getLoginStatus = async () => {
+    try {
+      const { data } = await axios.get(`/auth/login-status`);
+      console.log(data);
+    } catch (err) {
+      console.log(err);
+      // TODO: Toast notification
+    }
+  }
 
   return (
     <Grid
@@ -72,6 +98,7 @@ const Home = props => {
               transform: 'scale(1.01)',
             },
           }}
+          onClick={handleLogIn}
         >
           <GoogleIcon color='error' /> &nbsp; Continue with Google
         </Paper>
