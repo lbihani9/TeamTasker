@@ -1,3 +1,9 @@
+@import url('https://fonts.googleapis.com/css2?family=League+Gothic&family=Montserrat&display=swap');
+
 * {
   box-sizing: border-box;
+}
+
+body {
+  margin: 0;
 }
