@@ -60,7 +60,6 @@ const Home = props => {
             position: 'absolute',
             top: '40vh',
             left: '70vw',
-            borderRadius: '6px',
             borderRadius: '2rem',
             display: 'flex',
             alignItems: 'center',
