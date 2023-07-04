@@ -1,3 +1,4 @@
+![TeamTasker-4](https://github.com/lbihani9/TeamTasker/assets/49104508/bfbec681-3126-4a45-8ed8-036fee71cb36)
 # TeamTasker
 TeamTasker is a web-based application that aims to streamline task management and collaboration within teams.
 
