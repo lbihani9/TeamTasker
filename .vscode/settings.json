@@ -3,5 +3,10 @@
     "./TeamTasker"
   ],
   "prettier.singleQuote": true,
-  "prettier.jsxSingleQuote": true
+  "prettier.jsxSingleQuote": true,
+  "prettier.bracketSpacing": true,
+  "prettier.trailingComma": "es5",
+  "prettier.printWidth": 80,
+  "prettier.arrowParens": "avoid",
+  "prettier.singleAttributePerLine": true
 }

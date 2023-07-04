@@ -169,8 +169,56 @@ const logout = async (req, res) => {
   }
 };
 
+const getLoginStatus = async (req, res) => {
+  try {
+    let status = false;
+
+    if (!req.session.email) {
+      return res.status(200).json({
+        data: {
+          status
+        }
+      });
+    }
+
+    const session = await db.models.Sessions.findOne({
+      where: {
+        email: req.session.email
+      }
+    });
+
+    if (!session) {
+      return res.status(200).json({
+        data: {
+          status
+        }
+      });
+    }
+
+    status = true;
+    res.status(200).json({
+      data: {
+        status,
+        info: {
+          email: req.session.email,
+          username: req.session.username,
+          name: req.session.name
+        }
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      errors: [
+        err.message
+      ]
+    })
+  }
+}
+
 module.exports = {
   login,
   logout,
   oAuthCallback,
+  getLoginStatus
 };

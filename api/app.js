@@ -7,6 +7,7 @@ const { redisStore } = require('./redis');
 const { sequelize } = require('./db');
 const { router: v1Router } = require('./routers/routers');
 const { authRouter } = require('./routers/auths');
+const { validateSession } = require('./middlewares/auth');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -38,7 +39,7 @@ sequelize.sync();
 
 app.use('/auth', authRouter);
 
-app.use('/api/v1', v1Router);
+app.use('/api/v1', validateSession, v1Router);
 
 app.listen(process.env.APP_PORT, () => {
   console.log(`Express server is listening on port ${process.env.APP_PORT}`);

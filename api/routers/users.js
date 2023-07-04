@@ -4,13 +4,13 @@ const {
   getUser,
   patchUser,
   deleteUser,
-  getUsers
+  getUsers,
 } = require('../controllers/users');
 
-userRouter.get(``, getUsers);
-userRouter.get(`:id`, getUser);
-userRouter.patch(`:id`, patchUser);
-userRouter.delete(`:id`, deleteUser);
+userRouter.get('', getUsers);
+userRouter.get(':id', getUser);
+userRouter.patch(':id', patchUser);
+userRouter.delete(':id', deleteUser);
 
 module.exports = {
   userRouter,

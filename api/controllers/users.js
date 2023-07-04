@@ -20,19 +20,15 @@ const patchUser = async (req, res) => {};
 
 const deleteUser = async (req, res) => {};
 
-const getUsers = async(req, res) => {
-  console.log(req.session);
-  console.log(req.sessionID);
-  console.log(req.session.id);
-
+const getUsers = async (req, res) => {
   res.status(200).json({
-    data: []
+    data: [],
   });
-}
+};
 
 module.exports = {
   getUser,
   patchUser,
   deleteUser,
-  getUsers
+  getUsers,
 };

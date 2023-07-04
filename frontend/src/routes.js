@@ -1,27 +1,21 @@
 import React from 'react';
 import { Navigate, Route, Routes } from 'react-router-dom';
-import Login from './components/Login';
 import Home from './components/Home/Home';
+import UserDashboard from './components/UserDashboard/UserDashboard';
 
 export const Routing = () => {
-
   return (
     <Routes>
-      <Route 
+      <Route
         exact
-        path="/" 
-        element={<Navigate to="/login" />} 
+        path='/'
+        element={<Home />}
       />
 
       <Route 
-        exact
-        path="/login" 
-        element={<Login />} 
-      />
-      <Route 
-        path="/home" 
-        element={<Home />} 
+        path='/home'
+        element={<UserDashboard />}
       />
     </Routes>
   );
-}
+};
