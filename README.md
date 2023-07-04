@@ -17,3 +17,5 @@ TeamTasker is a web-based application that aims to streamline task management an
 2. **Backend:** Node.js, REST, Redis, MySQL, OAuth2.0
 
 Link to the Design doc: https://www.notion.so/TeamTasker-12047b1480f0422f8d1b4feb6149038e
+
+**Note:** Still in development mode.
