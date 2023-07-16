@@ -2,10 +2,11 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
 const Users = sequelize.define('users', {
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
+    allowNull: false,
   },
   name: {
     type: DataTypes.STRING,

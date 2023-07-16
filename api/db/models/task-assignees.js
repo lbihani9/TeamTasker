@@ -2,24 +2,25 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
 const TaskAssignees = sequelize.define('taskAssignees', {
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
+    allowNull: false,
   },
   taskId: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'tasks',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'tasks',
     },
     allowNull: false,
   },
   assignee: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'users',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'users',
     },
     allowNull: false,
   },

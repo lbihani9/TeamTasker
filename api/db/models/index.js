@@ -148,6 +148,36 @@ db.models.Tasks.hasMany(db.models.TaskAssignees, {
   as: 'Assignees',
 });
 
+db.models.OrganizationMembers.belongsTo(db.models.Organizations, {
+  foreignKey: 'organizationId',
+  as: 'Organization',
+});
+
+db.models.OrganizationMembers.belongsTo(db.models.Users, {
+  foreignKey: 'userId',
+  as: 'User',
+});
+
+db.models.OrganizationMembers.belongsTo(db.models.Roles, {
+  foreignKey: 'roleId',
+  as: 'Role',
+});
+
+db.models.Organizations.hasMany(db.models.OrganizationMembers, {
+  foreignKey: 'organizationId',
+  as: 'OrganizationMembers',
+});
+
+db.models.Users.hasMany(db.models.OrganizationMembers, {
+  foreignKey: 'userId',
+  as: 'OrganizationMembers',
+});
+
+db.models.Roles.hasMany(db.models.OrganizationMembers, {
+  foreignKey: 'roleId',
+  as: 'OrganizationMembers',
+});
+
 module.exports = {
   db,
 };

@@ -2,34 +2,39 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
 const TeamMembers = sequelize.define('teamMembers', {
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
+    allowNull: false,
   },
   teamId: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'teams',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'teams',
     },
     allowNull: false,
   },
   userId: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'users',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'users',
     },
     allowNull: false,
   },
   roleId: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'roles',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'roles',
     },
     allowNull: false,
+  },
+  hasAccess: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 });
 

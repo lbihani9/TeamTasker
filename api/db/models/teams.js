@@ -3,9 +3,10 @@ const { sequelize } = require('..');
 
 const Teams = sequelize.define('teams', {
   id: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
+    allowNull: false,
   },
   name: {
     type: DataTypes.STRING,
@@ -15,10 +16,10 @@ const Teams = sequelize.define('teams', {
     },
   },
   organizationId: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'organizations',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'organizations',
     },
     allowNull: false,
   },

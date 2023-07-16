@@ -2,10 +2,11 @@ const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
 const Tasks = sequelize.define('tasks', {
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
     primaryKey: true,
+    allowNull: false,
   },
   name: {
     type: DataTypes.STRING,
@@ -25,10 +26,10 @@ const Tasks = sequelize.define('tasks', {
     defaultValue: 'created',
   },
   createdBy: {
-    type: DataTypes.UUID,
-    foreignKey: {
-      referencedColumnName: 'uuid',
-      referencedTable: 'users',
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'users',
     },
     allowNull: false,
   },

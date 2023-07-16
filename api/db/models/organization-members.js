@@ -1,31 +1,43 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
-const ProjectTasks = sequelize.define('projectTasks', {
+const OrganizationMembers = sequelize.define('organizationMembers', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  taskId: {
+  organizationId: {
     type: DataTypes.INTEGER,
     references: {
       key: 'id',
-      model: 'tasks',
+      model: 'organizations',
     },
     allowNull: false,
   },
-  projectId: {
+  userId: {
     type: DataTypes.INTEGER,
     references: {
       key: 'id',
-      model: 'projects',
+      model: 'users',
     },
     allowNull: false,
+  },
+  roleId: {
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'roles',
+    },
+    allowNull: false,
+  },
+  hasAccess: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: true,
   },
 });
 
 module.exports = {
-  ProjectTasks,
+  OrganizationMembers,
 };
