@@ -1,7 +1,7 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
-const Users = sequelize.define('users', {
+const Organizations = sequelize.define('organizations', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -25,8 +25,7 @@ const Users = sequelize.define('users', {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
+    allowNull: true,
     validate: {
       isEmail: true,
     },
@@ -43,8 +42,16 @@ const Users = sequelize.define('users', {
       notEmpty: true, // don't allow empty strings
     },
   },
+  ownedBy: {
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'users',
+    },
+    allowNull: true,
+  },
 });
 
 module.exports = {
-  Users,
+  Organizations,
 };

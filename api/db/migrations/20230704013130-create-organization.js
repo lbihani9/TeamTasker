@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('organizations', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -20,8 +20,7 @@ module.exports = {
       },
       email: {
         type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
+        allowNull: true,
       },
       description: {
         type: Sequelize.TEXT('long'),
@@ -30,6 +29,13 @@ module.exports = {
       avatar: {
         type: Sequelize.STRING,
         allowNull: true,
+      },
+      ownedBy: {
+        type: Sequelize.INTEGER,
+        foreignKey: {
+          referencedColumnName: 'id',
+          referencedTable: 'users',
+        },
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -45,6 +51,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('organizations');
   },
 };

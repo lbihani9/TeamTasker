@@ -2,7 +2,7 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('users', {
+    await queryInterface.createTable('tasks', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -13,23 +13,22 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      username: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
       description: {
         type: Sequelize.TEXT('long'),
         allowNull: true,
       },
-      avatar: {
-        type: Sequelize.STRING,
-        allowNull: true,
+      status: {
+        type: Sequelize.ENUM,
+        values: ['created', 'assigned', 'inProgress', 'done'],
+        allowNull: false,
+        defaultValue: 'created',
+      },
+      createdBy: {
+        type: Sequelize.INTEGER,
+        foreignKey: {
+          referencedColumnName: 'id',
+          referencedTable: 'users',
+        },
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -45,6 +44,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('users');
+    await queryInterface.dropTable('tasks');
   },
 };

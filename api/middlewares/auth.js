@@ -1,4 +1,4 @@
-const { db } = require('../db/models/models');
+const { db } = require('../db/models');
 
 const validateSession = async (req, res, next) => {
   try {
