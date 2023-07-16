@@ -3,31 +3,36 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('teamMembers', {
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
       },
       teamId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         foreignKey: {
-          referencedColumnName: 'uuid',
+          referencedColumnName: 'id',
           referencedTable: 'teams',
         },
       },
       userId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         foreignKey: {
-          referencedColumnName: 'uuid',
+          referencedColumnName: 'id',
           referencedTable: 'users',
         },
       },
       roleId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         foreignKey: {
-          referencedColumnName: 'uuid',
+          referencedColumnName: 'id',
           referencedTable: 'roles',
         },
+      },
+      hasAccess: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
       },
       createdAt: {
         type: Sequelize.DATE,

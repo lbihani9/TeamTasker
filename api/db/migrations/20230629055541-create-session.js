@@ -2,19 +2,27 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('roles', {
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+    await queryInterface.createTable('sessions', {
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
       },
-      name: {
+      sessionId: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      description: {
-        type: Sequelize.TEXT('long'),
-        allowNull: true
+      email: {
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true,
+      },
+      expiresIn: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
+      ip: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -30,6 +38,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('roles');
+    await queryInterface.dropTable('sessions');
   },
 };

@@ -2,24 +2,20 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('sessions', {
+    await queryInterface.createTable('roles', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
       },
-      sessionId: {
+      name: {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false,
-        unique: true,
-      },
-      expiresIn: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+      description: {
+        type: Sequelize.TEXT('long'),
+        allowNull: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -35,6 +31,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('sessions');
+    await queryInterface.dropTable('roles');
   },
 };

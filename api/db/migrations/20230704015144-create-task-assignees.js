@@ -3,22 +3,23 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('taskAssignees', {
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
       },
       assignee: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         foreignKey: {
-          referencedColumnName: 'uuid',
+          referencedColumnName: 'id',
           referencedTable: 'users',
         },
       },
       taskId: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         foreignKey: {
-          referencedColumnName: 'uuid',
+          referencedColumnName: 'id',
           referencedTable: 'tasks',
         },
       },

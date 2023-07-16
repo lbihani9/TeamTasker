@@ -3,10 +3,11 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable('organizations', {
-      uuid: {
-        type: Sequelize.UUID,
-        defaultValue: Sequelize.UUIDV4,
+      id: {
+        type: Sequelize.INTEGER,
+        autoIncrement: true,
         primaryKey: true,
+        allowNull: false,
       },
       name: {
         type: Sequelize.STRING,
@@ -30,9 +31,9 @@ module.exports = {
         allowNull: true,
       },
       ownedBy: {
-        type: Sequelize.UUID,
+        type: Sequelize.INTEGER,
         foreignKey: {
-          referencedColumnName: 'uuid',
+          referencedColumnName: 'id',
           referencedTable: 'users',
         },
       },
