@@ -2,23 +2,37 @@
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('teams', {
+    await queryInterface.createTable('organizationMembers', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
-      name: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       organizationId: {
         type: Sequelize.INTEGER,
-        foreignKey: {
-          referencedColumnName: 'id',
-          referencedTable: 'organizations',
+        references: {
+          key: 'id',
+          model: 'organizations',
         },
+      },
+      userId: {
+        type: Sequelize.INTEGER,
+        references: {
+          key: 'id',
+          model: 'users',
+        },
+      },
+      roleId: {
+        type: Sequelize.INTEGER,
+        references: {
+          key: 'id',
+          model: 'roles',
+        },
+      },
+      hasAccess: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: true,
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -34,6 +48,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('teams');
+    await queryInterface.dropTable('organizationMembers');
   },
 };

@@ -1,6 +1,6 @@
 const { default: axios } = require('axios');
 const { v4: uuidv4 } = require('uuid');
-const { db } = require('../db/models/models');
+const { db } = require('../db/models');
 
 const login = async (req, res) => {
   try {

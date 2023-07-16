@@ -1,40 +1,30 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
-const Sessions = sequelize.define('sessions', {
+const Teams = sequelize.define('teams', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
     allowNull: false,
   },
-  sessionId: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
       notEmpty: true,
     },
   },
-  email: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
-  },
-  expiresIn: {
+  organizationId: {
     type: DataTypes.INTEGER,
-    allowNull: false,
-  },
-  ip: {
-    type: DataTypes.STRING,
-    validate: {
-      isIP: true,
+    references: {
+      key: 'id',
+      model: 'organizations',
     },
+    allowNull: false,
   },
 });
 
 module.exports = {
-  Sessions,
+  Teams,
 };
