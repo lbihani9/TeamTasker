@@ -7,7 +7,6 @@ import TeamTaskerLogo from '../../assets/TeamTasker-1.png';
 import Logout from '../Logout';
 
 const Navbar = props => {
-
   return (
     <Grid
       item
@@ -55,23 +54,6 @@ const Navbar = props => {
           );
         })}
       </Box>
-      
-      {/* {activeIndex !== -1 &&
-        <Grid
-          item
-          sx={{
-            width: '10em',
-            height: '100vh',
-            backgroundColor: 'red',
-            zIndex: 1,
-            position: 'absolute',
-            left: 100
-          }}
-        >
-          O1
-        </Grid>
-      } */}
-
 
       <Logout />
     </Grid>
@@ -80,7 +62,7 @@ const Navbar = props => {
 
 Navbar.propTypes = {
   activeIndex: PropTypes.number,
-  setActiveIndex: PropTypes.func
+  setActiveIndex: PropTypes.func,
 };
 
 export default Navbar;

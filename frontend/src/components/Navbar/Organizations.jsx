@@ -1,12 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Organizations = props => {
-  return (
-    <div>Organizations</div>
-  );
-}
+  return <div>Organizations</div>;
+};
 
-Organizations.propTypes = {}
+Organizations.propTypes = {};
 
-export default Organizations
+export default Organizations;

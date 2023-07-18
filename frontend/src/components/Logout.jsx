@@ -1,23 +1,23 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React from 'react';
+import PropTypes from 'prop-types';
 
 const Logout = props => {
   return (
-    <span 
-      class="material-symbols-sharp"
+    <span
+      class='material-symbols-sharp'
       style={{
         position: 'absolute',
         bottom: 50,
         fontSize: '3em',
         color: '#808080',
-        cursor: 'pointer'
+        cursor: 'pointer',
       }}
     >
       account_circle
     </span>
   );
-}
+};
 
-Logout.propTypes = {}
+Logout.propTypes = {};
 
-export default Logout
+export default Logout;
