@@ -13,7 +13,7 @@ export const Routing = () => {
       />
 
       <Route 
-        path='/home'
+        path='/dashboard'
         element={<UserDashboard />}
       />
     </Routes>
