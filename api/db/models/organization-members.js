@@ -1,42 +1,52 @@
 const { DataTypes } = require('sequelize');
 const { sequelize } = require('..');
 
-const OrganizationMembers = sequelize.define('organizationMembers', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-    allowNull: false,
-  },
-  organizationId: {
-    type: DataTypes.INTEGER,
-    references: {
-      key: 'id',
-      model: 'organizations',
+const OrganizationMembers = sequelize.define(
+  'organizationMembers',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+      allowNull: false,
     },
-    allowNull: false,
-  },
-  userId: {
-    type: DataTypes.INTEGER,
-    references: {
-      key: 'id',
-      model: 'users',
+    organizationId: {
+      type: DataTypes.INTEGER,
+      references: {
+        key: 'id',
+        model: 'organizations',
+      },
+      allowNull: false,
     },
-    allowNull: false,
-  },
-  roleId: {
-    type: DataTypes.INTEGER,
-    references: {
-      key: 'id',
-      model: 'roles',
+    userId: {
+      type: DataTypes.INTEGER,
+      references: {
+        key: 'id',
+        model: 'users',
+      },
+      allowNull: false,
     },
-    allowNull: false,
+    roleId: {
+      type: DataTypes.INTEGER,
+      references: {
+        key: 'id',
+        model: 'roles',
+      },
+      allowNull: false,
+    },
+    hasAccess: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
   },
-  hasAccess: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true,
-  },
-});
+  {
+    defaultScope: {
+      where: {
+        hasAccess: true,
+      },
+    },
+  }
+);
 
 module.exports = {
   OrganizationMembers,

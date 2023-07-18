@@ -1,4 +1,5 @@
 const { db } = require('../db/models');
+const { Sessions } = db.models;
 
 const validateSession = async (req, res, next) => {
   try {
@@ -13,7 +14,7 @@ const validateSession = async (req, res, next) => {
       });
 
       if (email) {
-        const session = await db.models.Sessions.findOne({ where: { email } });
+        const session = await Sessions.findOne({ where: { email } });
         await session.destroy();
       }
       return;

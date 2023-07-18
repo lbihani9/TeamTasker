@@ -30,6 +30,13 @@ const Users = sequelize.define('users', {
     validate: {
       isEmail: true,
     },
+    set(value) {
+      const currVal = this.getDataValue('email');
+      if (currVal !== null) {
+        throw new Error('Email cannot be changed.');
+      }
+      this.setDataValue('email', value);
+    },
   },
   description: {
     type: DataTypes.TEXT('long'),
@@ -43,6 +50,16 @@ const Users = sequelize.define('users', {
       notEmpty: true, // don't allow empty strings
     },
   },
+}, {
+  scopes: {
+    associatedOrganizations: {
+      include: [
+        {
+          model: 'users'
+        }
+      ]
+    }
+  }
 });
 
 module.exports = {

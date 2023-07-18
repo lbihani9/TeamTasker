@@ -1,8 +1,15 @@
 const { db } = require('../db/models');
+const { Users, Organizations } = db.models;
 
 const getUser = async (req, res) => {
   try {
-    const user = await db.models.Users.findByPk(req.params.id);
+    const { username } = req.params;
+    const user = await Users.findOne({
+      where: {
+        username,
+      },
+    });
+
     res.status(200).json({
       data: {
         user,
@@ -22,10 +29,17 @@ const getUser = async (req, res) => {
 
 const patchUser = async (req, res) => {
   try {
-    const user = await db.models.Users.findByPk(req.params.id);
+    const { username } = req.params;
+    const user = await Users.findOne({
+      where: {
+        username,
+      },
+    });
+
     if (user) {
       await user.update(req.body);
     }
+
     res.status(200).json({
       data: {
         user,
@@ -33,6 +47,16 @@ const patchUser = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    if (err.name === 'SequelizeValidationError') {
+      res.status(403).json({
+        errors: [
+          {
+            message: err.message,
+          },
+        ],
+      });
+      return;
+    }
     res.status(500).json({
       errors: [
         {
@@ -49,35 +73,40 @@ const getUsers = async (req, res) => {
   });
 };
 
-const getUserDashboard = async (req, res) => {
+/**
+ * @returns all the organizations the user is associated with.
+ */  
+const getUserOrganizations = async (req, res) => {
   try {
-    const { email } = req.session;
-    const user = await db.models.Users.findOne({ where: { email } });
-
-    // TODO: fetch organizations user is part of.
-    // TODO: fetch organizations user is owner of.
-    // TODO: fetch tasks for today.
-
-    res.status(200).json({
-      data: {
-        user,
-      },
+    const { email } = req.session.cookie;
+    const user = await Users.findOne({ 
+      where: {
+        email
+      }
     });
+
+    // const organizations = await Organizations.findAll({
+    //   where: {
+        
+    //   }
+    // })
+
+
   } catch (err) {
     console.log(err);
     res.status(500).json({
       errors: [
         {
-          message: 'An error occured while fetching dashboard details.',
+          message: 'An error occured while fetching associated organizations.',
         },
       ],
     });
   }
-};
+}
 
 module.exports = {
   getUser,
   patchUser,
   getUsers,
-  getUserDashboard
+  getUserOrganizations
 };
