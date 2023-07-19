@@ -1,10 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Box } from '@mui/material';
 
 const NewReminder = props => {
   return (
-    <div>NewReminder</div>
-  )
+    <Box
+      sx={{
+        width: '15em',
+        height: '5em',
+        border: '1px solid black',
+        borderRadius: '1em'
+      }}
+    >
+      Add Reminder
+    </Box>
+  );
 }
 
 NewReminder.propTypes = {}

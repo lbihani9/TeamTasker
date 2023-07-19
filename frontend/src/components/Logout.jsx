@@ -7,7 +7,7 @@ const Logout = props => {
       class='material-symbols-sharp'
       style={{
         position: 'absolute',
-        bottom: 50,
+        bottom: '1em',
         fontSize: '3em',
         color: '#808080',
         cursor: 'pointer',
