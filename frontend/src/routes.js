@@ -8,9 +8,19 @@ export const Routing = () => {
     <Routes>
       <Route
         exact
-        path='/'
+        path='/login'
         element={<Home />}
       />
+
+      {/* <Route
+        element={
+          <>
+
+          </>
+        }
+      >
+
+      </Route> */}
 
       <Route 
         path='/dashboard'

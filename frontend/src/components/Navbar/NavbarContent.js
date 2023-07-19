@@ -1,30 +1,37 @@
+import {
+  AlarmIcon,
+  ChatIcon,
+  CorporateFareIcon,
+  NotificationsIcon,
+  SettingsIcon,
+} from '../Icons';
 import Organizations from './Organizations';
 
 const contents = [
   {
     name: 'Organizations',
     secondaryMenuItem: <Organizations />,
-    icon: <span class='material-symbols-sharp'>corporate_fare</span>,
+    icon: <CorporateFareIcon />,
   },
   {
     name: 'Chats',
     secondaryMenuItem: <Organizations />,
-    icon: <span class='material-symbols-sharp'>chat</span>,
+    icon: <ChatIcon />,
   },
   {
     name: 'Notifications',
     secondaryMenuItem: <Organizations />,
-    icon: <span class='material-symbols-sharp'>notifications</span>,
+    icon: <NotificationsIcon />,
   },
   {
     name: 'Reminders',
     secondaryMenuItem: <Organizations />,
-    icon: <span class='material-symbols-sharp'>alarm</span>,
+    icon: <AlarmIcon />,
   },
   {
     name: 'Settings',
     secondaryMenuItem: <Organizations />,
-    icon: <span class='material-symbols-sharp'>settings</span>,
+    icon: <SettingsIcon />,
   },
 ];
 
