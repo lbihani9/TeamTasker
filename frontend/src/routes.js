@@ -8,7 +8,7 @@ export const Routing = () => {
     <Routes>
       <Route
         exact
-        path='/login'
+        path='/'
         element={<Home />}
       />
 

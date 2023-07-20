@@ -19,7 +19,7 @@ const QuickActions = props => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-evenly',
-        borderLeft: 'thin solid #808080',
+        borderLeft: 'thin solid #e0e0e0',
         backgroundColor: '#FFFFFF',
         paddingTop: '1em',
         width: '100%',

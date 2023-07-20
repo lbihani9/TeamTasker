@@ -2,9 +2,7 @@ const GoogleIcons = props => {
   return (
     <span
       class='material-symbols-sharp'
-      {...(props.style && {
-        style: props.style,
-      })}
+      {...props}
     >
       {props.name}
     </span>
@@ -94,6 +92,28 @@ export const TimerIcon = props => {
       {...{
         ...props,
         name: 'timer',
+      }}
+    />
+  );
+};
+
+export const SearchIcon = props => {
+  return (
+    <GoogleIcons
+      {...{
+        ...props,
+        name: 'search',
+      }}
+    />
+  );
+};
+
+export const MoreVertIcon = props => {
+  return (
+    <GoogleIcons
+      {...{
+        ...props,
+        name: 'more_vert',
       }}
     />
   );

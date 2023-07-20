@@ -16,7 +16,7 @@ const Navbar = props => {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'start',
-        borderRight: 'thin solid #808080',
+        borderRight: 'thin solid #e0e0e0',
         backgroundColor: '#FFFFFF',
       }}
     >
