@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Tooltip } from '@mui/material';
 
-const NavbarItem = props => {
+const NavbarItem = (props) => {
   return (
     <Tooltip
       title={props.name}
@@ -13,12 +13,11 @@ const NavbarItem = props => {
         style={{
           width: '100%',
           padding: '1.5em',
-          borderRadius: '0.2em',
           color: '#808080',
           cursor: 'pointer',
           ...(props.index === props.activeIndex && {
-            borderLeft: 'thick solid #0000FF',
-            color: '#0000FF',
+            borderLeft: 'thick solid #2196f3',
+            color: '#2196f3',
           }),
         }}
         onClick={props.handleItemClick}

@@ -7,6 +7,12 @@
   "prettier.bracketSpacing": true,
   "prettier.trailingComma": "es5",
   "prettier.printWidth": 80,
-  "prettier.arrowParens": "avoid",
-  "prettier.singleAttributePerLine": true
+  "prettier.arrowParens": "always",
+  "prettier.singleAttributePerLine": true,
+  "prettier.tabWidth": 2,
+  "prettier.useTabs": false,
+  "prettier.semi": true,
+  "prettier.quoteProps": "as-needed",
+  "prettier.bracketSameLine": false,
+  "prettier.endOfLine": "lf"
 }

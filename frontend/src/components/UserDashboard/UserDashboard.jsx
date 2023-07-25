@@ -6,9 +6,9 @@ import SecondaryNavbar from '../Navbar/SecondaryNavbar';
 import MainContent from './MainContent';
 import QuickActions from './QuickActions';
 
-const UserDashboard = props => {
+const UserDashboard = (props) => {
   const [activeIndex, setActiveIndex] = useState(-1);
-  const closeSecondaryNavbar = e => setActiveIndex(-1);
+  const closeSecondaryNavbar = (e) => setActiveIndex(-1);
 
   return (
     <Grid

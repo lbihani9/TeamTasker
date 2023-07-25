@@ -4,7 +4,7 @@ import { Box, Grid, IconButton } from '@mui/material';
 import contents from './NavbarContent';
 import CloseIcon from '@mui/icons-material/Close';
 
-const SecondaryNavbar = props => {
+const SecondaryNavbar = (props) => {
   return (
     <Grid
       item
@@ -16,6 +16,7 @@ const SecondaryNavbar = props => {
         justifyContent: 'start',
         borderRight: 'thin solid #808080',
         backgroundColor: '#FFFFFF',
+        zIndex: 3000,
       }}
     >
       <Box

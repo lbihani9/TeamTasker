@@ -4,7 +4,7 @@ import { Grid } from '@mui/material';
 import TopContent from './TopContent';
 import BottomContent from './BottomContent';
 
-const MainContent = props => {
+const MainContent = (props) => {
   return (
     <Grid
       item
@@ -14,7 +14,6 @@ const MainContent = props => {
         flexDirection: 'column',
       }}
     >
-
       <TopContent />
       <BottomContent />
     </Grid>
