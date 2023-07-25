@@ -12,8 +12,18 @@ export const Routing = () => {
         element={<Home />}
       />
 
+      {/* <Route
+        element={
+          <>
+
+          </>
+        }
+      >
+
+      </Route> */}
+
       <Route 
-        path='/home'
+        path='/dashboard'
         element={<UserDashboard />}
       />
     </Routes>

@@ -1,19 +1,46 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
-import axios from 'axios'
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+import Navbar from '../Navbar/Navbar';
+import { Grid } from '@mui/material';
+import SecondaryNavbar from '../Navbar/SecondaryNavbar';
+import MainContent from './MainContent';
+import QuickActions from './QuickActions';
 
 const UserDashboard = props => {
-  useEffect(() => {
-    axios.get(`/api/v1/users`)
-    .then(res => console.log(res))
-    .catch(err => console.log(err))  
-  }, []);
+  const [activeIndex, setActiveIndex] = useState(-1);
+  const closeSecondaryNavbar = e => setActiveIndex(-1);
 
   return (
-    <div>UserDashboard</div>
-  )
-}
+    <Grid
+      container
+      sx={{
+        height: '100vh',
+      }}
+    >
+      <Navbar
+        {...{
+          activeIndex,
+          setActiveIndex,
+        }}
+      />
 
-UserDashboard.propTypes = {}
+      {activeIndex !== -1 && (
+        <SecondaryNavbar
+          {...{
+            activeIndex,
+            setActiveIndex,
+            closeSecondaryNavbar,
+          }}
+        />
+      )}
 
-export default UserDashboard
+      <MainContent activeIndex={activeIndex} />
+
+      <QuickActions activeIndex={activeIndex} />
+    </Grid>
+  );
+};
+
+UserDashboard.propTypes = {};
+
+export default UserDashboard;
