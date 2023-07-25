@@ -107,6 +107,7 @@ const oAuthCallback = async (req, res) => {
     }
 
     if (!session) {
+      req.session.userId = user.id;
       req.session.email = email;
       req.session.username = user.username;
       req.session.name = user.name;
