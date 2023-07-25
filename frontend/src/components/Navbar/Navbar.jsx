@@ -5,64 +5,62 @@ import contents from './NavbarContent';
 import NavbarItem from './NavbarItem';
 import TeamTaskerLogo from '../../assets/TeamTasker-1.png';
 import Logout from '../Logout';
+import { useSelector } from 'react-redux';
 
-const Navbar = props => {
+const Navbar = (props) => {
+  const layout = useSelector((state) => state.layouts.layout);
+
   return (
     <Grid
       item
-      md={0.5}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'start',
-        borderRight: 'thin solid #e0e0e0',
-        backgroundColor: '#FFFFFF',
-      }}
+      {...layout.primaryNavbar}
     >
-      <img
-        src={TeamTaskerLogo}
-        style={{
-          marginTop: '1em',
-          width: '4em',
-          height: '4em',
-          backgroundColor: 'white',
-          borderRadius: '50%',
-        }}
-      />
+      <div className='primary-navbar'>
+        <img
+          src={TeamTaskerLogo}
+          style={{
+            marginTop: '1em',
+            width: '4em',
+            height: '4em',
+            backgroundColor: 'white',
+            borderRadius: '50%',
+          }}
+        />
 
-      <Box
-        sx={{
-          height: 'fit-content',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-        {contents.map((content, index) => {
-          return (
-            <NavbarItem
-              {...{
-                ...content,
-                index,
-                activeIndex: props.activeIndex,
-                key: index + 1,
-                handleItemClick: e => props.setActiveIndex(index),
-              }}
-            />
-          );
-        })}
-      </Box>
+        <Box
+          sx={{
+            height: 'fit-content',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            width: '100%',
+          }}
+        >
+          {contents.map((content, index) => {
+            return (
+              <NavbarItem
+                {...{
+                  ...content,
+                  index,
+                  activeIndex: props.activeIndex,
+                  key: index + 1,
+                  handleItemClick: (e) =>
+                    props.selectPrimaryNavbarItem(e, index),
+                }}
+              />
+            );
+          })}
+        </Box>
 
-      <Logout />
+        <Logout />
+      </div>
     </Grid>
   );
 };
 
 Navbar.propTypes = {
   activeIndex: PropTypes.number,
-  setActiveIndex: PropTypes.func,
+  selectPrimaryNavbarItem: PropTypes.func,
 };
 
 export default Navbar;

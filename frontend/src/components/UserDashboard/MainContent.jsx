@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { Grid } from '@mui/material';
 import TopContent from './TopContent';
 import BottomContent from './BottomContent';
+import { useSelector } from 'react-redux';
 
 const MainContent = (props) => {
+  const layout = useSelector((state) => state.layouts.layout);
+
   return (
     <Grid
       item
-      md={8}
+      {...layout.centerContent}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -20,8 +23,6 @@ const MainContent = (props) => {
   );
 };
 
-MainContent.propTypes = {
-  activeIndex: PropTypes.number,
-};
+MainContent.propTypes = {};
 
 export default MainContent;

@@ -3,12 +3,15 @@ import PropTypes from 'prop-types';
 import { Box, Grid, IconButton } from '@mui/material';
 import contents from './NavbarContent';
 import CloseIcon from '@mui/icons-material/Close';
+import { useSelector } from 'react-redux';
 
 const SecondaryNavbar = (props) => {
+  const layout = useSelector((state) => state.layouts.layout);
+
   return (
     <Grid
       item
-      md={1.5}
+      {...layout.secondaryNavbar}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -16,7 +19,6 @@ const SecondaryNavbar = (props) => {
         justifyContent: 'start',
         borderRight: 'thin solid #808080',
         backgroundColor: '#FFFFFF',
-        zIndex: 3000,
       }}
     >
       <Box
@@ -39,7 +41,6 @@ const SecondaryNavbar = (props) => {
 
 SecondaryNavbar.propTypes = {
   activeIndex: PropTypes.number,
-  setActiveIndex: PropTypes.func,
   closeSecondaryNavbar: PropTypes.func,
 };
 

@@ -6,41 +6,33 @@ import UpcomingMeetings from '../Meetings/UpcomingMeetings';
 import Deadlines from './Deadlines';
 import OrganizationUpdates from './OrganizationUpdates';
 import TeamUpdates from './TeamUpdates';
+import { useSelector } from 'react-redux';
 
-const getGridWidth = index => (index === -1 ? 3.5 : 2);
+const QuickActions = (props) => {
+  const layout = useSelector((state) => state.layouts.layout);
 
-const QuickActions = props => {
   return (
     <Grid
       item
-      md={getGridWidth(props.activeIndex)}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-        borderLeft: 'thin solid #e0e0e0',
-        backgroundColor: '#FFFFFF',
-        paddingTop: '1em',
-        width: '100%',
-        overflowY: 'auto',
-      }}
+      {...layout.quickActions}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-evenly',
-          width: '100%',
-          mb: '2em',
-        }}
-      >
-        <NewReminder />
-        <UpcomingMeetings />
-      </Box>
+      <div className='quick-actions'>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-evenly',
+            width: '100%',
+            mb: '2em',
+          }}
+        >
+          <NewReminder />
+          <UpcomingMeetings />
+        </Box>
 
-      <Deadlines />
-      <OrganizationUpdates />
-      <TeamUpdates />
+        <Deadlines />
+        <OrganizationUpdates />
+        <TeamUpdates />
+      </div>
     </Grid>
   );
 };
