@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Box, Grid } from '@mui/material';
-import NewReminder from '../Reminders/NewReminder';
-import UpcomingMeetings from '../Meetings/UpcomingMeetings';
+import NewReminder from '../../Reminders/NewReminder';
+import UpcomingMeetings from '../../Meetings/UpcomingMeetings';
 import Deadlines from './Deadlines';
 import OrganizationUpdates from './OrganizationUpdates';
 import TeamUpdates from './TeamUpdates';

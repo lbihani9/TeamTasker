@@ -37,8 +37,8 @@ const Layout = () => {
         component='main'
         sx={{
           flexGrow: 1,
-          p: 3,
-          height: '100%',
+          p: 1,
+          height: '100vh',
         }}
       >
         <Outlet />

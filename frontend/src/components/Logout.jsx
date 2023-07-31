@@ -17,7 +17,7 @@ const Logout = (props) => {
           sx={{
             margin: 'auto',
           }}
-          src={<span class='material-symbols-sharp'>account_circle</span>}
+          src={<span className='material-symbols-sharp'>account_circle</span>}
         />
       </ListItemAvatar>
     </ListItem>

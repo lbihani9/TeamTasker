@@ -1,7 +1,7 @@
 const GoogleIcons = props => {
   return (
     <span
-      class='material-symbols-sharp'
+      className='material-symbols-sharp'
       {...props}
     >
       {props.name}
