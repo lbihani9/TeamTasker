@@ -1,8 +1,9 @@
 const { db } = require('../db/models');
+const { Tasks, Users, TaskAssignees, Organizations } = db.models;
 
 const getUser = async (req, res) => {
   try {
-    const user = await db.models.Users.findByPk(req.params.id);
+    const user = await Users.findByPk(req.params.id);
     res.status(200).json({
       data: {
         user,
@@ -22,7 +23,7 @@ const getUser = async (req, res) => {
 
 const patchUser = async (req, res) => {
   try {
-    const user = await db.models.Users.findByPk(req.params.id);
+    const user = await Users.findByPk(req.params.id);
     if (user) {
       await user.update(req.body);
     }
@@ -51,22 +52,31 @@ const getUsers = async (req, res) => {
 
 const getUserDashboard = async (req, res) => {
   try {
-    const { email } = req.session;
-    const user = await db.models.Users.findOne({ where: { email } });
+    let { limit, offset } = req.query;
 
-    // TODO: fetch organizations user is part of.
-    // TODO: fetch organizations user is owner of.
-    // TODO: fetch tasks for today.
+    limit = typeof limit === 'undefined' ? 50 : min(max(1, Number(limit)), 50);
+    offset = typeof offset === 'undefined' ? 0 : Number(offset);
+
+    const tasks = await TaskAssignees.findAll({
+      where: {
+        assignee: req.user.id,
+      },
+      limit,
+      offset,
+    });
 
     res.status(200).json({
       data: {
-        user,
+        tasks,
       },
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       errors: [
+        {
+          message: err.message,
+        },
         {
           message: 'An error occured while fetching dashboard details.',
         },
@@ -79,5 +89,5 @@ module.exports = {
   getUser,
   patchUser,
   getUsers,
-  getUserDashboard
+  getUserDashboard,
 };

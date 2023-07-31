@@ -19,6 +19,8 @@ const validateSession = async (req, res, next) => {
       return;
     }
 
+    req.user = await db.models.Users.findOne({ where: { email }});
+
     next();
   } catch (err) {
     console.log(err);
