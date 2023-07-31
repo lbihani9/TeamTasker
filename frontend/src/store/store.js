@@ -6,7 +6,7 @@ import thunk from 'redux-thunk';
 import layoutReducer from './slices/layoutSlice';
 
 const reducers = combineReducers({
-  layouts: layoutReducer
+  layouts: layoutReducer,
 });
 
 const persistConfig = {
@@ -17,6 +17,6 @@ const persistConfig = {
 const persistedReducer = persistReducer(persistConfig, reducers);
 
 export const store = configureStore({
-  reducer: persistedReducer,
+  reducer: reducers,
   middleware: [thunk],
 });

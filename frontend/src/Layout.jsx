@@ -1,64 +1,50 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { useDispatch } from 'react-redux';
-import { Grid } from '@mui/material';
-import Navbar from './components/Navbar/Navbar';
-import SecondaryNavbar from './components/Navbar/SecondaryNavbar';
 import { Outlet } from 'react-router-dom';
-import QuickActions from './components/UserDashboard/QuickActions';
-import { setLayout } from './store/slices/layoutSlice';
+import Box from '@mui/material/Box';
+import SecondaryNavbar from './components/Navbar/SecondaryNavbar';
+import Navbar from './components/Navbar/Navbar';
 
-const Layout = (props) => {
-  const dispatch = useDispatch();
+const Layout = () => {
+  const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
 
-  const selectPrimaryNavbarItem = (e, id) => {
-    dispatch(
-      setLayout({
-        isSecondaryNavbarOpen: true,
-      })
-    );
-    setActiveIndex(id);
+  const handleDrawerOpen = (e, index) => {
+    setOpen(true);
+    setActiveIndex(index);
   };
 
-  const closeSecondaryNavbar = (e) => {
-    dispatch(
-      setLayout({
-        isSecondaryNavbarOpen: false,
-      })
-    );
+  const handleDrawerClose = () => {
+    setOpen(false);
     setActiveIndex(-1);
   };
 
   return (
-    <Grid
-      container
-      sx={{
-        height: '100vh',
-      }}
-    >
+    <Box sx={{ display: 'flex' }}>
       <Navbar
         {...{
+          open,
           activeIndex,
-          selectPrimaryNavbarItem,
+          handleDrawerClose,
+          handleDrawerOpen,
         }}
       />
 
-      {activeIndex !== -1 && (
-        <SecondaryNavbar
-          {...{
-            activeIndex,
-            closeSecondaryNavbar,
-          }}
-        />
-      )}
-
-      <Outlet />
-      <QuickActions activeIndex={activeIndex} />
-    </Grid>
+      <SecondaryNavbar
+        open={open}
+        handleDrawerClose={handleDrawerClose}
+      />
+      <Box
+        component='main'
+        sx={{
+          flexGrow: 1,
+          p: 3,
+          height: '100%',
+        }}
+      >
+        <Outlet />
+      </Box>
+    </Box>
   );
 };
-
-Layout.propTypes = {};
 
 export default Layout;

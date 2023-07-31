@@ -1,23 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { Avatar, ListItem, ListItemAvatar } from '@mui/material';
 
-const Logout = props => {
+const Logout = (props) => {
   return (
-    <span
-      class='material-symbols-sharp'
-      style={{
+    <ListItem
+      sx={{
+        display: 'block',
         position: 'absolute',
-        bottom: '1em',
-        fontSize: '3em',
-        color: '#808080',
+        top: '90vh',
         cursor: 'pointer',
       }}
+      disablePadding
     >
-      account_circle
-    </span>
+      <ListItemAvatar>
+        <Avatar
+          sx={{
+            margin: 'auto',
+          }}
+          src={<span class='material-symbols-sharp'>account_circle</span>}
+        />
+      </ListItemAvatar>
+    </ListItem>
   );
 };
-
-Logout.propTypes = {};
 
 export default Logout;

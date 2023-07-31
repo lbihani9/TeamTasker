@@ -1,30 +1,44 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Box, Tooltip } from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, Tooltip } from '@mui/material';
 
 const NavbarItem = (props) => {
   return (
-    <Tooltip
-      title={props.name}
-      placement='right'
-      followCursor
+    <ListItem
+      key={props.name}
+      sx={{ display: 'block' }}
+      onClick={props.handleItemClick}
+      disablePadding
     >
-      <div
-        style={{
-          width: '100%',
-          padding: '1.5em',
-          color: '#808080',
-          cursor: 'pointer',
-          ...(props.index === props.activeIndex && {
-            borderLeft: 'thick solid #2196f3',
-            color: '#2196f3',
-          }),
-        }}
-        onClick={props.handleItemClick}
+      <Tooltip
+        title={props.name}
+        placement='right'
+        followCursor
       >
-        {props.icon}
-      </div>
-    </Tooltip>
+        <ListItemButton
+          sx={{
+            color: '#808080',
+            minHeight: 48,
+            justifyContent: 'initial',
+            px: 2.5,
+            ...(props.index === props.activeIndex && {
+              borderLeft: 'thick solid #2196f3',
+              color: '#2196f3',
+            }),
+          }}
+        >
+          <ListItemIcon
+            sx={{
+              minWidth: 0,
+              mr: 3,
+              justifyContent: 'center',
+            }}
+          >
+            {props.icon}
+          </ListItemIcon>
+        </ListItemButton>
+      </Tooltip>
+    </ListItem>
   );
 };
 

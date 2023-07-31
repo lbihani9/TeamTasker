@@ -6,16 +6,10 @@ import UpcomingMeetings from '../Meetings/UpcomingMeetings';
 import Deadlines from './Deadlines';
 import OrganizationUpdates from './OrganizationUpdates';
 import TeamUpdates from './TeamUpdates';
-import { useSelector } from 'react-redux';
 
 const QuickActions = (props) => {
-  const layout = useSelector((state) => state.layouts.layout);
-
   return (
-    <Grid
-      item
-      {...layout.quickActions}
-    >
+    <Grid item>
       <div className='quick-actions'>
         <Box
           sx={{
@@ -23,6 +17,8 @@ const QuickActions = (props) => {
             justifyContent: 'space-evenly',
             width: '100%',
             mb: '2em',
+            flexWrap: 'wrap',
+            gap: '1em',
           }}
         >
           <NewReminder />
