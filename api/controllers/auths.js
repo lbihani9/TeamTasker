@@ -1,6 +1,7 @@
 const { default: axios } = require('axios');
 const { v4: uuidv4 } = require('uuid');
 const { db } = require('../db/models');
+const { Sessions, Users } = db.models;
 
 const login = async (req, res) => {
   try {
@@ -20,7 +21,8 @@ const login = async (req, res) => {
     res.status(500).json({
       errors: [
         {
-          message: 'Oops! An unexpected server error occured.',
+          message:
+            'Oops! An unexpected server error occured. Please try logging in after some time.',
         },
       ],
     });
@@ -81,7 +83,7 @@ const oAuthCallback = async (req, res) => {
     );
     const { email, name, picture, given_name } = userInfo.data;
 
-    let user = await db.models.Users.findOne({ where: { email } });
+    let user = await Users.findOne({ where: { email } });
     if (!user) {
       /**
        * uuids are very large (36 characters) and we only want to use it to make usernames unique.
@@ -89,7 +91,7 @@ const oAuthCallback = async (req, res) => {
        * initial 9 characters is infinitesimally small, so we're good to go.
        */
       const usernameUUID = uuidv4().split('-')[0];
-      user = await db.models.Users.create({
+      user = await Users.create({
         email,
         name,
         username: `${given_name}#${usernameUUID}`,
@@ -97,32 +99,27 @@ const oAuthCallback = async (req, res) => {
       });
     }
 
-    // Restricting to one session per user.
-    const session = await db.models.Sessions.findOne({ where: { email } });
+    const session = await Sessions.findOne({ where: { email } });
     if (session) {
-      const key = `session:${session.sessionId}`;
-
-      req.session.destroy(async (err) => {
-        if (err) {
-          console.log(err);
-          throw new Error(`Couldn't delete previous session with key = ${key}`);
-        }
-
+      if (session.sessionId !== req.session.id) {
         await session.destroy();
+      }
+    }
+
+    if (!session) {
+      req.session.userId = user.id;
+      req.session.email = email;
+      req.session.username = user.username;
+      req.session.name = user.name;
+
+      await Sessions.create({
+        email,
+        sessionId: req.session.id,
+        expiresIn: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
       });
     }
 
-    await db.models.Sessions.create({
-      email,
-      sessionId: req.session.id,
-      expiresIn: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
-    });
-
-    req.session.email = email;
-    req.session.username = user.username;
-    req.session.name = user.name;
-
-    res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+    res.redirect(`${process.env.REDIRECT_BASE_URL}/dashboard`);
 
     // TODO: Send email to notify about login attempt.
   } catch (error) {
@@ -146,13 +143,13 @@ const logout = async (req, res) => {
      * present in the request. (This restriction is released for /login and /google/callback routes).
      */
     if (!req.session.email) {
-      res.redirect(`${process.env.REDIRECT_BASE_URL}/home`);
+      res.redirect(`${process.env.REDIRECT_BASE_URL}/dashboard`);
       return;
     }
 
     const { email } = req.session;
 
-    const session = await db.models.Sessions.findOne({ where: { email } });
+    const session = await Sessions.findOne({ where: { email } });
     req.session.destroy(async (err) => {
       if (err) {
         console.log(err);
@@ -176,22 +173,22 @@ const getLoginStatus = async (req, res) => {
     if (!req.session.email) {
       return res.status(200).json({
         data: {
-          status
-        }
+          status,
+        },
       });
     }
 
-    const session = await db.models.Sessions.findOne({
+    const session = await Sessions.findOne({
       where: {
-        email: req.session.email
-      }
+        email: req.session.email,
+      },
     });
 
     if (!session) {
       return res.status(200).json({
         data: {
-          status
-        }
+          status,
+        },
       });
     }
 
@@ -202,23 +199,21 @@ const getLoginStatus = async (req, res) => {
         info: {
           email: req.session.email,
           username: req.session.username,
-          name: req.session.name
-        }
-      }
+          name: req.session.name,
+        },
+      },
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      errors: [
-        err.message
-      ]
-    })
+      errors: [err.message],
+    });
   }
-}
+};
 
 module.exports = {
   login,
   logout,
   oAuthCallback,
-  getLoginStatus
+  getLoginStatus,
 };

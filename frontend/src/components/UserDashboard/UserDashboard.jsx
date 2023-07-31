@@ -1,43 +1,19 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import Navbar from '../Navbar/Navbar';
-import { Grid } from '@mui/material';
-import SecondaryNavbar from '../Navbar/SecondaryNavbar';
-import MainContent from './MainContent';
-import QuickActions from './QuickActions';
+import React from 'react';
+import { Grid, Stack } from '@mui/material';
+import TopContent from './TopContent/TopContent';
+import BottomContent from './BottomContent/BottomContent';
 
-const UserDashboard = props => {
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const closeSecondaryNavbar = e => setActiveIndex(-1);
-
+const UserDashboard = (props) => {
   return (
-    <Grid
-      container
+    <Stack
+      direction='column'
       sx={{
-        height: '100vh',
+        height: '100%',
       }}
     >
-      <Navbar
-        {...{
-          activeIndex,
-          setActiveIndex,
-        }}
-      />
-
-      {activeIndex !== -1 && (
-        <SecondaryNavbar
-          {...{
-            activeIndex,
-            setActiveIndex,
-            closeSecondaryNavbar,
-          }}
-        />
-      )}
-
-      <MainContent activeIndex={activeIndex} />
-
-      <QuickActions activeIndex={activeIndex} />
-    </Grid>
+      <TopContent />
+      <BottomContent />
+    </Stack>
   );
 };
 

@@ -1,68 +1,92 @@
-import React, { useState } from 'react';
-import PropTypes from 'prop-types';
-import { Box, Grid } from '@mui/material';
+import * as React from 'react';
+import { styled } from '@mui/material/styles';
+import MuiDrawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
 import contents from './NavbarContent';
+import Logout from '../Logout';
 import NavbarItem from './NavbarItem';
 import TeamTaskerLogo from '../../assets/TeamTasker-1.png';
-import Logout from '../Logout';
+import Avatar from '@mui/material/Avatar';
+import { ListItem, ListItemAvatar } from '@mui/material';
 
-const Navbar = props => {
+const drawerWidth = 240;
+
+const closedMixin = (theme) => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(7)} + 1px)`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)} + 1px)`,
+  },
+});
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  width: drawerWidth,
+  flexShrink: 0,
+  whiteSpace: 'nowrap',
+  boxSizing: 'border-box',
+  ...(!open && {
+    ...closedMixin(theme),
+    '& .MuiDrawer-paper': closedMixin(theme),
+  }),
+}));
+
+const Navbar = (props) => {
   return (
-    <Grid
-      item
-      md={0.5}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'start',
-        borderRight: 'thin solid #e0e0e0',
-        backgroundColor: '#FFFFFF',
-      }}
-    >
-      <img
-        src={TeamTaskerLogo}
-        style={{
-          marginTop: '1em',
-          width: '4em',
-          height: '4em',
-          backgroundColor: 'white',
-          borderRadius: '50%',
-        }}
-      />
+    <>
+      <CssBaseline />
+      <Drawer variant='permanent'>
+        <List>
+          <Logo />
 
-      <Box
-        sx={{
-          height: 'fit-content',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          width: '100%',
-        }}
-      >
-        {contents.map((content, index) => {
-          return (
-            <NavbarItem
-              {...{
-                ...content,
-                index,
-                activeIndex: props.activeIndex,
-                key: index + 1,
-                handleItemClick: e => props.setActiveIndex(index),
-              }}
-            />
-          );
-        })}
-      </Box>
+          {contents.map((content, index) => {
+            return (
+              <NavbarItem
+                {...{
+                  ...content,
+                  index,
+                  activeIndex: props.activeIndex,
+                  key: index + 1,
+                  handleItemClick: (e) => props.handleDrawerOpen(e, index),
+                }}
+              />
+            );
+          })}
 
-      <Logout />
-    </Grid>
+          <Logout />
+        </List>
+      </Drawer>
+    </>
   );
 };
 
-Navbar.propTypes = {
-  activeIndex: PropTypes.number,
-  setActiveIndex: PropTypes.func,
+const Logo = () => {
+  return (
+    <ListItem
+      key='TeamTasker'
+      sx={{ display: 'block' }}
+      disablePadding
+    >
+      <ListItemAvatar>
+        <Avatar
+          alt='TeamTasker'
+          sx={{
+            marginTop: '0.7em',
+            width: '2.8em',
+            height: '2.8em',
+            justifyContent: 'center',
+          }}
+          src={TeamTaskerLogo}
+        />
+      </ListItemAvatar>
+    </ListItem>
+  );
 };
 
 export default Navbar;

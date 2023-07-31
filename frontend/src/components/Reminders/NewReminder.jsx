@@ -7,7 +7,7 @@ const NewReminder = props => {
   return (
     <Box
       sx={{
-        width: '14em',
+        width: '60%',
         height: '5em',
         border: '1px solid black',
         borderRadius: '1em',
@@ -35,7 +35,7 @@ const NewReminder = props => {
           },
         }}
       >
-        Add reminder
+        Add a reminder
       </Typography>
     </Box>
   );

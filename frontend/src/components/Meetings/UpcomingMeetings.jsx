@@ -7,7 +7,7 @@ const UpcomingMeetings = props => {
   return (
     <Box
       sx={{
-        width: '15em',
+        width: '60%',
         height: '5em',
         border: '1px solid black',
         borderRadius: '1em',
