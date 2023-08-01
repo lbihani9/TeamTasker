@@ -5,8 +5,10 @@ const createTask = async (req, res) => {
   try {
     const task = await Tasks.create({
       ...req.body,
-      createdBy: req.user.id
+      createdBy: req.user.id,
     });
+
+    await task.addUser(req.user);
 
     res.status(201).json({
       data: {
@@ -29,5 +31,5 @@ const createTask = async (req, res) => {
 };
 
 module.exports = {
-  createTask
+  createTask,
 };

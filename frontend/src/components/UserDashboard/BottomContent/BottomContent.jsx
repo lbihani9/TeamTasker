@@ -1,7 +1,8 @@
 import React from 'react';
-import { Box, Table } from '@mui/material';
+import { Box } from '@mui/material';
 import { TabSelection } from './TabSelection';
 import { ViewSelection } from './ViewSelection';
+import { Table } from './Views/Table';
 
 const BottomContent = (props) => {
   return (

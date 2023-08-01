@@ -1,5 +1,5 @@
 const { db } = require('../db/models');
-const { TaskAssignees, Projects } = db.models;
+const { TaskAssignees, Projects, Tasks } = db.models;
 
 const getMyOrganizations = async (req, res) => {
   try {
@@ -32,13 +32,7 @@ const getMyTasks = async (req, res) => {
     limit = typeof limit === 'undefined' ? 50 : min(max(1, Number(limit)), 50);
     offset = typeof offset === 'undefined' ? 0 : Number(offset);
 
-    const tasks = await TaskAssignees.findAll({
-      where: {
-        assignee: req.user.id,
-      },
-      limit,
-      offset,
-    });
+    const tasks = await req.user.getTasks({ joinTableAttributes: [] });
 
     res.status(200).json({
       data: {
