@@ -1,6 +1,5 @@
 import React from 'react';
 import { Box, Table } from '@mui/material';
-import FormatListBulletedSharpIcon from '@mui/icons-material/FormatListBulletedSharp';
 import { TabSelection } from './TabSelection';
 import { ViewSelection } from './ViewSelection';
 

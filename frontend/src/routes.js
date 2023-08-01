@@ -21,7 +21,7 @@ export const Routing = () => {
 
       <Route element={<Layout />}>
         <Route
-          path='/dashboard'
+          path='/@me'
           element={<UserDashboard />}
         />
       </Route>
