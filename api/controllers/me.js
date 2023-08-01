@@ -32,7 +32,7 @@ const getMyTasks = async (req, res) => {
     limit = typeof limit === 'undefined' ? 50 : min(max(1, Number(limit)), 50);
     offset = typeof offset === 'undefined' ? 0 : Number(offset);
 
-    const tasks = await req.user.getTasks({ joinTableAttributes: [] });
+    const tasks = await req.user.getTasks({ joinTableAttributes: [] })
 
     res.status(200).json({
       data: {
