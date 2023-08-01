@@ -3,14 +3,10 @@ const userRouter = express.Router();
 const {
   getUser,
   patchUser,
-  getUsers,
-  getUserDashboard,
 } = require('../controllers/users');
 
-userRouter.get('', getUsers);
-userRouter.get(':id', getUser);
-userRouter.patch(':id', patchUser);
-userRouter.get('/dashboard', getUserDashboard);
+userRouter.get(':username', getUser);
+userRouter.patch(':username', patchUser);
 
 module.exports = {
   userRouter,

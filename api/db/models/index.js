@@ -106,7 +106,7 @@ db.models.Projects.hasMany(db.models.Tasks, {
   foreignKey: 'projectId',
 });
 
-db.models.Tasks.belongsTo(db.models.Project, {
+db.models.Tasks.belongsTo(db.models.Projects, {
   foreignKey: 'projectId',
 });
 

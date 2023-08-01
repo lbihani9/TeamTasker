@@ -22,7 +22,10 @@ const login = async (req, res) => {
       errors: [
         {
           message:
-            'Oops! An unexpected server error occured. Please try logging in after some time.',
+          'Oops! An unexpected server error occured. Please try logging in after some time.',
+        },
+        {
+          message: error.message,
         },
       ],
     });
@@ -100,13 +103,15 @@ const oAuthCallback = async (req, res) => {
     }
 
     const session = await Sessions.findOne({ where: { email } });
+    let sessionFound = session !== null
     if (session) {
-      if (session.sessionId !== req.session.id) {
+      if (session.sessionId === req.sessionID) {
         await session.destroy();
+        sessionFound = false;
       }
     }
 
-    if (!session) {
+    if (!sessionFound) {
       req.session.userId = user.id;
       req.session.email = email;
       req.session.username = user.username;
@@ -119,7 +124,7 @@ const oAuthCallback = async (req, res) => {
       });
     }
 
-    res.redirect(`${process.env.REDIRECT_BASE_URL}/dashboard`);
+    res.redirect(`${process.env.REDIRECT_BASE_URL}/@me`);
 
     // TODO: Send email to notify about login attempt.
   } catch (error) {
