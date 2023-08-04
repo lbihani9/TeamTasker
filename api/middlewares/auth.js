@@ -2,22 +2,25 @@ const { db } = require('../db/models');
 
 const validateSession = async (req, res, next) => {
   try {
-    const { maxAge, email = null } = req.session.cookie;
-    if (maxAge <= 0 || !email) {
-      await req.session.destroy();
+    const { maxAge } = req.session.cookie;
+    const email = req.session.email || null;
+    // if (maxAge <= 0 || !email) {
+    //   await req.session.destroy();
 
-      res.status(401).json({
-        data: {
-          url: '/',
-        },
-      });
+    //   res.status(401).json({
+    //     data: {
+    //       url: '/',
+    //     },
+    //   });
 
-      if (email) {
-        const session = await db.models.Sessions.findOne({ where: { email } });
-        await session.destroy();
-      }
-      return;
-    }
+    //   if (email) {
+    //     const session = await db.models.Sessions.findOne({ where: { email } });
+    //     await session.destroy();
+    //   }
+    //   return;
+    // }
+
+    req.user = await db.models.Users.findOne({ where: { email }});
 
     next();
   } catch (err) {

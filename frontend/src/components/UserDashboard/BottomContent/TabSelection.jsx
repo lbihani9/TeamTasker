@@ -1,6 +1,8 @@
-import { Box, Button, Typography } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Typography } from '@mui/material';
 import React from 'react';
+import { NewProjectButton } from '../../Projects/NewProjectButton';
+import { NewTaskButton } from '../../Tasks/NewTaskButton';
+import ResponsiveHorizontalButtonGroup from '../../Templates/ResponsiveHorizontalButtonGroup';
 
 export const TabSelection = () => {
   return (
@@ -31,22 +33,10 @@ export const TabSelection = () => {
         Tasks
       </Typography>
 
-      <Button
-        variant='contained'
-        size='small'
-        sx={{
-          fontFamily: 'inherit',
-          color: 'black',
-          backgroundColor: '#f5f5f5',
-          borderRadius: '0.5em',
-          '&:hover': {
-            backgroundColor: '#f5f5f5',
-          },
-        }}
-        startIcon={<AddIcon />}
-      >
-        New project
-      </Button>
+      <ResponsiveHorizontalButtonGroup>
+        <NewTaskButton name='New Task' />
+        <NewProjectButton name='New Project' />
+      </ResponsiveHorizontalButtonGroup>
     </Box>
   );
 };

@@ -1,8 +1,8 @@
 import React from 'react';
-import { Box, Table } from '@mui/material';
-import FormatListBulletedSharpIcon from '@mui/icons-material/FormatListBulletedSharp';
+import { Box } from '@mui/material';
 import { TabSelection } from './TabSelection';
 import { ViewSelection } from './ViewSelection';
+import { Table } from './Views/Table';
 
 const BottomContent = (props) => {
   return (

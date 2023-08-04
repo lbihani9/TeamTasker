@@ -14,7 +14,7 @@ try {
   const files = fs.readdirSync(directoryPath);
 
   // Iterate through the files array and log each filename
-  files.forEach(file => {
+  files.forEach((file) => {
     if (file === 'index.js') return;
 
     const model = require(`./${file}`);
@@ -39,7 +39,7 @@ db.models.Users.hasMany(db.models.Organizations, {
 
 db.models.Organizations.belongsTo(db.models.Users, {
   foreignKey: 'ownedBy',
-  as: 'Owner',
+  as: 'OwnedOrganizations',
 });
 
 db.models.Organizations.hasMany(db.models.Teams, {
@@ -50,39 +50,31 @@ db.models.Teams.belongsTo(db.models.Organizations, {
   foreignKey: 'organizationId',
 });
 
-db.models.TeamMembers.belongsTo(db.models.Users, {
-  foreignKey: 'userId',
-  as: 'Member',
-});
-
-db.models.TeamMembers.belongsTo(db.models.Teams, {
-  foreignKey: 'teamId',
-  as: 'Team',
+db.models.Roles.hasMany(db.models.TeamMembers, {
+  foreignKey: 'roleId',
+  as: 'TeamMemberRoles',
 });
 
 db.models.TeamMembers.belongsTo(db.models.Roles, {
   foreignKey: 'roleId',
-  as: 'Role',
+  as: 'TeamMemberRoles',
 });
 
-db.models.Teams.hasMany(db.models.TeamMembers, {
+db.models.Teams.belongsToMany(db.models.Users, {
+  through: db.models.TeamMembers,
   foreignKey: 'teamId',
-  as: 'TeamMembers',
+  otherKey: 'userId',
 });
 
-db.models.Users.hasMany(db.models.TeamMembers, {
+db.models.Users.belongsToMany(db.models.Teams, {
+  through: db.models.TeamMembers,
   foreignKey: 'userId',
-  as: 'TeamMembers',
-});
-
-db.models.Roles.hasMany(db.models.TeamMembers, {
-  foreignKey: 'roleId',
-  as: 'TeamMembers',
+  otherKey: 'teamId',
 });
 
 db.models.Users.hasMany(db.models.Projects, {
   foreignKey: 'createdBy',
-  as: 'CreatedProjects',
+  as: 'ProjectCreator',
 });
 
 db.models.Projects.belongsTo(db.models.Users, {
@@ -92,11 +84,17 @@ db.models.Projects.belongsTo(db.models.Users, {
 
 db.models.Teams.hasMany(db.models.Projects, {
   foreignKey: 'teamId',
+  as: 'TeamProjects',
 });
 
 db.models.Projects.belongsTo(db.models.Teams, {
   foreignKey: 'teamId',
-  as: 'Team',
+  as: 'TeamProjects',
+});
+
+db.models.Users.hasMany(db.models.Tasks, {
+  foreignKey: 'createdBy',
+  as: 'TaskCreator',
 });
 
 db.models.Tasks.belongsTo(db.models.Users, {
@@ -104,78 +102,44 @@ db.models.Tasks.belongsTo(db.models.Users, {
   as: 'TaskCreator',
 });
 
-db.models.Users.hasMany(db.models.Tasks, {
-  foreignKey: 'createdBy',
-});
-
-db.models.ProjectTasks.belongsTo(db.models.Tasks, {
-  foreignKey: 'taskId',
-  as: 'Task',
-});
-
-db.models.ProjectTasks.belongsTo(db.models.Projects, {
+db.models.Projects.hasMany(db.models.Tasks, {
   foreignKey: 'projectId',
-  as: 'Project',
 });
 
-db.models.Projects.hasMany(db.models.ProjectTasks, {
+db.models.Tasks.belongsTo(db.models.Projects, {
   foreignKey: 'projectId',
-  as: 'ProjectTasks',
 });
 
-db.models.Tasks.hasMany(db.models.ProjectTasks, {
+db.models.Tasks.belongsToMany(db.models.Users, {
+  through: db.models.TaskAssignees,
   foreignKey: 'taskId',
-  as: 'ProjectTasks',
+  otherKey: 'assignee',
 });
 
-db.models.TaskAssignees.belongsTo(db.models.Tasks, {
-  foreignKey: 'taskId',
-  as: 'Task',
-});
-
-db.models.TaskAssignees.belongsTo(db.models.Users, {
+db.models.Users.belongsToMany(db.models.Tasks, {
+  through: db.models.TaskAssignees,
   foreignKey: 'assignee',
-  as: 'Assignee',
+  otherKey: 'taskId',
 });
 
-db.models.Users.hasMany(db.models.TaskAssignees, {
-  foreignKey: 'assignee',
-  as: 'AssignedTasks',
-});
-
-db.models.Tasks.hasMany(db.models.TaskAssignees, {
-  foreignKey: 'taskId',
-  as: 'Assignees',
-});
-
-db.models.OrganizationMembers.belongsTo(db.models.Organizations, {
+db.models.Organizations.belongsToMany(db.models.Users, {
+  through: db.models.OrganizationMembers,
   foreignKey: 'organizationId',
-  as: 'Organization',
+  otherKey: 'userId',
 });
 
-db.models.OrganizationMembers.belongsTo(db.models.Users, {
+db.models.Users.belongsToMany(db.models.Organizations, {
+  through: db.models.OrganizationMembers,
   foreignKey: 'userId',
-  as: 'User',
+  otherKey: 'organizationId',
 });
 
 db.models.OrganizationMembers.belongsTo(db.models.Roles, {
   foreignKey: 'roleId',
-  as: 'Role',
-});
-
-db.models.Organizations.hasMany(db.models.OrganizationMembers, {
-  foreignKey: 'organizationId',
-  as: 'OrganizationMembers',
-});
-
-db.models.Users.hasMany(db.models.OrganizationMembers, {
-  foreignKey: 'userId',
-  as: 'OrganizationMembers',
 });
 
 db.models.Roles.hasMany(db.models.OrganizationMembers, {
   foreignKey: 'roleId',
-  as: 'OrganizationMembers',
 });
 
 module.exports = {

@@ -30,6 +30,14 @@ module.exports = {
           referencedTable: 'users',
         },
       },
+      projectId: {
+        type: Sequelize.INTEGER,
+        foreignKey: {
+          referencedColumnName: 'id',
+          referencedTable: 'projects',
+        },
+        allowNull: true,
+      },
       createdAt: {
         type: Sequelize.DATE,
         defaultValue: Sequelize.NOW,

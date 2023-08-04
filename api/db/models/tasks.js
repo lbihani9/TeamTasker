@@ -25,6 +25,14 @@ const Tasks = sequelize.define('tasks', {
     allowNull: false,
     defaultValue: 'created',
   },
+  projectId: {
+    type: DataTypes.INTEGER,
+    references: {
+      key: 'id',
+      model: 'projects',
+    },
+    allowNull: true,
+  },
   createdBy: {
     type: DataTypes.INTEGER,
     references: {
