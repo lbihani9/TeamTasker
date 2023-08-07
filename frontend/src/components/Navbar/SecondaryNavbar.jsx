@@ -2,7 +2,6 @@ import React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
-import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
@@ -24,7 +23,6 @@ const SecondaryNavbar = ({ open, handleDrawerClose }) => {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CssBaseline />
       <Drawer
         sx={{
           flexShrink: 0,

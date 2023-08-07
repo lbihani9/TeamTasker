@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 import BackupTableIcon from '@mui/icons-material/BackupTable';
-import { Filters } from './Filters';
+import { FilterButton } from './FilterButton';
 
-export const ViewSelection = () => {
+export const ViewAndFilterSelection = () => {
   return (
     <Box
       sx={{
@@ -38,7 +38,7 @@ export const ViewSelection = () => {
           </Typography>
         </Box>
 
-        <Filters />
+        <FilterButton />
       </Box>
     </Box>
   );
