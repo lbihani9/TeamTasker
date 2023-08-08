@@ -6,14 +6,11 @@ const db = {
 };
 
 db.sequelize = sequelize;
-
-// Specify the directory path
 const directoryPath = './db/models';
 
 try {
   const files = fs.readdirSync(directoryPath);
 
-  // Iterate through the files array and log each filename
   files.forEach((file) => {
     if (file === 'index.js') return;
 

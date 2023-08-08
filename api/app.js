@@ -7,7 +7,7 @@ const { redisStore } = require('./redis');
 const { sequelize } = require('./db');
 const { router: v1Router } = require('./routers/routers');
 const { authRouter } = require('./routers/auths');
-const { validateSession } = require('./middlewares/auth');
+const { validateSession } = require('./middlewares/validate-session');
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -30,7 +30,7 @@ app.use(
       path: '/', 
       httpOnly: true, 
       secure: false, 
-      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days in milliseconds 
+      maxAge: 100 * 24 * 60 * 60 * 1000 // 7 days in milliseconds 
     }
   })
 );
