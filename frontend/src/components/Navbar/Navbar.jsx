@@ -75,6 +75,7 @@ const Logo = () => {
             width: '2.8em',
             height: '2.8em',
             justifyContent: 'center',
+            marginBottom: '1em'
           }}
           src={TeamTaskerLogo}
         />

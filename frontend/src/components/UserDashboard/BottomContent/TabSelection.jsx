@@ -1,10 +1,16 @@
-import { Box, Typography } from '@mui/material';
-import React from 'react';
+import { Box, Stack, Typography } from '@mui/material';
+import React, { useState } from 'react';
 import { NewProjectButton } from '../../Projects/NewProjectButton';
 import { NewTaskButton } from '../../Tasks/NewTaskButton';
 import ResponsiveHorizontalButtonGroup from '../../Templates/ResponsiveHorizontalButtonGroup';
 
 export const TabSelection = () => {
+  const [value, setValue] = useState(0);
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
     <Box
       sx={{

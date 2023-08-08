@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import {
   Avatar,
-  Button,
   List,
   ListItem,
   ListItemAvatar,
@@ -11,6 +11,11 @@ import {
 } from '@mui/material';
 import { CorporateFareIcon } from '../Icons';
 import NewOrganizationButton from './NewOrganizationButton';
+import {
+  setCurrentOrganization,
+  setMyOrganizations,
+} from '../../store/slices/organizationSlice';
+import { useNavigate } from 'react-router-dom';
 
 const fetchMyOrganizations = async (setOrganizations) => {
   try {
@@ -22,8 +27,10 @@ const fetchMyOrganizations = async (setOrganizations) => {
   }
 };
 
-const Organizations = (props) => {
+const MyOrganizations = (props) => {
   const [organizations, setOrganizations] = useState([]);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const getOrganizations = async () => {
@@ -33,6 +40,16 @@ const Organizations = (props) => {
     getOrganizations();
     return () => {};
   }, []);
+
+  useEffect(() => {
+    dispatch(setMyOrganizations(organizations));
+    return () => {};
+  }, [organizations]);
+
+  const selectOrganization = (org) => {
+    dispatch(setCurrentOrganization(org));
+    navigate(`/organizations/${org.username}`);
+  };
 
   return (
     <Stack
@@ -54,6 +71,7 @@ const Organizations = (props) => {
                 fontFamily: 'Poppins',
                 fontSize: '1em',
               }}
+              onClick={(e) => selectOrganization(org)}
             >
               <ListItemAvatar>
                 {!org.avatar ? (
@@ -84,4 +102,4 @@ const Organizations = (props) => {
   );
 };
 
-export default Organizations;
+export default MyOrganizations;

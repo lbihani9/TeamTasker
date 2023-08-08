@@ -22,14 +22,14 @@ export const clearReduxPersistState = () => {
 function App() {
   return (
     <Provider store={store}>
-      {/* <PersistGate
+      <PersistGate
         loading={null}
         persistor={persistor}
-      > */}
+      >
         <BrowserRouter>
           <Routing />
         </BrowserRouter>
-      {/* </PersistGate> */}
+      </PersistGate>
     </Provider>
   );
 }
