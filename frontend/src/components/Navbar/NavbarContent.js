@@ -10,27 +10,27 @@ import Organizations from './Organizations';
 const contents = [
   {
     name: 'Organizations',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <Organizations />,
     icon: <CorporateFareIcon />,
   },
   {
     name: 'Chats',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <Organizations />,
     icon: <ChatIcon />,
   },
   {
     name: 'Notifications',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <Organizations />,
     icon: <NotificationsIcon />,
   },
   {
     name: 'Reminders',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <Organizations />,
     icon: <AlarmIcon />,
   },
   {
     name: 'Settings',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <Organizations />,
     icon: <SettingsIcon />,
   },
 ];

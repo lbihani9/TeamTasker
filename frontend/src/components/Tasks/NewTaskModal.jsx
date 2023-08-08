@@ -22,7 +22,7 @@ const Transition = React.forwardRef((props, ref) => {
 
 const createTask = async (body) => {
   try {
-    const res = await axios.post(`/api/v1/tasks`, body);
+    const res = await axios.post(`/api/v1/@me/tasks`, body);
   } catch (err) {
     console.log(err);
   }

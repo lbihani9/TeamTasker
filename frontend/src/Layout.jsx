@@ -32,6 +32,7 @@ const Layout = () => {
       <SecondaryNavbar
         open={open}
         handleDrawerClose={handleDrawerClose}
+        activeIndex={activeIndex}
       />
       <Box
         component='main'
