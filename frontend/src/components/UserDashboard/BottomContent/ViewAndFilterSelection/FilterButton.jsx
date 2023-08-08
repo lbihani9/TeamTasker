@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 import TuneIcon from '@mui/icons-material/Tune';
 
-export const Filters = () => {
+export const FilterButton = () => {
   return (
     <Box
       sx={{

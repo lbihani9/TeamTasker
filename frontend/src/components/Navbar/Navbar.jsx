@@ -2,7 +2,6 @@ import * as React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import CssBaseline from '@mui/material/CssBaseline';
 import contents from './NavbarContent';
 import Logout from '../Logout';
 import NavbarItem from './NavbarItem';
@@ -39,30 +38,25 @@ const Drawer = styled(MuiDrawer, {
 
 const Navbar = (props) => {
   return (
-    <>
-      <CssBaseline />
-      <Drawer variant='permanent'>
-        <List>
-          <Logo />
-
-          {contents.map((content, index) => {
-            return (
-              <NavbarItem
-                {...{
-                  ...content,
-                  index,
-                  activeIndex: props.activeIndex,
-                  key: index + 1,
-                  handleItemClick: (e) => props.handleDrawerOpen(e, index),
-                }}
-              />
-            );
-          })}
-
-          <Logout />
-        </List>
-      </Drawer>
-    </>
+    <Drawer variant='permanent'>
+      <List>
+        <Logo />
+        {contents.map((content, index) => {
+          return (
+            <NavbarItem
+              {...{
+                ...content,
+                index,
+                activeIndex: props.activeIndex,
+                key: index + 1,
+                handleItemClick: (e) => props.handleDrawerOpen(e, index),
+              }}
+            />
+          );
+        })}
+        <Logout />
+      </List>
+    </Drawer>
   );
 };
 

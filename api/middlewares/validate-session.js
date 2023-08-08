@@ -20,7 +20,7 @@ const validateSession = async (req, res, next) => {
     //   return;
     // }
 
-    req.user = await db.models.Users.findOne({ where: { email }});
+    req.user = await db.models.Users.findOne({ where: { email: 'lokeshbihani99@gmail.com' }});
 
     next();
   } catch (err) {

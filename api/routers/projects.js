@@ -1,9 +1,14 @@
 const express = require('express');
-const { createProject, updateProject } = require('../controllers/projects');
+const {
+  updateProject,
+  createProjectTask,
+  getProjectTasks,
+} = require('../controllers/projects');
 const projectRouter = express.Router();
 
-projectRouter.post('', createProject);
-projectRouter.patch(':id', updateProject);
+projectRouter.patch('/:id', updateProject); // tested
+projectRouter.post('/:id/tasks', createProjectTask); // tested
+projectRouter.get('/:id/tasks', getProjectTasks); // tested
 
 module.exports = {
   projectRouter,
