@@ -1,10 +1,8 @@
 const express = require('express');
 const taskRouter = express.Router();
-const {
-  createTask
-} = require('../controllers/tasks');
+const { addTaskAssignee } = require('../controllers/tasks');
 
-taskRouter.post('', createTask);
+taskRouter.post('/:id/assignees', addTaskAssignee); // tested
 
 module.exports = {
   taskRouter,
