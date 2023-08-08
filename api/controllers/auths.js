@@ -97,7 +97,7 @@ const oAuthCallback = async (req, res) => {
       user = await Users.create({
         email,
         name,
-        username: `${given_name}#${usernameUUID}`,
+        username: `${given_name}-${usernameUUID}`,
         avatar: picture,
       });
     }
@@ -120,7 +120,7 @@ const oAuthCallback = async (req, res) => {
       await Sessions.create({
         email,
         sessionId: req.session.id,
-        expiresIn: 7 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
+        expiresIn: 100 * 24 * 60 * 60 * 1000, // 7 days in milliseconds
       });
     }
 

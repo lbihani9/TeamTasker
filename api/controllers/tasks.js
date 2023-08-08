@@ -1,29 +1,38 @@
 const { db } = require('../db/models');
-const { Tasks, TaskAssignees } = db.models;
+const { Tasks, Users } = db.models;
 
-const createTask = async (req, res) => {
+const addTaskAssignee = async (req, res) => {
   try {
-    const task = await Tasks.create({
-      ...req.body,
-      createdBy: req.user.id,
-    });
+    const task = await Tasks.findByPk(req.params.id);
+    if (!task) {
+      return res.status(400).json({
+        errors: [
+          {
+            message: "Task doesn't exist",
+          },
+        ],
+      });
+    }
 
-    await task.addUser(req.user);
+    const { username } = req.body;
+    const user = await Users.findOne({ where: { username } });
 
+    // TODO (Lokesh): Use findOrCreate kinda functionality with mixins.
+    const assignee = await task.addUser(user);
     res.status(201).json({
       data: {
-        task,
+        assignee,
       },
     });
   } catch (error) {
-    console.log(error);
+    console.log(err);
     res.status(500).json({
       errors: [
         {
           message: 'An error occured while creating the task.',
         },
         {
-          message: error.message,
+          message: err.message,
         },
       ],
     });
@@ -31,5 +40,5 @@ const createTask = async (req, res) => {
 };
 
 module.exports = {
-  createTask,
+  addTaskAssignee,
 };
