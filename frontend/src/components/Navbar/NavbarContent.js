@@ -5,32 +5,32 @@ import {
   NotificationsIcon,
   SettingsIcon,
 } from '../Icons';
-import Organizations from './Organizations';
+import MyOrganizations from './MyOrganizations';
 
 const contents = [
   {
     name: 'Organizations',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <MyOrganizations />,
     icon: <CorporateFareIcon />,
   },
-  {
-    name: 'Chats',
-    secondaryMenuItem: <Organizations />,
-    icon: <ChatIcon />,
-  },
-  {
-    name: 'Notifications',
-    secondaryMenuItem: <Organizations />,
-    icon: <NotificationsIcon />,
-  },
-  {
-    name: 'Reminders',
-    secondaryMenuItem: <Organizations />,
-    icon: <AlarmIcon />,
-  },
+  // {
+  //   name: 'Chats',
+  //   secondaryMenuComponent: <MyOrganizations />,
+  //   icon: <ChatIcon />,
+  // },
+  // {
+  //   name: 'Notifications',
+  //   secondaryMenuComponent: <MyOrganizations />,
+  //   icon: <NotificationsIcon />,
+  // },
+  // {
+  //   name: 'Reminders',
+  //   secondaryMenuComponent: <MyOrganizations />,
+  //   icon: <AlarmIcon />,
+  // },
   {
     name: 'Settings',
-    secondaryMenuItem: <Organizations />,
+    secondaryMenuComponent: <MyOrganizations />,
     icon: <SettingsIcon />,
   },
 ];

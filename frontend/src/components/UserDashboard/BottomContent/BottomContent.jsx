@@ -1,8 +1,7 @@
 import React from 'react';
 import { Box } from '@mui/material';
 import { TabSelection } from './TabSelection';
-import { ViewAndFilterSelection } from './ViewAndFilterSelection/ViewAndFilterSelection';
-import { TaskTable } from './Views/TaskTable';
+import { Outlet } from 'react-router-dom';
 
 const BottomContent = (props) => {
   return (
@@ -23,8 +22,7 @@ const BottomContent = (props) => {
           height: '100%',
         }}
       >
-        <ViewAndFilterSelection />
-        <TaskTable />
+        <Outlet />
       </Box>
     </Box>
   );

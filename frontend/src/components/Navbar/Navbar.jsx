@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -75,6 +75,7 @@ const Logo = () => {
             width: '2.8em',
             height: '2.8em',
             justifyContent: 'center',
+            marginBottom: '1em'
           }}
           src={TeamTaskerLogo}
         />
