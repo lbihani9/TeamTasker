@@ -1,8 +1,6 @@
 const { Op } = require('sequelize');
 const { models } = require('../db/models');
 
-// TODO: Remove hardcoding
-
 const getProjectActionItems = async (req, res) => {
   try {
     const { text = null, fields } = req.query;
@@ -12,7 +10,7 @@ const getProjectActionItems = async (req, res) => {
       attributes,
       where: {
         projectableType: 'user',
-        projectableId: 1,
+        projectableId: req.user.id,
       },
     };
 
@@ -22,7 +20,6 @@ const getProjectActionItems = async (req, res) => {
       };
     }
 
-    console.log(models);
     const projects = await models.Projects.findAll(dbQuery);
 
     res.status(200).json({
@@ -46,18 +43,14 @@ const getLabelActionItems = async (req, res) => {
 
     const task = await models.Tasks.findOne({
       where: {
-        id: taskId
+        id: taskId,
       },
       include: {
         model: models.Labels,
-        // through: {
-        //   attributes: ['labelId']
-        // },
-        attributes: ['id']
+        attributes: ['id'],
       },
     });
 
-    
     if (task === null) {
       return res.status(200).json({
         data: [],
@@ -67,8 +60,8 @@ const getLabelActionItems = async (req, res) => {
     const dbQuery = {
       where: {
         id: {
-          [Op.notIn]: task.labels.map(l => l.id)
-        }
+          [Op.notIn]: task.labels.map((l) => l.id),
+        },
       },
     };
 

@@ -1,13 +1,11 @@
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
-// TODO: Remove hard coding.
-
 const createTaskComment = async (req, res) => {
   try {
     const comment = await models.TaskComments.create({
       ...req.body,
-      createdBy: 1,
+      createdBy: req.user.id,
     });
 
     const user = await comment.getUser();

@@ -1,14 +1,12 @@
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
-// TODO: Remove hardcoding
-
 const createProject = async (req, res) => {
   try {
     const { projectableType, projectableId } = req.body;
 
     if (!projectableType || projectableType === 'user') {
-      req.body.projectableId = 1;
+      req.body.projectableId = req.user.id;
       req.body.projectableType = 'user';
     } else if (!projectableId) {
       return res.status(403).json({
@@ -21,11 +19,9 @@ const createProject = async (req, res) => {
       });
     }
 
-    // TODO (Lokesh): Add `beforeBulkCreate`, `beforeCreate` hooks to validate statusId.
-
     let project = await models.Projects.create({
       ...req.body,
-      createdBy: 1,
+      createdBy: req.user.id,
     });
 
     project = await models.Projects.findOne({
@@ -134,7 +130,7 @@ const getProjectTasks = async (req, res) => {
     res.status(200).json({
       data: {
         tasks,
-        project
+        project,
       },
     });
   } catch (error) {

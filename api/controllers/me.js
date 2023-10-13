@@ -2,14 +2,12 @@ const { Op } = require('sequelize');
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
-// TODO: Remove Hardcoding
-
 const getMyProjects = async (req, res) => {
   try {
     const projects = await models.Projects.findAll({
       where: {
         projectableType: 'user',
-        projectableId: 1,
+        projectableId: req.user.id,
       },
       include: [
         {
@@ -45,14 +43,10 @@ const getMyProjects = async (req, res) => {
 
 const getMyLabels = async (req, res) => {
   try {
-    let { limit, offset } = req.query;
-    limit = Number(limit || 25);
-    offset = Number(offset || 0);
-
     const { count: total, rows: labels } = await models.Labels.findAndCountAll({
       where: {
         labelableType: 'user',
-        labelableId: 1,
+        labelableId: req.user.id,
       },
       include: [
         {
@@ -62,14 +56,9 @@ const getMyLabels = async (req, res) => {
           model: models.Teams,
         },
       ],
-      limit,
-      offset,
     });
 
     res.status(200).json({
-      limit,
-      total,
-      offset: offset + limit,
       data: labels,
     });
   } catch (error) {
@@ -97,7 +86,7 @@ const getMyOrganizations = async (req, res) => {
             attributes: [],
           },
           where: {
-            id: 1,
+            id: req.user.id,
           },
           attributes: [],
         },
@@ -172,7 +161,7 @@ const getMyTasks = async (req, res) => {
           },
           as: 'assignees',
           where: {
-            id: 1,
+            id: req.user.id,
           },
           attributes: ['id', 'name', 'email', 'username', 'avatar'],
         },

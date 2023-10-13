@@ -1,4 +1,5 @@
 const { models } = require('../db/models');
+const { controllerErrorHandler } = require('../utils/utils');
 
 const createOrganizationMember = async (req, res) => {
   try {
@@ -39,12 +40,14 @@ const createOrganizationMember = async (req, res) => {
       data: organizationMember,
     });
   } catch (error) {
-    const { statusCode, message } = controllerErrorHandler(error);
-    res.status(500).json({
+    const { statusCode, message } = controllerErrorHandler(
+      error,
+      'An error occured while adding the user to the organization.'
+    );
+    res.status(statusCode).json({
       errors: [
         {
-          message:
-            'An error occured while adding the user to the organization.',
+          message,
         },
       ],
     });
@@ -73,12 +76,14 @@ const deleteOrganizationMember = async (req, res) => {
       data: null,
     });
   } catch (error) {
-    const { statusCode, message } = controllerErrorHandler(error);
-    res.status(500).json({
+    const { statusCode, message } = controllerErrorHandler(
+      error,
+      'An error occured while removing the user from the organization.'
+    );
+    res.status(statusCode).json({
       errors: [
         {
-          message:
-            'An error occured while removing the user from the organization.',
+          message,
         },
       ],
     });

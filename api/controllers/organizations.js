@@ -2,8 +2,6 @@ const { sequelize } = require('../db');
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
-// TODO: Remove Hardcoding
-
 const createOrganization = async (req, res) => {
   try {
     let organization;
@@ -11,7 +9,7 @@ const createOrganization = async (req, res) => {
       organization = await models.Organizations.create(
         {
           ...req.body,
-          ownedBy: 1,
+          ownedBy: req.user.id,
         },
         { transaction }
       );
@@ -19,7 +17,7 @@ const createOrganization = async (req, res) => {
       await models.OrganizationMembers.create(
         {
           organizationId: organization.id,
-          userId: 1,
+          userId: req.user.id,
         },
         { transaction }
       );

@@ -25,9 +25,14 @@ try {
 }
 
 module.exports = {
-  db,
   models: db.models,
 };
+
+// ====================== Sessions
+
+db.models.Sessions.belongsTo(db.models.Users, {
+  foreignKey: 'userId',
+});
 
 // ====================== Labels
 
@@ -219,6 +224,10 @@ db.models.Teams.hasMany(db.models.Projects, {
 });
 
 // ======================= Users
+
+db.models.Users.hasMany(db.models.Sessions, {
+  foreignKey: 'userId',
+});
 
 db.models.Users.hasMany(db.models.Projects, {
   foreignKey: 'projectableId',

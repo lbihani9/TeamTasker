@@ -108,7 +108,7 @@ const oAuthCallback = async (req, res) => {
       });
     }
 
-    const session = await Sessions.findOne({ where: { email } });
+    const session = await Sessions.findOne({ where: { userId: user.id } });
     let sessionFound = session !== null;
 
     if (session) {
@@ -120,7 +120,7 @@ const oAuthCallback = async (req, res) => {
 
       // It's because redis couldn't find the data maybe because connect.sid was missing, or the session expired so it was removed from redis.
       if (session.sessionId !== req.session.id) {
-        await redisClient.DEL(
+        await redisClient.del(
           `${REDIS_SESSION_KEY_PREFIX}${session.sessionId}`
         );
 
@@ -136,18 +136,13 @@ const oAuthCallback = async (req, res) => {
       }
     }
 
-    req.session.userInfo = {
-      email,
-      userId: user.id,
-      username: user.username,
-      name: user.name,
-    };
+    req.session.userId = user.id;
 
     if (sessionFound) {
       await session.save();
     } else {
       await Sessions.create({
-        email,
+        userId: user.id,
         sessionId: req.session.id,
         expiresIn: SESSION_EXPIRY_TIME_IN_MS,
       });
@@ -176,7 +171,7 @@ const logout = async (req, res) => {
      * 2. when session has expired.
      * 3. when somewhere in the codebase, this information was deleted.
      */
-    if (!req.session.userInfo) {
+    if (!req.session || !req.session.userId) {
       res.status(200).json({
         data: {
           url: 'login',
@@ -185,34 +180,15 @@ const logout = async (req, res) => {
       return;
     }
 
-    const { email = null, userId = null } = req.session.userInfo || {};
-    if (!email && !userId) {
-      res.status(200).json({
-        data: {
-          url: 'login',
-        },
-      });
-      return;
-    }
-
-    const dbQuery = {};
-    if (userId) {
-      dbQuery.where = {
-        id: userId,
-      };
-    } else {
-      dbQuery.where = {
-        email,
-      };
-    }
-
-    const session = await Sessions.findOne(dbQuery);
+    const session = await Sessions.findOne({
+      where: { userId: req.session.userId },
+    });
     req.session.destroy(async (err) => {
       if (err) {
         console.log(err);
       }
       if (session) {
-        await session.destroy();
+        await session.destroy({ force: true });
       }
       res.status(200).json({
         data: {
@@ -233,7 +209,7 @@ const logout = async (req, res) => {
 const getLoginStatus = async (req, res) => {
   try {
     let status = false;
-    if (!req.session.userInfo) {
+    if (!req.session || !req.session.userId) {
       return res.status(200).json({
         data: {
           status,
@@ -241,27 +217,9 @@ const getLoginStatus = async (req, res) => {
       });
     }
 
-    const { email = null, userId = null } = req.session.userInfo || {};
-    if (!email && !userId) {
-      return res.status(200).json({
-        data: {
-          status,
-        },
-      });
-    }
-
-    const dbQuery = {};
-    if (userId) {
-      dbQuery.where = {
-        id: userId,
-      };
-    } else {
-      dbQuery.where = {
-        email,
-      };
-    }
-
-    const session = await Sessions.findOne(dbQuery);
+    const session = await Sessions.findOne({
+      where: { userId: req.session.userId },
+    });
     if (!session) {
       return res.status(200).json({
         data: {
@@ -274,7 +232,6 @@ const getLoginStatus = async (req, res) => {
     res.status(200).json({
       data: {
         status,
-        info: req.session.userInfo,
       },
     });
   } catch (err) {

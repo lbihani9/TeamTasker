@@ -3,14 +3,12 @@ const { sequelize } = require('../db');
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
-// TODO: Remove hardcoding.
-
 const createTask = async (req, res) => {
   try {
     const { taskableType, taskableId } = req.body;
 
     if (!taskableType || taskableType === 'user') {
-      req.body.taskableId = 1;
+      req.body.taskableId = req.user.id;
       req.body.taskableType = 'user';
     } else if (!taskableId) {
       return res.status(403).json({
@@ -23,19 +21,17 @@ const createTask = async (req, res) => {
       });
     }
 
-    // TODO (Lokesh): Add `beforeBulkCreate`, `beforeCreate` hooks to validate statusId.
-
     let task;
     await sequelize.transaction(async (transaction) => {
       task = await models.Tasks.create({
         ...req.body,
-        createdBy: 1,
+        createdBy: req.user.id,
       });
 
       if (req.body.taskableType === 'user') {
         await models.TaskAssignees.create({
           taskId: task.id,
-          userId: 1,
+          userId: req.user.id,
         });
       }
     });
@@ -82,8 +78,6 @@ const createTask = async (req, res) => {
 const patchTask = async (req, res) => {
   try {
     delete req.body.createdBy;
-
-    // TODO (Lokesh): Add `beforeBulkUpdate`, and `beforeUpdate` hooks to validate statusId.
 
     const task = await models.Tasks.findOne({
       where: {

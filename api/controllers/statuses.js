@@ -3,14 +3,12 @@ const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 const { sequelize } = require('../db');
 
-// TODO: Remove hardcoding
-
 const createStatus = async (req, res) => {
   try {
     const { statusableType, statusableId } = req.body;
 
     if (!statusableType || statusableType === 'user') {
-      req.body.statusableId = 1;
+      req.body.statusableId = req.user.id;
       req.body.statusableType = 'user';
     } else if (!statusableId) {
       return res.status(403).json({

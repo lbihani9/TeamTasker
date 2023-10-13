@@ -2,14 +2,12 @@ const { sequelize } = require('../db');
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
-// TODO: Remove hardcoding
-
 const createLabel = async (req, res) => {
   try {
     let { labelableType, labelableId } = req.body;
 
     if (!labelableType || labelableType === 'user') {
-      req.body.labelableId = 1;
+      req.body.labelableId = req.user.id;
       req.body.labelableType = 'user';
     } else if (!labelableId) {
       return res.status(403).json({
