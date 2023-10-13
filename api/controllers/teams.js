@@ -1,10 +1,19 @@
 const { Op } = require('sequelize');
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
+const { sequelize } = require('../db');
 
 const createTeam = async (req, res) => {
   try {
-    const team = await models.Teams.create(req.body);
+    let team;
+    await sequelize.transaction(async (transaction) => {
+      team = await models.Teams.create(req.body, { transaction });
+
+      await models.TeamMembers.create({
+        teamId: team.id,
+        userId: req.user.id,
+      });
+    });
 
     res.status(201).json({
       data: team,
@@ -128,9 +137,6 @@ const getTeamLabels = async (req, res) => {
 
 const getTeamMembers = async (req, res) => {
   try {
-    let { limit, offset } = req.query;
-    (limit = Number(limit)), (offset = Number(offset));
-
     const { rows: members, count: total } =
       await models.TeamMembers.findAndCountAll({
         where: {
@@ -140,15 +146,10 @@ const getTeamMembers = async (req, res) => {
           model: models.Users,
         },
         order: [['createdAt', 'ASC']],
-        limit,
-        offset,
       });
 
     res.status(200).json({
       data: members,
-      limit,
-      offset: limit + offset,
-      total,
     });
   } catch (error) {
     const { statusCode, message } = controllerErrorHandler(
