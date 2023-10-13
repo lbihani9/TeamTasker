@@ -6,11 +6,6 @@
 /api/.env
 redis
 mysql
-/api/_controllers
-/api/_db
-/api/_middlewares
-/api/_routers
-/api/_.sequelizerc
 
 # frontend
 /frontend/node_modules

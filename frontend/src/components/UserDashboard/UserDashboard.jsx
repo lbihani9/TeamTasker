@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Stack } from '@mui/material';
+import { Stack } from '@mui/material';
 import TopContent from './TopContent/TopContent';
 import BottomContent from './BottomContent/BottomContent';
 

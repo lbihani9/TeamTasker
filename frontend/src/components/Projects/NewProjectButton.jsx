@@ -20,7 +20,7 @@ export const NewProjectButton = () => {
         onClick={(e) => setOpen(!open)}
         startIcon={<AddIcon />}
       >
-        New project
+        Project
       </Button>
 
       {open && (

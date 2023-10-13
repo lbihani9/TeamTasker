@@ -1,28 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  organizations: [],
-  currentOrganization: null,
+  items: [],
+  current: null,
 };
 
 export const organizationSlice = createSlice({
-  name: 'my-organizations',
+  name: 'organizations',
   initialState,
   reducers: {
-    setMyOrganizations: (state, action) => {
-      state.currentOrganization = null;
-      state.organizations = action.payload;
+    setOrganizations: (state, action) => {
+      state.current = null;
+      state.items = action.payload;
     },
 
     setCurrentOrganization: (state, action) => {
-      state.currentOrganization = action.payload;
+      state.current = action.payload;
+    },
+
+    addOrganization: (state, action) => {
+      state.items.push(action.payload);
+    },
+
+    clearOrgnizations: (state) => {
+      return initialState;
     },
   },
 });
 
 export const {
-  setMyOrganizations,
+  setOrganizations,
   setCurrentOrganization,
+  addOrganization,
+  clearOrgnizations,
 } = organizationSlice.actions;
 
 export default organizationSlice.reducer;

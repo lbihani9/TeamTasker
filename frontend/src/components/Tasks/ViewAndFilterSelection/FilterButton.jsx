@@ -9,9 +9,9 @@ export const FilterButton = () => {
         display: 'flex',
         fontFamily: 'inherit',
         gap: '0.2em',
+        cursor: 'pointer'
       }}
     >
-      <TuneIcon />
       <Typography
         sx={{
           fontFamily: 'inherit',
