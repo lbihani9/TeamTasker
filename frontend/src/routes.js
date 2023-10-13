@@ -1,53 +1,70 @@
 import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, createBrowserRouter } from 'react-router-dom';
 import Home from './components/Home/Home';
 import UserDashboard from './components/UserDashboard/UserDashboard';
 import Layout from './Layout';
-import Organizations from './components/Organizations/Organizations';
 import Tasks from './components/Tasks/Tasks';
+import Projects from './components/Projects/Projects';
+import DetailedTask from './components/Tasks/DetailedTask';
+import Labels from './components/Labels/Labels';
 
-export const Routing = () => {
-  return (
-    <Routes>
-      <Route
-        exact
-        path='/'
-        element={<Navigate to='/login' />}
-      />
-
-      <Route
-        exact
-        path='/@me'
-        element={
+export const router = createBrowserRouter([
+  {
+    path: '',
+    element: <Navigate to='/login' />,
+  },
+  {
+    path: 'login',
+    element: <Home />,
+  },
+  {
+    path: '/',
+    element: <Layout />,
+    children: [
+      {
+        path: '',
+        element: (
           <Navigate
-            to='/@me/tasks'
+            to='/login'
             replace
           />
-        }
-      />
-
-      <Route
-        exact
-        path='/login'
-        element={<Home />}
-      />
-
-      <Route element={<Layout />}>
-        <Route
-          path='/@me'
-          element={<UserDashboard />}
-        >
-          <Route
-            path='tasks'
-            element={<Tasks />}
-          />
-        </Route>
-
-        <Route
-          path='/organizations/:slug'
-          element={<Organizations />}
-        />
-      </Route>
-    </Routes>
-  );
-};
+        ),
+      },
+      {
+        path: 'projects/:projectId/tasks',
+        element: <Tasks />,
+      },
+      {
+        path: 'tasks/:taskId',
+        element: <DetailedTask />,
+      },
+      {
+        path: '@me',
+        element: <UserDashboard />,
+        children: [
+          {
+            path: '',
+            element: (
+              <Navigate
+                to='/@me/tasks'
+                replace
+              />
+            ),
+          },
+          {
+            path: 'tasks',
+            element: <Tasks />,
+          },
+          {
+            path: 'projects',
+            element: <Projects />,
+          },
+          {
+            path: 'labels',
+            element: <Labels />,
+          },
+        ],
+      },
+    ],
+  },
+]);

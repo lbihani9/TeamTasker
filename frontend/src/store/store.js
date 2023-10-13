@@ -4,9 +4,15 @@ import { combineReducers } from 'redux';
 import { persistReducer } from 'redux-persist';
 import thunk from 'redux-thunk';
 import organizationReducer from './slices/organizationSlice';
+import tasksReducer from './slices/tasksSlice';
+import projectsReducer from './slices/projectsSlice';
+import teamReducer from './slices/teamSlice';
 
 const reducers = combineReducers({
-  'my-organizations': organizationReducer,
+  organizations: organizationReducer,
+  tasks: tasksReducer,
+  projects: projectsReducer,
+  teams: teamReducer,
 });
 
 const persistConfig = {

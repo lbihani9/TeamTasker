@@ -1,5 +1,7 @@
 require('dotenv').config();
 const redis = require('redis');
+const session = require('express-session');
+const { REDIS_SESSION_KEY_PREFIX } = require('./utils/constants');
 const RedisStore = require('connect-redis').default;
 
 const redisURL = `redis://${process.env.REDIS_USERNAME}:${process.env.REDIS_PASSWORD}@${process.env.REDIS_IP}:${process.env.REDIS_PORT}`;
@@ -16,10 +18,11 @@ redisClient
 
 const redisStore = new RedisStore({
   client: redisClient,
-  prefix: 'session:',
+  prefix: REDIS_SESSION_KEY_PREFIX,
 });
 
 module.exports = {
   redisClient,
-  redisStore
-}
+  redisStore,
+  session,
+};

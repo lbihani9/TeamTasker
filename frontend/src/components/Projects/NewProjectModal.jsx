@@ -6,9 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
-import axios from 'axios';
-import { Button, TextField } from '@mui/material';
+import { Button, DialogActions, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import usePostProject from '../../hooks/usePostProject';
 
 const Transition = React.forwardRef((props, ref) => {
   return (
@@ -20,19 +20,17 @@ const Transition = React.forwardRef((props, ref) => {
   );
 });
 
-const createProject = async (body) => {
-  try {
-    const res = await axios.post(`/api/v1/@me/projects`, body);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const NewProjectModal = ({ open, handleClose }) => {
+export const NewProjectModal = ({
+  open,
+  handleClose,
+  projectableType = null,
+  projectableId = null,
+}) => {
   const [fields, setFields] = useState({
     name: '',
+    description: '',
   });
-  const [loading, setLoading] = useState(false);
+  const { postProject, loading } = usePostProject();
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
 
@@ -49,9 +47,17 @@ export const NewProjectModal = ({ open, handleClose }) => {
   };
 
   const handleCreation = async (e) => {
-    setLoading(true);
-    await createProject(fields);
-    setLoading(false);
+    const body = { ...fields };
+    if (body.description.length > 255) {
+      alert('The limit for description is 255 characters.');
+      return;
+    }
+
+    if (projectableType) {
+      body.projectableType = projectableType;
+      body.projectableId = projectableId;
+    }
+    await postProject(body, projectableType);
     handleClose();
   };
 
@@ -61,6 +67,8 @@ export const NewProjectModal = ({ open, handleClose }) => {
       open={open}
       onClose={handleClose}
       TransitionComponent={Transition}
+      fullWidth
+      maxWidth='md'
     >
       <DialogTitle
         sx={{
@@ -73,21 +81,35 @@ export const NewProjectModal = ({ open, handleClose }) => {
       <DialogContent
         sx={{
           display: 'flex',
-          alignItems: 'baseline',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
           gap: '1em',
         }}
       >
         <TextField
-          label='Task name'
-          variant='standard'
+          label='Project name'
+          variant='outlined'
           type='string'
           name='name'
-          value={fields.name}
+          value={fields?.name}
           onChange={handleChange}
           required
         />
 
+        <TextField
+          helperText={`${255 - fields?.description.length} characters left.`}
+          label='Description'
+          variant='outlined'
+          placeholder='Description (optional). Max limit is 255 characters.'
+          type='string'
+          name='description'
+          value={fields?.description}
+          onChange={handleChange}
+          multiline
+          minRows={3}
+        />
+      </DialogContent>
+
+      <DialogActions>
         <Button
           size='small'
           onClick={handleCreation}
@@ -97,6 +119,7 @@ export const NewProjectModal = ({ open, handleClose }) => {
           sx={{
             gap: '1em',
             fontFamily: 'Poppins',
+            borderRadius: '0.5em',
           }}
         >
           {loading && (
@@ -107,7 +130,7 @@ export const NewProjectModal = ({ open, handleClose }) => {
           )}
           Add
         </Button>
-      </DialogContent>
+      </DialogActions>
     </Dialog>
   );
 };

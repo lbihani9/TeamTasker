@@ -5,7 +5,7 @@ import {
   NotificationsIcon,
   SettingsIcon,
 } from '../Icons';
-import MyOrganizations from './MyOrganizations';
+import MyOrganizations from '../Organizations/MyOrganizations';
 
 const contents = [
   {
@@ -28,11 +28,11 @@ const contents = [
   //   secondaryMenuComponent: <MyOrganizations />,
   //   icon: <AlarmIcon />,
   // },
-  {
-    name: 'Settings',
-    secondaryMenuComponent: <MyOrganizations />,
-    icon: <SettingsIcon />,
-  },
+  // {
+  //   name: 'Settings',
+  //   secondaryMenuComponent: <MyOrganizations />,
+  //   icon: <SettingsIcon />,
+  // },
 ];
 
 export default contents;

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import AddTaskIcon from '@mui/icons-material/AddTask';
 import { Button } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import { NewTaskModal } from './NewTaskModal';
 
 export const NewTaskButton = () => {
@@ -18,9 +18,9 @@ export const NewTaskButton = () => {
           borderRadius: '0.5em',
         }}
         onClick={(e) => setOpen(!open)}
-        startIcon={<AddTaskIcon />}
+        startIcon={<AddIcon />}
       >
-        New Task
+        Task
       </Button>
 
       {open && (

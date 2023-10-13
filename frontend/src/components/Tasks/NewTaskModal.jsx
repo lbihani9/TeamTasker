@@ -6,9 +6,9 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import Slide from '@mui/material/Slide';
-import axios from 'axios';
 import { Button, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
+import usePostTask from '../../hooks/usePostTask';
 
 const Transition = React.forwardRef((props, ref) => {
   return (
@@ -20,21 +20,16 @@ const Transition = React.forwardRef((props, ref) => {
   );
 });
 
-const createTask = async (body) => {
-  try {
-    const res = await axios.post(`/api/v1/@me/tasks`, body);
-  } catch (err) {
-    console.log(err);
-  }
-};
-
-export const NewTaskModal = ({ open, handleClose }) => {
-  const [fields, setFields] = useState({
-    name: '',
-  });
-  const [loading, setLoading] = useState(false);
+export const NewTaskModal = ({
+  open,
+  handleClose,
+  taskableType = null,
+  taskableId = null,
+}) => {
+  const [fields, setFields] = useState({ name: '' });
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down('xs'));
+  const { loading, postTask } = usePostTask();
 
   const hasAtleastOneEmptyField = () => {
     return fields.name === '';
@@ -49,9 +44,13 @@ export const NewTaskModal = ({ open, handleClose }) => {
   };
 
   const handleCreation = async (e) => {
-    setLoading(true);
-    await createTask(fields);
-    setLoading(false);
+    const body = { ...fields };
+    if (taskableType) {
+      body.taskableType = taskableType;
+      body.taskableId = taskableId;
+    }
+
+    await postTask(body, taskableType);
     handleClose();
   };
 

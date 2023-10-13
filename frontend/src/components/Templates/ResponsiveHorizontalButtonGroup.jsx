@@ -94,9 +94,7 @@ const ResponsiveHorizontalButtonGroup = (props) => {
               >
                 <Paper>
                   <ClickAwayListener onClickAway={handleClose}>
-                    <MenuList
-                      autoFocusItem
-                    >
+                    <MenuList autoFocusItem>
                       {options.map((option, index) => (
                         <MenuItem
                           key={option}
@@ -117,6 +115,6 @@ const ResponsiveHorizontalButtonGroup = (props) => {
       )}
     </>
   );
-}
+};
 
 export default ResponsiveHorizontalButtonGroup;

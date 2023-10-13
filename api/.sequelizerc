@@ -1,0 +1,11 @@
+// .sequelizerc
+const path = require('path');
+require('dotenv').config();
+
+module.exports = {
+  'config': path.resolve('db', 'index.js'),
+  'models-path': path.resolve('db', 'models'),
+  'migrations-path': path.resolve('db', 'migrations'),
+  'seeders-path': path.resolve('db', 'seeders'),
+  'url': `mysql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_IP}:${process.env.DB_PORT}/TeamTasker`
+};
