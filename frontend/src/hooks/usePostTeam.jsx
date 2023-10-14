@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addTeam } from '../store/slices/teamSlice';
+import { dismissNotifications, notify } from '../utils';
 
 const usePostTeam = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ const usePostTeam = () => {
 
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.post(`/api/v1/teams`, body);
       dispatch(
         addTeam({
@@ -25,8 +27,12 @@ const usePostTeam = () => {
           team: res.data?.data ?? {},
         })
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

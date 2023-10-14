@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setTeams } from '../store/slices/teamSlice';
+import { dismissNotifications, notify } from '../utils';
 
 const useTeams = () => {
   const [loading, setLoading] = useState(false);
@@ -18,6 +19,7 @@ const useTeams = () => {
   const getTeams = useCallback(async () => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.get(
         `/api/v1/organizations/${currentOrganization?.id}/teams`
       );
@@ -27,8 +29,12 @@ const useTeams = () => {
           teams: res.data?.data ?? [],
         })
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -37,8 +43,12 @@ const useTeams = () => {
   const patchTeam = useCallback(async () => {
     try {
       setLoading(true);
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

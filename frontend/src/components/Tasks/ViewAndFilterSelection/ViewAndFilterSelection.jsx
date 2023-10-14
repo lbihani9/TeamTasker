@@ -62,7 +62,7 @@ export const ViewAndFilterSelection = () => {
         </Box>
       </Grid>
 
-      <Grid
+      {/* <Grid
         item
         xs={12}
         md={9.5}
@@ -73,7 +73,7 @@ export const ViewAndFilterSelection = () => {
           variant='outlined'
           fullWidth
         />
-      </Grid>
+      </Grid> */}
 
       <Grid
         item
@@ -92,11 +92,11 @@ export const ViewAndFilterSelection = () => {
           justifyContent='space-between'
           width='100%'
         >
-          <Tooltip title='Filter'>
+          {/* <Tooltip title='Filter'>
             <IconButton size='small'>
               <TuneIcon fontSize='small' />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
 
           {projectId && (
             <Button

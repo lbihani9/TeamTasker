@@ -8,6 +8,7 @@ import {
 } from '../store/slices/tasksSlice';
 import { useParams } from 'react-router-dom';
 import { setCurrentProject } from '../store/slices/projectsSlice';
+import { dismissNotifications, notify } from '../utils';
 
 const useTasks = () => {
   const { projectId } = useParams();
@@ -29,6 +30,7 @@ const useTasks = () => {
   const getProjectTasks = useCallback(async (projectId) => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.get(`/api/v1/projects/${projectId}/tasks`);
       const { tasks, project } = res.data.data ?? {};
       dispatch(
@@ -38,8 +40,11 @@ const useTasks = () => {
         })
       );
       dispatch(setCurrentProject(project));
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -48,6 +53,7 @@ const useTasks = () => {
   const getTasks = useCallback(async () => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.get(`/api/v1/@me/tasks`);
       dispatch(
         setTasks({
@@ -55,8 +61,11 @@ const useTasks = () => {
           tasks: res.data.data ?? [],
         })
       );
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

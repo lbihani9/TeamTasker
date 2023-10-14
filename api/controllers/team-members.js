@@ -1,8 +1,10 @@
 const { models } = require('../db/models');
+const { sequelize } = require('../db');
+const { controllerErrorHandler } = require('../utils/utils');
 
 const createTeamMember = async (req, res) => {
   try {
-    const { users = [], teamId = null } = req.body;
+    const { email = null, teamId = null } = req.body;
     if (!teamId) {
       return res.status(400).json({
         errors: [
@@ -13,37 +15,80 @@ const createTeamMember = async (req, res) => {
       });
     }
 
-    if (users.length === 0) {
+    if (!email) {
       return res.status(400).json({
         errors: [
           {
-            message: 'Atleast one user is required.',
+            message: 'Email is required.',
+          },
+        ],
+      });
+    }
+
+    const team = await models.Teams.findOne({
+      where: {
+        id: teamId,
+      },
+      include: models.Organizations,
+    });
+
+    if (!team) {
+      return res.status(404).json({
+        errors: [
+          {
+            message: "Team doesn't exist.",
           },
         ],
       });
     }
 
     let teamMember;
-    if (users.length === 1) {
-      teamMember = await models.TeamMembers.create({
-        teamId,
-        userId: users[0].id,
+    const user = await models.Users.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!user) {
+      return res.status(400).json({
+        errors: [
+          {
+            message: 'Please ensure that the user has a valid account.',
+          },
+        ],
       });
-    } else {
-      teamMember = await models.TeamMembers.bulkCreate(
-        users.map((user) => ({ teamId, userId: user.id }))
-      );
     }
+
+    await sequelize.transaction(async (transaction) => {
+      teamMember = await models.TeamMembers.create(
+        {
+          teamId,
+          userId: user.id,
+        },
+        { transaction }
+      );
+
+      await models.OrganizationMembers.create(
+        {
+          organizationId: team.organization.id,
+          userId: user.id,
+        },
+        { transaction }
+      );
+    });
 
     res.status(201).json({
       data: teamMember,
     });
   } catch (error) {
-    const { statusCode, message } = controllerErrorHandler(error);
-    res.status(500).json({
+    const { statusCode, message } = controllerErrorHandler(
+      error,
+      'An error occured while adding the team member.'
+    );
+    res.status(statusCode).json({
       errors: [
         {
-          message: 'An error occured while adding the team member.',
+          message,
         },
       ],
     });
@@ -62,11 +107,14 @@ const deleteTeamMember = async (req, res) => {
       data: null,
     });
   } catch (error) {
-    const { statusCode, message } = controllerErrorHandler(error);
-    res.status(500).json({
+    const { statusCode, message } = controllerErrorHandler(
+      error,
+      'An error occured while deleting the team member.'
+    );
+    res.status(statusCode).json({
       errors: [
         {
-          message: 'An error occured while deleting the team member.',
+          message,
         },
       ],
     });

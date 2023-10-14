@@ -7,14 +7,19 @@ import LoginWithFacebook from './LoginWithFacebook';
 import LoginWithGithub from './LoginWithGithub';
 
 const Login = () => {
-  // useEffect(() => {
-  //   getLoginStatus();
-  //   return () => {};
-  // }, []);
+  useEffect(() => {
+    getLoginStatus();
+    return () => {};
+  }, []);
 
   const getLoginStatus = async () => {
     try {
       const { data } = await axios.get(`/auth/login-status`);
+      const { status = false } = data.data;
+      console.log(status)
+      if (status) {
+        window.location.href = '/@me/tasks';
+      }
       console.log(data);
     } catch (err) {
       console.log(err);

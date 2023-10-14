@@ -5,6 +5,7 @@ import {
   setTeamProjects,
   updateTeamStoreProject,
 } from '../store/slices/projectsSlice';
+import { dismissNotifications, notify } from '../utils';
 
 const useTeamProjects = () => {
   const [loading, setLoading] = useState(false);
@@ -20,6 +21,8 @@ const useTeamProjects = () => {
   const getTeamProjects = useCallback(async (searchText) => {
     try {
       setLoading(true);
+      notify('Loading...');
+
       const res = await axios.get(
         `/api/v1/teams/${currentTeam?.id}/projects?text=${searchText}`
       );
@@ -29,8 +32,12 @@ const useTeamProjects = () => {
           projects: res.data?.data ?? [],
         })
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -39,6 +46,8 @@ const useTeamProjects = () => {
   const patchTeamProject = useCallback(async (body, projectId) => {
     try {
       setLoading(true);
+      notify('Loading...');
+
       const res = await axios.patch(`/api/v1/projects/${projectId}`, body);
 
       dispatch(
@@ -47,8 +56,12 @@ const useTeamProjects = () => {
           project: res.data.data ?? {},
         })
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
