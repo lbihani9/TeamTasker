@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { dismissNotifications, notify } from '../utils';
 
 const useLabelSearch = () => {
   const { taskId } = useParams();
@@ -25,12 +26,18 @@ const useLabelSearch = () => {
 
     try {
       setLoading(true);
+      notify('Loading...');
+
       const res = await axios.get(
         `/api/v1/search/labels/action-items?${queryString}`
       );
       setFoundLabels(res.data.data ?? []);
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

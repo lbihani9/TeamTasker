@@ -8,6 +8,9 @@ import { store } from './store/store';
 import { router } from './routes';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 axios.defaults.withCredentials = true;
@@ -25,7 +28,6 @@ axios.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error?.response?.status === 401) {
-      // unauthorized request
       window.location.href = '/login';
     }
     return Promise.reject(error);
@@ -40,6 +42,16 @@ function App() {
         persistor={persistor}
       >
         <LocalizationProvider dateAdapter={AdapterMoment}>
+          <ToastContainer 
+            position='top-center'
+            newestOnTop
+            rtl={false}
+            pauseOnFocusLoss
+            closeOnClick
+            draggable
+            pauseOnHover
+            theme='light'
+          />
           <RouterProvider router={router} />
         </LocalizationProvider>
       </PersistGate>

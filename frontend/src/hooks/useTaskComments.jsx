@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import { dismissNotifications, notify } from '../utils';
 
 const useTaskComments = (taskId) => {
   const [comments, setComments] = useState([]);
@@ -14,10 +15,15 @@ const useTaskComments = (taskId) => {
   const getComments = useCallback(async () => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.get(`/api/v1/tasks/${taskId}/comments`);
       setComments(res.data.data ?? []);
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -31,10 +37,15 @@ const useTaskComments = (taskId) => {
         taskId,
       };
 
+      notify('Loading...');
       const res = await axios.post(`/api/v1/task-comments`, body);
       setComments((prev) => [...prev, { ...res.data.data }]);
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -43,12 +54,17 @@ const useTaskComments = (taskId) => {
   const updateComment = useCallback(async (body, commentId) => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.patch(`/api/v1/task-comments/${commentId}`, body);
       setComments((prev) =>
         prev.map((p) => (p.id === commentId ? { ...res.data.data } : p))
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -57,10 +73,15 @@ const useTaskComments = (taskId) => {
   const deleteComment = useCallback(async (commentId) => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.delete(`/api/v1/task-comments/${commentId}`);
       setComments((prev) => prev.filter((p) => p.id !== commentId));
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

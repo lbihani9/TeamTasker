@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { addProjectTask, addTask } from '../store/slices/tasksSlice';
+import { dismissNotifications, notify } from '../utils';
 
 const usePostTask = () => {
   const [loading, setLoading] = useState(false);
@@ -11,6 +12,8 @@ const usePostTask = () => {
   const postTask = useCallback(async (body, taskableType) => {
     try {
       setLoading(true);
+      notify('Loading...');
+
       const res = await axios.post(`/api/v1/tasks`, body);
       if (taskableType) {
         dispatch(
@@ -27,8 +30,12 @@ const usePostTask = () => {
           })
         );
       }
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

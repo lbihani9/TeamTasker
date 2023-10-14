@@ -1,23 +1,36 @@
 import { useCallback, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addProject, addTeamProject } from '../store/slices/projectsSlice';
 import axios from 'axios';
+import { dismissNotifications, notify } from '../utils';
 
 const usePostProject = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
+  const currentTeam = useSelector((state) => state.teams.current);
 
   const postProject = useCallback(async (body, projectableType) => {
     try {
       setLoading(true);
+      notify('Loading...');
+
       const res = await axios.post(`/api/v1/projects`, body);
       if (!projectableType) {
-        dispatch(addProject({ ...res.data.data }));
+        dispatch(addProject({ userId: 1, project: { ...res.data.data } }));
       } else {
-        dispatch(addTeamProject({ ...res.data.data }));
+        dispatch(
+          addTeamProject({
+            teamId: currentTeam.id,
+            project: { ...res.data.data },
+          })
+        );
       }
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

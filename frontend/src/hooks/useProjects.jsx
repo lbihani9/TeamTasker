@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { setProjects, updateStoreProject } from '../store/slices/projectsSlice';
 import { useDispatch } from 'react-redux';
+import { dismissNotifications, notify } from '../utils';
 
 const useProjects = () => {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ const useProjects = () => {
   const getProjects = useCallback(async () => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.get(`/api/v1/@me/projects`);
       dispatch(
         setProjects({
@@ -22,8 +24,12 @@ const useProjects = () => {
           projects: res.data?.data ?? [],
         })
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -32,6 +38,7 @@ const useProjects = () => {
   const updateProject = useCallback(async (body, projectId) => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.patch(`/api/v1/projects/${projectId}`, body);
 
       dispatch(
@@ -40,8 +47,12 @@ const useProjects = () => {
           project: res.data.data ?? {},
         })
       );
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setCurrentTask, updateCurrentTask } from '../store/slices/tasksSlice';
+import { dismissNotifications, notify } from '../utils';
 
 const useDetailedTask = (taskId) => {
   const [loading, setLoading] = useState(false);
@@ -15,10 +16,15 @@ const useDetailedTask = (taskId) => {
   const getTask = async () => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.get(`/api/v1/tasks/${taskId}`);
       dispatch(setCurrentTask(res.data?.data ?? {}));
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
@@ -27,10 +33,15 @@ const useDetailedTask = (taskId) => {
   const updateTask = useCallback(async (body, taskId) => {
     try {
       setLoading(true);
+      notify('Loading...');
       const res = await axios.patch(`/api/v1/tasks/${taskId}`, body);
       dispatch(updateCurrentTask(res.data?.data ?? {}));
+
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }

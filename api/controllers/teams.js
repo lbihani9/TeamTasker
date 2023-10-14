@@ -9,10 +9,13 @@ const createTeam = async (req, res) => {
     await sequelize.transaction(async (transaction) => {
       team = await models.Teams.create(req.body, { transaction });
 
-      await models.TeamMembers.create({
-        teamId: team.id,
-        userId: req.user.id,
-      });
+      await models.TeamMembers.create(
+        {
+          teamId: team.id,
+          userId: req.user.id,
+        },
+        { transaction }
+      );
     });
 
     res.status(201).json({

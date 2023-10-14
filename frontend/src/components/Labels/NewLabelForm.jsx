@@ -17,6 +17,10 @@ const NewLabelForm = ({ handleNewLabelClick, postLabel }) => {
     setFields((prev) => ({ ...prev, [name]: value }));
   };
 
+  const shouldDisable = (e) => {
+    return !fields.name || !fields.color;
+  };
+
   const handleCancelClick = (e) => {
     handleNewLabelClick();
   };
@@ -94,7 +98,7 @@ const NewLabelForm = ({ handleNewLabelClick, postLabel }) => {
             name='color'
             sx={{
               cursor: 'pointer',
-              width: "3rem"
+              width: '3rem',
             }}
             value={fields?.color}
             onChange={handleChange}
@@ -133,6 +137,7 @@ const NewLabelForm = ({ handleNewLabelClick, postLabel }) => {
               height: '2rem',
             }}
             onClick={handleSave}
+            disabled={shouldDisable()}
           >
             Create label
           </Button>

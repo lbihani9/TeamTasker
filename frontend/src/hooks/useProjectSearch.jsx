@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
+import { dismissNotifications, notify } from '../utils';
 
 const useProjectSearch = () => {
   // TODO (Lokesh): Implement pagination.
@@ -18,13 +19,18 @@ const useProjectSearch = () => {
 
     try {
       setLoading(true);
+      notify('Loading...');
+
       const res = await axios.get(
         `/api/v1/search/projects/action-items?${queryString}`
       );
 
       setFoundProjects(res.data?.data ?? []);
+      dismissNotifications();
     } catch (error) {
-      console.log(error);
+      console.log(error.response);
+      const { errors } = error.response?.data;
+      notify(errors[0].message, 'error');
     } finally {
       setLoading(false);
     }
