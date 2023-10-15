@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import {
+  CircularProgress,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
+  Stack,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import useTeams from '../../hooks/useTeams';
 import { useDispatch, useSelector } from 'react-redux';
@@ -34,14 +37,22 @@ const Teams = (props) => {
 
   if (!isSameOrganization) {
     return (
-      <List
-        component='div'
-        disablePadding
-      >
-        <ListItem pl={4}>
-          <ListItemText primary='No teams found' />
-        </ListItem>
-      </List>
+      <Stack alignItems='center'>
+        {loading && (
+          <CircularProgress
+            size='2em'
+            thickness='5'
+          />
+        )}
+        <List
+          component='div'
+          disablePadding
+        >
+          <ListItem pl={4}>
+            <ListItemText primary='No teams found' />
+          </ListItem>
+        </List>
+      </Stack>
     );
   }
 
@@ -67,7 +78,14 @@ const Teams = (props) => {
   };
 
   return (
-    <>
+    <Stack alignItems='center'>
+      {loading && (
+        <CircularProgress
+          size='2em'
+          thickness='5'
+        />
+      )}
+
       <List
         component='div'
         disablePadding
@@ -78,13 +96,28 @@ const Teams = (props) => {
               key={index}
               onClick={(e) => handleOpenTeamModal(e, team)}
               sx={{
-                pl: '2.2rem',
                 '&:hover': {
                   backgroundColor: '#eceff1',
                   cursor: 'pointer',
                 },
               }}
-              secondaryAction={
+            >
+              <Stack
+                direction='row'
+                spacing={3}
+                justifyContent='space-between'
+                alignItems='center'
+              >
+                <Stack
+                  direction='row'
+                  spacing={1}
+                  pl='1rem'
+                  alignItems='center'
+                >
+                  <SubdirectoryArrowRightIcon />
+                  <Typography>{team?.name}</Typography>
+                </Stack>
+
                 <Tooltip title='Add new member'>
                   <IconButton
                     size='small'
@@ -93,12 +126,7 @@ const Teams = (props) => {
                     <PersonAddIcon fontSize='small' />
                   </IconButton>
                 </Tooltip>
-              }
-            >
-              <ListItemIcon>
-                <SubdirectoryArrowRightIcon />
-              </ListItemIcon>
-              <ListItemText primary={team?.name} />
+              </Stack>
             </ListItem>
           );
         })}
@@ -111,7 +139,7 @@ const Teams = (props) => {
           teamId={teamId}
         />
       )}
-    </>
+    </Stack>
   );
 };
 

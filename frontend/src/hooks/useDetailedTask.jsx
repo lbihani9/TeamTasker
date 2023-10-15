@@ -16,11 +16,11 @@ const useDetailedTask = (taskId) => {
   const getTask = async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(`/api/v1/tasks/${taskId}`);
       dispatch(setCurrentTask(res.data?.data ?? {}));
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -33,11 +33,12 @@ const useDetailedTask = (taskId) => {
   const updateTask = useCallback(async (body, taskId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.patch(`/api/v1/tasks/${taskId}`, body);
       dispatch(updateCurrentTask(res.data?.data ?? {}));
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Task updated successfully.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

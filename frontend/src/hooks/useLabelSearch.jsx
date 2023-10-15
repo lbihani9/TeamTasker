@@ -26,14 +26,14 @@ const useLabelSearch = () => {
 
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.get(
         `/api/v1/search/labels/action-items?${queryString}`
       );
       setFoundLabels(res.data.data ?? []);
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

@@ -8,11 +8,12 @@ const usePostTeamMember = () => {
   const postTeamMember = useCallback(async (body) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.post(`/api/v1/team-members`, body);
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Successfully added user to the team.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

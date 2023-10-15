@@ -15,11 +15,11 @@ const useTaskComments = (taskId) => {
   const getComments = useCallback(async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(`/api/v1/tasks/${taskId}/comments`);
       setComments(res.data.data ?? []);
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -37,11 +37,12 @@ const useTaskComments = (taskId) => {
         taskId,
       };
 
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.post(`/api/v1/task-comments`, body);
       setComments((prev) => [...prev, { ...res.data.data }]);
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Comment created', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -54,13 +55,14 @@ const useTaskComments = (taskId) => {
   const updateComment = useCallback(async (body, commentId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.patch(`/api/v1/task-comments/${commentId}`, body);
       setComments((prev) =>
         prev.map((p) => (p.id === commentId ? { ...res.data.data } : p))
       );
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Comment updated', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -73,11 +75,12 @@ const useTaskComments = (taskId) => {
   const deleteComment = useCallback(async (commentId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.delete(`/api/v1/task-comments/${commentId}`);
       setComments((prev) => prev.filter((p) => p.id !== commentId));
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Comment deleted successfully.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

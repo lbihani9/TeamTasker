@@ -2,16 +2,13 @@ import React from 'react';
 import { ListItem, ListItemButton, Tooltip } from '@mui/material';
 import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
+import useUserInfo from '../hooks/useUserInfo';
 
 const Logout = (props) => {
-  const handleLogout = async (e) => {
+  const { logout } = useUserInfo();
+  const handleLogout = (e) => {
     e.stopPropagation();
-    try {
-      const res = await axios.get(`/auth/logout`);
-      window.location.href = `/${res.data.data.url}`;
-    } catch (error) {
-      console.log(error);
-    }
+    logout();
   };
 
   return (

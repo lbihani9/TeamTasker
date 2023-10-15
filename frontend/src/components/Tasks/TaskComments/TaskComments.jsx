@@ -5,6 +5,7 @@ import { Stack } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import useTaskComments from '../../../hooks/useTaskComments';
 import NewComment from './NewComment';
+import TTBackdrop from '../../Templates/TTBackdrop';
 
 const TaskComments = (props) => {
   const { taskId } = useParams();
@@ -21,6 +22,8 @@ const TaskComments = (props) => {
         alignItems: 'center',
       }}
     >
+      {loading && <TTBackdrop open={loading} />}
+
       {comments.map((comment, index) => {
         return (
           <SingleComment

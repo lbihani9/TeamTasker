@@ -5,6 +5,7 @@ const {
   getMyOrganizations,
   getMyTask,
   getMyTasks,
+  getMyProfile
 } = require('../controllers/me');
 const myRouter = express.Router();
 
@@ -13,6 +14,7 @@ myRouter.get('/labels', getMyLabels);
 myRouter.get('/organizations', getMyOrganizations);
 myRouter.get('/tasks/:id', getMyTask);
 myRouter.get('/tasks', getMyTasks);
+myRouter.get('/profile', getMyProfile)
 
 module.exports = {
   myRouter,

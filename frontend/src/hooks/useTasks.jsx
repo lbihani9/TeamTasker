@@ -30,7 +30,7 @@ const useTasks = () => {
   const getProjectTasks = useCallback(async (projectId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(`/api/v1/projects/${projectId}/tasks`);
       const { tasks, project } = res.data.data ?? {};
       dispatch(
@@ -40,7 +40,7 @@ const useTasks = () => {
         })
       );
       dispatch(setCurrentProject(project));
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.message);
       const { errors } = error.response?.data;
@@ -53,7 +53,7 @@ const useTasks = () => {
   const getTasks = useCallback(async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(`/api/v1/@me/tasks`);
       dispatch(
         setTasks({
@@ -61,7 +61,7 @@ const useTasks = () => {
           tasks: res.data.data ?? [],
         })
       );
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

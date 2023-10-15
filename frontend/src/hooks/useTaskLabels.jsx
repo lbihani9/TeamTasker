@@ -15,11 +15,12 @@ const useTaskLabels = () => {
   const deleteTaskLabel = useCallback(async (taskLabelId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       await axios.delete(`/api/v1/task-labels/${taskLabelId}`);
 
       dispatch(removeCurrentTaskLabel(taskLabelId));
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Deleted task label successfully.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -32,10 +33,11 @@ const useTaskLabels = () => {
   const postTaskLabel = useCallback(async (body) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.post(`/api/v1/task-labels`, body);
       dispatch(addCurrentTaskLabel(res.data?.data ?? {}));
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Created task label successfully.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -48,14 +50,15 @@ const useTaskLabels = () => {
   const patchTaskLabels = useCallback(async (body, taskId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.patch(
         `/api/v1/tasks/${taskId}/task-labels/bulk`,
         body
       );
 
       dispatch(updateCurrentTask({ labels: res.data.data }));
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Updated task label successfully.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

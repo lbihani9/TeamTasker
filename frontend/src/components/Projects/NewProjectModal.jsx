@@ -9,6 +9,7 @@ import Slide from '@mui/material/Slide';
 import { Button, DialogActions, TextField } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import usePostProject from '../../hooks/usePostProject';
+import TTBackdrop from '../Templates/TTBackdrop';
 
 const Transition = React.forwardRef((props, ref) => {
   return (
@@ -70,6 +71,7 @@ export const NewProjectModal = ({
       fullWidth
       maxWidth='md'
     >
+      {loading && <TTBackdrop open={loading} />}
       <DialogTitle
         sx={{
           fontFamily: 'Poppins',

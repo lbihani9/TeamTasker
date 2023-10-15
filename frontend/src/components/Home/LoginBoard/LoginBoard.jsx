@@ -1,31 +1,18 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
-import { Box, Divider, Grid, Paper, Typography } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
+import { Box, Grid, Paper, Typography } from '@mui/material';
 import LoginWithGoogle from './LoginWithGoogle';
 import LoginWithFacebook from './LoginWithFacebook';
 import LoginWithGithub from './LoginWithGithub';
+import useUserInfo from '../../../hooks/useUserInfo';
 
 const Login = () => {
+  const { getLoginStatus } = useUserInfo();
+
   useEffect(() => {
     getLoginStatus();
     return () => {};
   }, []);
 
-  const getLoginStatus = async () => {
-    try {
-      const { data } = await axios.get(`/auth/login-status`);
-      const { status = false } = data.data;
-      console.log(status)
-      if (status) {
-        window.location.href = '/@me/tasks';
-      }
-      console.log(data);
-    } catch (err) {
-      console.log(err);
-      // TODO: Toast notification
-    }
-  };
   return (
     <Grid
       item
