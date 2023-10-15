@@ -67,12 +67,11 @@ const LabelTableRow = ({ label, updateLabel, deleteLabel }) => {
       >
         <Stack
           direction='row'
-          justifyContent='space-around'
-          // flexWrap='wrap'
-          gap='1.5rem'
-          width='inherit'
+          columnGap='10rem'
+          rowGap='1.5rem'
+          width={!isBelowMedium ? (shouldEdit() ? '50%' : '80%') : '50%'}
         >
-          <Box minWidth='30%'>
+          <Box width={!isBelowMedium ? '20%' : '100%'}>
             <Chip
               size='small'
               label={shouldEdit() ? fields?.name : label?.name}
@@ -85,7 +84,7 @@ const LabelTableRow = ({ label, updateLabel, deleteLabel }) => {
           </Box>
 
           {!isBelowMedium && !shouldEdit() && (
-            <Box>
+            <Box width='80%'>
               <Typography
                 variant='body2'
                 component='p'
@@ -96,21 +95,27 @@ const LabelTableRow = ({ label, updateLabel, deleteLabel }) => {
           )}
         </Stack>
 
-        <Box
-          display='flex'
-          flexDirection='row'
+        <Stack
+          direction='row'
           columnGap='0.5rem'
           justifyContent='flex-end'
         >
           <Button
-            variant='contained'
+            variant='outlined'
             size='small'
-            color='secondary'
             sx={{
               fontFamily: 'inherit',
               borderRadius: '0.5em',
               fontFamily: 'Poppins',
               height: '1.8rem',
+              color: 'black',
+              borderColor: '#9e9e9e',
+              backgroundColor: '#eeeeee',
+              '&:hover': {
+                color: '#616161',
+                borderColor: '#9e9e9e',
+                backgroundColor: '#bdbdbd',
+              },
             }}
             onClick={(e) =>
               !shouldEdit() ? handleEditClick(e) : handleCancelUpdate(e)
@@ -120,7 +125,7 @@ const LabelTableRow = ({ label, updateLabel, deleteLabel }) => {
           </Button>
 
           <Button
-            variant='contained'
+            variant={!shouldEdit() ? 'outlined' : 'contained'}
             size='small'
             color={!shouldEdit() ? 'error' : 'success'}
             sx={{
@@ -135,7 +140,7 @@ const LabelTableRow = ({ label, updateLabel, deleteLabel }) => {
           >
             {!shouldEdit() ? 'Delete' : 'Save'}
           </Button>
-        </Box>
+        </Stack>
       </Stack>
 
       {shouldEdit() && (

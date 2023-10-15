@@ -12,11 +12,11 @@ const Layout = () => {
 
   useEffect(() => {
     getUserProfile();
-    const interval = setInterval(getLoginStatus, 5 * 60 * 1000);
+    // const interval = setInterval(getLoginStatus, 5 * 60 * 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
+    // return () => {
+    //   clearInterval(interval);
+    // };
   }, []);
 
   const handleDrawerOpen = (e, index) => {

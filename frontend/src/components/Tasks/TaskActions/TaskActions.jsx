@@ -36,6 +36,7 @@ const TaskActions = ({ task, updateTask }) => {
               height: 'fit-content',
               padding: '1rem',
               maxWidth: '22rem',
+              borderRadius: '0.5rem'
             }}
             spacing={2}
           >
@@ -62,7 +63,7 @@ const TaskActions = ({ task, updateTask }) => {
         </Grid>
       )}
 
-      {isMobile && (
+      {/* {isMobile && (
         <Box
           sx={{
             '& > :not(style)': {
@@ -77,7 +78,7 @@ const TaskActions = ({ task, updateTask }) => {
             <EditIcon />
           </Fab>
         </Box>
-      )}
+      )} */}
     </>
   );
 };

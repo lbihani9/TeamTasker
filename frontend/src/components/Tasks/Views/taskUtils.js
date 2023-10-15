@@ -1,4 +1,11 @@
-import { Avatar, AvatarGroup, Chip, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  AvatarGroup,
+  Chip,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import moment from 'moment';
 
 export const getAssignees = (assignees) => {
@@ -7,12 +14,26 @@ export const getAssignees = (assignees) => {
   }
 
   return (
-    <AvatarGroup max={4}>
+    <AvatarGroup
+      max={4}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+      }}
+    >
       {assignees.map((assignee, index) => {
         return (
-          <Avatar
-            src={<span className='material-symbols-sharp'>account_circle</span>}
-          />
+          <Tooltip title={assignee?.name ?? ''}>
+            <Avatar
+              key={index}
+              src={
+                assignee?.avatar ?? (
+                  <span className='material-symbols-sharp'>account_circle</span>
+                )
+              }
+            />
+          </Tooltip>
         );
       })}
     </AvatarGroup>

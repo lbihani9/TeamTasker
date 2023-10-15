@@ -1,11 +1,11 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import { TabSelection } from './TabSelection';
 import { Outlet } from 'react-router-dom';
 
 const BottomContent = (props) => {
   return (
-    <Box
+    <Stack
       sx={{
         height: '100%',
         width: '100%',
@@ -17,14 +17,14 @@ const BottomContent = (props) => {
       <Box
         sx={{
           backgroundColor: '#f5f5f5',
-          pt: 1,
+          overflowY: 'auto',
           width: '100%',
-          height: '100%',
+          height: 'inherit',
         }}
       >
         <Outlet />
       </Box>
-    </Box>
+    </Stack>
   );
 };
 

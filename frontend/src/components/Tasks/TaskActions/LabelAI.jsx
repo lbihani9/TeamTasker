@@ -81,6 +81,11 @@ const LabelAI = ({ task }) => {
             <Chip
               label={label.name}
               size='small'
+              variant='outlined'
+              sx={{
+                color: label.color,
+                borderColor: label.color
+              }}
             />
           );
         })}

@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Box, Button, Paper, Stack, TextField } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Paper,
+  Stack,
+  TextField,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
+import { useSelector } from 'react-redux';
 
 const NewComment = ({ postComment }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [comment, setComment] = useState('');
+  const info = useSelector((state) => state.auth.info);
 
   const handlePostComment = async (e) => {
     const body = {
@@ -16,47 +29,56 @@ const NewComment = ({ postComment }) => {
 
   return (
     <Stack
+      direction='row'
+      width='100%'
       spacing={1}
-      sx={{
-        width: '100%',
-        padding: '1rem',
-        mt: '1.5rem',
-      }}
-      component={Paper}
     >
-      <TextField
-        variant='outlined'
-        placeholder='Leave a comment'
-        multiline
-        minRows={4}
-        value={comment}
-        onChange={(e) => setComment(e.target.value)}
-      />
+      {!isMobile && <Avatar src={info?.avatar ?? '/broken-image.jpg'} />}
 
-      <Box
-        display='flex'
-        justifyContent='flex-end'
+      <Stack
+        spacing={1}
+        sx={{
+          width: '100%',
+          padding: '1rem',
+          mt: '1.5rem',
+          borderRadius: '0.5rem',
+        }}
+        component={Paper}
       >
-        <Button
-          variant='contained'
-          color='success'
-          sx={{
-            height: '2rem',
-            fontFamily: 'Poppins',
-            borderRadius: '0.5em',
-          }}
-          disabled={comment.length === 0}
-          onClick={handlePostComment}
+        <TextField
+          variant='outlined'
+          placeholder='Leave a comment'
+          multiline
+          minRows={4}
+          value={comment}
+          onChange={(e) => setComment(e.target.value)}
+        />
+
+        <Box
+          display='flex'
+          justifyContent='flex-end'
         >
-          Comment
-        </Button>
-      </Box>
+          <Button
+            variant='contained'
+            color='success'
+            sx={{
+              height: '2rem',
+              fontFamily: 'Poppins',
+              borderRadius: '0.5em',
+            }}
+            disabled={comment.length === 0}
+            onClick={handlePostComment}
+          >
+            Comment
+          </Button>
+        </Box>
+      </Stack>
     </Stack>
   );
 };
 
 NewComment.propTypes = {
-  postComment: PropTypes.func
+  postComment: PropTypes.func,
 };
 
 export default NewComment;

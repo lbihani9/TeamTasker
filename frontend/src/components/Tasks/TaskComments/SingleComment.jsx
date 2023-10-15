@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { Avatar, Box, Button, Paper, Stack, TextField } from '@mui/material';
+import {
+  Avatar,
+  Box,
+  Button,
+  Paper,
+  Stack,
+  TextField,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import TaskCommentMenu from './TaskCommentMenu';
 
 const SingleComment = ({ comment, updateComment, deleteComment }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   const [newComment, setNewComment] = useState('');
   const [shouldEdit, setShouldEdit] = useState(false);
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,22 +63,31 @@ const SingleComment = ({ comment, updateComment, deleteComment }) => {
       width='100%'
       spacing={1}
     >
-      <Avatar src='/broken-image.jpg' />
+      {!isMobile && (
+        <Avatar src={comment?.user.avatar ?? '/broken-image.jpg'} />
+      )}
 
       {!shouldEdit && (
         <Stack width='100%'>
           <Box
             sx={{
               width: '100%',
-              height: '1.7rem',
               border: '1px solid #bdbdbd',
               borderBottom: 0,
               display: 'flex',
-              justifyContent: 'flex-end',
+              justifyContent: 'space-between',
               padding: '0.2rem',
-              pr: '0.5rem',
+              p: '0.5rem',
+              borderTopLeftRadius: '0.5rem',
+              borderTopRightRadius: '0.5rem',
             }}
           >
+            <Typography
+              variant='body2'
+              component='p'
+            >
+              {comment?.user.name}
+            </Typography>
             <MoreHorizIcon
               fontSize='small'
               sx={{
@@ -78,6 +99,13 @@ const SingleComment = ({ comment, updateComment, deleteComment }) => {
           <TextField
             sx={{
               width: '100%',
+              '.MuiInputBase-root': {
+                borderTopRightRadius: 0,
+                borderTopLeftRadius: 0,
+                borderTop: 0,
+                borderBottomLeftRadius: '0.5rem',
+                borderBottomRightRadius: '0.5rem',
+              },
             }}
             disabled={!shouldEdit}
             variant='outlined'
@@ -98,6 +126,11 @@ const SingleComment = ({ comment, updateComment, deleteComment }) => {
         >
           <TextField
             variant='outlined'
+            sx={{
+              '.MuiInputBase-root': {
+                color: '#616161',
+              },
+            }}
             multiline
             minRows={4}
             value={newComment}

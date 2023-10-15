@@ -6,7 +6,7 @@ import PaletteIcon from '@mui/icons-material/Palette';
 const initialState = {
   name: null,
   description: null,
-  color: null,
+  color: '#c10101',
 };
 
 const NewLabelForm = ({ handleNewLabelClick, postLabel }) => {
@@ -48,8 +48,8 @@ const NewLabelForm = ({ handleNewLabelClick, postLabel }) => {
         <Chip
           label={fields?.name ?? 'Label preview'}
           sx={{
-            color: fields?.color ?? 'red',
-            borderColor: fields?.color ?? 'red',
+            color: fields?.color,
+            borderColor: fields?.color,
           }}
           variant='outlined'
         />
@@ -112,9 +112,9 @@ const NewLabelForm = ({ handleNewLabelClick, postLabel }) => {
           columnGap='0.5em'
         >
           <Button
-            variant='contained'
+            variant='outlined'
             size='small'
-            color='secondary'
+            color='error'
             sx={{
               fontFamily: 'inherit',
               borderRadius: '0.5em',

@@ -19,7 +19,8 @@ const DetailedTask = (props) => {
     <Grid
       container
       sx={{
-        padding: '1rem',
+        padding: '0.6rem',
+        backgroundColor: '#fafafa'
       }}
       rowSpacing={5}
     >
