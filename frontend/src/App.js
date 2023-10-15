@@ -42,14 +42,14 @@ function App() {
         persistor={persistor}
       >
         <LocalizationProvider dateAdapter={AdapterMoment}>
-          <ToastContainer 
+          <ToastContainer
             position='top-center'
             newestOnTop
             rtl={false}
             pauseOnFocusLoss
             closeOnClick
             draggable
-            pauseOnHover
+            pauseOnHover={false}
             theme='light'
           />
           <RouterProvider router={router} />

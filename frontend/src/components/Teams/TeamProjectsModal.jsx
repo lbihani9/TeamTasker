@@ -17,6 +17,7 @@ import { NewProjectModal } from '../Projects/NewProjectModal';
 import EditIcon from '@mui/icons-material/Edit';
 import EditProjectModal from '../Projects/EditProjectModal';
 import { useNavigate } from 'react-router-dom';
+import TTBackdrop from '../Templates/TTBackdrop';
 
 const TeamProjectsModal = (props) => {
   const { loading, searchText, setSearchText, patchTeamProject } =
@@ -60,6 +61,7 @@ const TeamProjectsModal = (props) => {
 
   return (
     <Stack spacing={1}>
+      {loading && <TTBackdrop open={loading} />}
       <Stack
         direction='row'
         spacing={0.5}

@@ -2,19 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Paper } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import axios from 'axios';
-
-const handleLogIn = async () => {
-  try {
-    const { data } = await axios.get(`/auth/login`);
-    window.location.href = data.data.url;
-  } catch (err) {
-    console.log(err);
-    // TODO: Toast notification
-  }
-};
+import useUserInfo from '../../../hooks/useUserInfo';
 
 const LoginWithGoogle = props => {
+  const { login } = useUserInfo();
+
   return (
     <Paper
       elevation={1}
@@ -28,7 +20,7 @@ const LoginWithGoogle = props => {
         cursor: 'pointer',
         border: '0.1em solid darkgrey',
       }}
-      onClick={handleLogIn}
+      onClick={login}
     >
       <GoogleIcon color='error' /> &nbsp; Continue with Google
     </Paper>

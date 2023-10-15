@@ -19,7 +19,7 @@ const useTeams = () => {
   const getTeams = useCallback(async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(
         `/api/v1/organizations/${currentOrganization?.id}/teams`
       );
@@ -30,7 +30,7 @@ const useTeams = () => {
         })
       );
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -44,7 +44,7 @@ const useTeams = () => {
     try {
       setLoading(true);
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
