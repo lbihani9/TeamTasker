@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
-import TeamTaskerLogo from '../../assets/TeamTasker-4.png';
+import TeamTaskerLogo from '../../assets/TeamTasker-logos_transparent.png';
 import Grid from '@mui/material/Grid';
 import Login from './LoginBoard/LoginBoard';
+import { Stack, useMediaQuery, useTheme } from '@mui/material';
 
-const Home = props => {
+const Home = (props) => {
   const [randomBgColor, setRandomBgColor] = useState('#F5C5BE');
+  const theme = useTheme();
+  const isAboveLG = useMediaQuery(theme.breakpoints.up('lg'));
 
   useEffect(() => {
-    const colors = ['#F5C5BE', '#539D8B', '#53679D', '#9B539D', '#9D6153'];
+    // const colors = ['#F5C5BE', '#539D8B', '#53679D', '#9B539D', '#9D6153'];
+    const colors = ['#FFFFFF', '#000000', '#00008B', '#34282C', '#FFC0CB'];
 
     const interval = setInterval(() => {
       const index = Math.floor(Math.random() * colors.length);
       setRandomBgColor(colors[index]);
-    }, 10000); // 10 seconds
+    }, 6000); // 6 seconds
 
     return () => {
       clearInterval(interval);
@@ -26,28 +30,34 @@ const Home = props => {
         transition: 'background-color 0.5s ease',
         backgroundColor: randomBgColor,
         height: '100vh',
+        width: '100vw',
         margin: 0,
         overflow: 'hidden',
       }}
     >
       <Grid
         item
-        lg={8}
-        sx={{
-          position: 'relative',
-          flexShrink: 3,
-        }}
+        sm={7}
+        xs={12}
+        width='100%'
       >
-        <img
-          src={TeamTaskerLogo}
-          style={{
-            width: '60vw',
-            paddingInlineStart: '2rem',
-            position: 'absolute',
-            left: '1.25rem',
-            bottom: '1px',
+        <Stack
+          justifyContent='center'
+          alignItems='center'
+          sx={{
+            width: '100%',
+            height: isAboveLG ? '80%' : '100%',
           }}
-        />
+        >
+          <img
+            src={TeamTaskerLogo}
+            style={{
+              maxWidth: '100%',
+              maxHeight: '100%',
+              alignSelf: 'center',
+            }}
+          />
+        </Stack>
       </Grid>
 
       <Login />

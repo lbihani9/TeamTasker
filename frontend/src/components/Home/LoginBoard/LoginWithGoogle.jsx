@@ -4,7 +4,7 @@ import { Paper } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import useUserInfo from '../../../hooks/useUserInfo';
 
-const LoginWithGoogle = props => {
+const LoginWithGoogle = (props) => {
   const { login } = useUserInfo();
 
   return (
@@ -12,13 +12,17 @@ const LoginWithGoogle = props => {
       elevation={1}
       sx={{
         height: 'fit-content',
-        width: '80%',
+        width: 'fit-content',
         padding: '1em',
         display: 'flex',
         alignItems: 'center',
         borderRadius: '4em',
         cursor: 'pointer',
         border: '0.1em solid darkgrey',
+        fontFamily: 'Poppins',
+        '&:hover': {
+          backgroundColor: '#e0e0e0',
+        },
       }}
       onClick={login}
     >

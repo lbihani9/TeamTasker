@@ -1,13 +1,18 @@
 import axios from 'axios';
 import { useCallback } from 'react';
-import { useDispatch } from 'react-redux';
-import { clearInfo, setLoginStatus, setUserInfo } from '../store/slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clearInfo,
+  setLoginStatus,
+  setUserInfo,
+} from '../store/slices/userSlice';
 import { notify } from '../utils';
 import { useNavigate } from 'react-router-dom';
 
 const useUserInfo = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);
 
   const getLoginStatus = useCallback(async () => {
     try {
@@ -20,8 +25,10 @@ const useUserInfo = () => {
       }
     } catch (err) {
       console.log(err);
-      notify('Session expired.', 'error');
-      navigate('/login');
+      if (err?.response?.status[0] == 4) {
+        notify('Session expired.', 'error');
+        navigate('/login');
+      }
     }
   }, []);
 
