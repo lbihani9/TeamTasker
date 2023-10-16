@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import { Button, TextField } from '@mui/material';
 import usePostTeam from '../../hooks/usePostTeam';
+import TTBackdrop from '../Templates/TTBackdrop';
 
 const initialState = {
   name: '',
@@ -39,7 +40,6 @@ const NewTeamModal = ({ handleClose }) => {
       maxWidth='sm'
     >
       <DialogTitle>New Team</DialogTitle>
-
       <DialogContent
         sx={{
           display: 'flex',
@@ -47,6 +47,8 @@ const NewTeamModal = ({ handleClose }) => {
           rowGap: '1rem',
         }}
       >
+        <TTBackdrop open={loading} />
+
         <TextField
           type='text'
           name='name'

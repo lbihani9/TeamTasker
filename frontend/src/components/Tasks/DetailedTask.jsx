@@ -8,6 +8,7 @@ import { useParams } from 'react-router-dom';
 import useDetailedTask from '../../hooks/useDetailedTask';
 import TaskActions from './TaskActions/TaskActions';
 import { useSelector } from 'react-redux';
+import TTBackdrop from '../Templates/TTBackdrop';
 
 const DetailedTask = (props) => {
   const { taskId } = useParams();
@@ -18,10 +19,12 @@ const DetailedTask = (props) => {
     <Grid
       container
       sx={{
-        padding: '1rem',
+        padding: '0.6rem',
+        backgroundColor: '#fafafa'
       }}
       rowSpacing={5}
     >
+      {loading && <TTBackdrop open={loading} />}
       <TaskHeader
         task={task}
         updateTask={updateTask}

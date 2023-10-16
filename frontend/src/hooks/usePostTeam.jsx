@@ -19,7 +19,7 @@ const usePostTeam = () => {
 
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.post(`/api/v1/teams`, body);
       dispatch(
         addTeam({
@@ -28,7 +28,8 @@ const usePostTeam = () => {
         })
       );
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Team created successfully.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

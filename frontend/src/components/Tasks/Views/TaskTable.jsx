@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useTheme } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import useTasks from '../../../hooks/useTasks';
 import {
   getAssignees,
@@ -19,6 +19,19 @@ import {
 } from './taskUtils';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import TTBackdrop from '../../Templates/TTBackdrop';
+import { styled } from '@mui/material/styles';
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  borderRight: '1px solid #e0e0e0',
+  textAlign: 'center',
+}));
 
 const headers = [
   'id',
@@ -36,7 +49,8 @@ export const TaskTable = () => {
   const { loading } = useTasks();
   const currentProject = useSelector((state) => state.projects.current);
   const taskItems = useSelector((state) => state.tasks.items);
-  const tasks = projectId ? taskItems.project[projectId] : taskItems.other[1];
+  const tasks =
+    (projectId ? taskItems.project[projectId] : taskItems.other[1]) ?? [];
   const navigate = useNavigate();
 
   const openTask = (id) => navigate(`/tasks/${id}`);
@@ -48,6 +62,17 @@ export const TaskTable = () => {
       alignContent='center'
       mt='4em'
     >
+      <TTBackdrop open={loading} />
+
+      {!loading && tasks.length === 0 && (
+        <Typography
+          variant='body1'
+          component='p'
+        >
+          No tasks found
+        </Typography>
+      )}
+
       <TableContainer
         component={Paper}
         sx={{
@@ -57,19 +82,37 @@ export const TaskTable = () => {
           [theme.breakpoints.up('md')]: {
             width: '90vw',
           },
+          display: (loading || tasks.length === 0) && 'none',
+          borderRadius: '0.8rem',
         }}
       >
         <Table
-          sx={{ width: '100%' }}
+          sx={{
+            width: '100%',
+          }}
           size='medium'
         >
           <TableHead>
             <TableRow>
               {headers.map((header, index) => {
-                return <TableCell>{header}</TableCell>;
+                return (
+                  <TableCell>
+                    <Typography
+                      variant='body1'
+                      component='p'
+                      sx={{
+                        fontWeight: '200',
+                        textAlign: 'center',
+                      }}
+                    >
+                      {header}
+                    </Typography>
+                  </TableCell>
+                );
               })}
             </TableRow>
           </TableHead>
+
           <TableBody>
             {tasks?.map((task, index) => {
               const {
@@ -84,29 +127,26 @@ export const TaskTable = () => {
               } = task;
 
               return (
-                <TableRow
-                  key={index}
-                  sx={{
-                    '&:last-child td, &:last-child th': {
-                      border: 0,
-                    },
-                  }}
-                >
-                  <TableCell>{id}</TableCell>
-                  <TableCell>{getName(name, () => openTask(id))}</TableCell>
-                  <TableCell>{getTaskable(taskableType, taskable)}</TableCell>
-                  <TableCell>{getDeadline(deadline)}</TableCell>
-                  {/* <TableCell>{getStatus(status)}</TableCell> */}
-                  <TableCell>{getLabels(labels)}</TableCell>
-                  <TableCell
-                    sx={{
-                      display: 'flex',
-                      justifyContent: 'flex-start',
-                    }}
-                  >
-                    {getAssignees(assignees)}
-                  </TableCell>
-                </TableRow>
+                <StyledTableRow key={index}>
+                  <StyledTableCell>
+                    <Typography textAlign='center'>{id}</Typography>
+                  </StyledTableCell>
+
+                  <StyledTableCell>
+                    {getName(name, () => openTask(id))}
+                  </StyledTableCell>
+
+                  <StyledTableCell>
+                    {getTaskable(taskableType, taskable)}
+                  </StyledTableCell>
+
+                  <StyledTableCell>{getDeadline(deadline)}</StyledTableCell>
+                  {/* <StyledTableCell>{getStatus(status)}</StyledTableCell> */}
+
+                  <StyledTableCell>{getLabels(labels)}</StyledTableCell>
+
+                  <StyledTableCell>{getAssignees(assignees)}</StyledTableCell>
+                </StyledTableRow>
               );
             })}
           </TableBody>

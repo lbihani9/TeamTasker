@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   Avatar,
+  CircularProgress,
   Collapse,
   IconButton,
   List,
@@ -10,6 +11,7 @@ import {
   ListItemText,
   Stack,
   Tooltip,
+  Typography,
 } from '@mui/material';
 import { CorporateFareIcon } from '../Icons';
 import NewOrganizationButton from '../Organizations/NewOrganizationButton';
@@ -50,10 +52,33 @@ const MyOrganizations = (props) => {
       spacing={2}
       direction='column'
       height='inherit'
+      alignItems='center'
     >
       <NewOrganizationButton postOrganization={postOrganization} />
+      {loading && (
+        <CircularProgress
+          size='2em'
+          thickness='5'
+        />
+      )}
 
-      <List>
+      {!loading && organizations.length === 0 && (
+        <Typography
+          variant='body2'
+          component='p'
+          sx={{
+            fontFamily: 'Poppins',
+          }}
+        >
+          No organizations found.
+        </Typography>
+      )}
+
+      <List
+        sx={{
+          display: (loading || organizations.length === 0) && 'none',
+        }}
+      >
         {organizations.map((org, index) => {
           return (
             <>

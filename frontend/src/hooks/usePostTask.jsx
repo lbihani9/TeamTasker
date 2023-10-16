@@ -12,7 +12,7 @@ const usePostTask = () => {
   const postTask = useCallback(async (body, taskableType) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.post(`/api/v1/tasks`, body);
       if (taskableType) {
@@ -31,7 +31,8 @@ const usePostTask = () => {
         );
       }
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Task created successfully', 'success');
     } catch (error) {
       console.log(error.message);
       const { errors } = error.response?.data;

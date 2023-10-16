@@ -14,12 +14,12 @@ const useLabels = () => {
   const getLabels = useCallback(async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(`/api/v1/@me/labels`);
 
       setLabels(res.data.data ?? []);
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -32,11 +32,12 @@ const useLabels = () => {
   const postLabel = useCallback(async (body) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.post(`/api/v1/labels`, body);
       setLabels((prev) => [...prev, { ...res.data.data }]);
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Lable created.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -49,13 +50,14 @@ const useLabels = () => {
   const updateLabel = useCallback(async (body, labelId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.patch(`/api/v1/labels/${labelId}`, body);
       setLabels((prev) =>
         prev.map((p) => (p.id === labelId ? { ...res.data.data } : p))
       );
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Label updated', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -68,11 +70,12 @@ const useLabels = () => {
   const deleteLabel = useCallback(async (labelId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.delete(`/api/v1/labels/${labelId}`);
       setLabels((prev) => prev.filter((p) => p.id !== labelId));
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Label deleted', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

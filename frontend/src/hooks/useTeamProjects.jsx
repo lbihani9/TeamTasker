@@ -21,7 +21,7 @@ const useTeamProjects = () => {
   const getTeamProjects = useCallback(async (searchText) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.get(
         `/api/v1/teams/${currentTeam?.id}/projects?text=${searchText}`
@@ -33,7 +33,7 @@ const useTeamProjects = () => {
         })
       );
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -46,7 +46,7 @@ const useTeamProjects = () => {
   const patchTeamProject = useCallback(async (body, projectId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.patch(`/api/v1/projects/${projectId}`, body);
 
@@ -57,7 +57,8 @@ const useTeamProjects = () => {
         })
       );
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Project updated.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

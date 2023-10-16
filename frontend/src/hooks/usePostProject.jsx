@@ -12,7 +12,7 @@ const usePostProject = () => {
   const postProject = useCallback(async (body, projectableType) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.post(`/api/v1/projects`, body);
       if (!projectableType) {
@@ -26,7 +26,8 @@ const usePostProject = () => {
         );
       }
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Project created', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

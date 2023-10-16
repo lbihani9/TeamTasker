@@ -17,13 +17,13 @@ const useTeamLabels = () => {
   const getTeamLabels = useCallback(async (searchText) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(
         `/api/v1/teams/${currentTeam?.id}/labels?text=${searchText}`
       );
       setLabels(res.data?.data ?? []);
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -36,14 +36,15 @@ const useTeamLabels = () => {
   const patchLabel = useCallback(async (body, labelId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.patch(`/api/v1/labels/${labelId}`, body);
 
       setLabels((prev) =>
         prev.filter((p) => (p.id === labelId ? { ...res.data.data } : p))
       );
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Label updated.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -56,11 +57,12 @@ const useTeamLabels = () => {
   const postLabel = useCallback(async (body) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.post(`/api/v1/labels`, body);
       setLabels((prev) => [...prev, { ...res.data.data }]);
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Label created', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

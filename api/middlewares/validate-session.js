@@ -53,6 +53,7 @@ const validateSession = async (req, res, next) => {
       data: {
         url: 'login',
       },
+      message: 'Your session expired.'
     });
   } catch (error) {
     console.log(error);

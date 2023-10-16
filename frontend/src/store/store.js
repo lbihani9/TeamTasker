@@ -7,12 +7,14 @@ import organizationReducer from './slices/organizationSlice';
 import tasksReducer from './slices/tasksSlice';
 import projectsReducer from './slices/projectsSlice';
 import teamReducer from './slices/teamSlice';
+import userReducer from './slices/userSlice';
 
 const reducers = combineReducers({
   organizations: organizationReducer,
   tasks: tasksReducer,
   projects: projectsReducer,
   teams: teamReducer,
+  auth: userReducer,
 });
 
 const persistConfig = {

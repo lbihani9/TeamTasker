@@ -19,12 +19,12 @@ const useOrganizations = () => {
   const getOrganizations = useCallback(async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.get(`/api/v1/@me/organizations`);
       dispatch(setOrganizations(res.data?.data ?? []));
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -37,12 +37,13 @@ const useOrganizations = () => {
   const postOrganization = useCallback(async (body) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.post(`/api/v1/organizations`, body);
       dispatch(addOrganization(res.data?.data ?? {}));
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Organization created successfully', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

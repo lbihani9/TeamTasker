@@ -13,6 +13,7 @@ import {
 import SearchIcon from '@mui/icons-material/Search';
 import useTeamLabels from '../../hooks/useTeamLabels';
 import NewLabelModal from './NewLabelModal';
+import TTBackdrop from '../Templates/TTBackdrop';
 
 const TeamLabelsModal = (props) => {
   const { loading, labels, searchText, setSearchText, postLabel } =
@@ -33,6 +34,7 @@ const TeamLabelsModal = (props) => {
 
   return (
     <Stack spacing={1}>
+      {loading && <TTBackdrop open={loading} />}
       <Stack
         direction='row'
         spacing={0.5}

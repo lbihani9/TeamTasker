@@ -16,7 +16,7 @@ const useProjects = () => {
   const getProjects = useCallback(async () => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.get(`/api/v1/@me/projects`);
       dispatch(
         setProjects({
@@ -25,7 +25,7 @@ const useProjects = () => {
         })
       );
 
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;
@@ -38,7 +38,7 @@ const useProjects = () => {
   const updateProject = useCallback(async (body, projectId) => {
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
       const res = await axios.patch(`/api/v1/projects/${projectId}`, body);
 
       dispatch(
@@ -48,7 +48,8 @@ const useProjects = () => {
         })
       );
 
-      dismissNotifications();
+      // dismissNotifications();
+      notify('Project updated.', 'success');
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

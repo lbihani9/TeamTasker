@@ -2,6 +2,23 @@ const { Op } = require('sequelize');
 const { models } = require('../db/models');
 const { controllerErrorHandler } = require('../utils/utils');
 
+const getMyProfile = async (req, res) => {
+  try {
+    res.status(200).json({
+      data: req.user,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      errors: [
+        {
+          message: 'An error occured while fetching user info.',
+        },
+      ],
+    });
+  }
+};
+
 const getMyProjects = async (req, res) => {
   try {
     const projects = await models.Projects.findAll({
@@ -199,4 +216,5 @@ module.exports = {
   getMyOrganizations,
   getMyTask,
   getMyTasks,
+  getMyProfile,
 };

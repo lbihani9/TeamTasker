@@ -19,14 +19,14 @@ const useProjectSearch = () => {
 
     try {
       setLoading(true);
-      notify('Loading...');
+      // notify('Loading...');
 
       const res = await axios.get(
         `/api/v1/search/projects/action-items?${queryString}`
       );
 
       setFoundProjects(res.data?.data ?? []);
-      dismissNotifications();
+      // dismissNotifications();
     } catch (error) {
       console.log(error.response);
       const { errors } = error.response?.data;

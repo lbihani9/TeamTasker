@@ -1,42 +1,11 @@
-// [
-//   {
-//     id: 3,
-//     name: 'Task 1',
-//     description: null,
-//     taskableType: 'user',
-//     taskableId: 1,
-//     statusId: null,
-//     deadline: null,
-//     createdBy: 1,
-//     createdAt: '2023-10-05T16:51:41.000Z',
-//     updatedAt: '2023-10-05T16:51:41.000Z',
-//     deletedAt: null,
-//     assignees: [
-//       {
-//         id: 1,
-//         name: 'Lokesh Bihani',
-//         email: 'lokeshbihani99@gmail.com',
-//         username: 'lbihani9',
-//         avatar: null,
-//       },
-//     ],
-//     labels: [],
-//     status: null,
-//     taskable: {
-//       id: 1,
-//       name: 'Lokesh Bihani',
-//       username: 'lbihani9',
-//       email: 'lokeshbihani99@gmail.com',
-//       description: null,
-//       avatar: null,
-//       createdAt: '2023-10-04T17:27:28.000Z',
-//       updatedAt: '2023-10-04T17:27:28.000Z',
-//       deletedAt: null,
-//     },
-//   },
-// ];
-
-import { Avatar, AvatarGroup, Chip, Stack, Typography } from '@mui/material';
+import {
+  Avatar,
+  AvatarGroup,
+  Chip,
+  Stack,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import moment from 'moment';
 
 export const getAssignees = (assignees) => {
@@ -45,12 +14,26 @@ export const getAssignees = (assignees) => {
   }
 
   return (
-    <AvatarGroup max={4}>
+    <AvatarGroup
+      max={4}
+      sx={{
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'flex-start',
+      }}
+    >
       {assignees.map((assignee, index) => {
         return (
-          <Avatar
-            src={<span className='material-symbols-sharp'>account_circle</span>}
-          />
+          <Tooltip title={assignee?.name ?? ''}>
+            <Avatar
+              key={index}
+              src={
+                assignee?.avatar ?? (
+                  <span className='material-symbols-sharp'>account_circle</span>
+                )
+              }
+            />
+          </Tooltip>
         );
       })}
     </AvatarGroup>
@@ -65,7 +48,7 @@ export const getLabels = (labels) => {
   return (
     <Stack
       direction='row'
-      spacing={0.2}
+      gap='0.4rem'
       width='inherit'
       flexWrap='wrap'
     >
@@ -141,8 +124,8 @@ export const getName = (name, taskHandler) => {
         fontFamily: 'Poppins',
         '&:hover': {
           textDecoration: 'underline',
-          color: 'blue'
-        } 
+          color: 'blue',
+        },
       }}
       onClick={taskHandler}
     >
