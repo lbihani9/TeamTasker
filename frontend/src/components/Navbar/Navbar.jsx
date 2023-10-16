@@ -5,7 +5,7 @@ import List from '@mui/material/List';
 import contents from './NavbarContent';
 import Logout from '../Logout';
 import NavbarItem from './NavbarItem';
-import TeamTaskerLogo from '../../assets/TeamTasker-1.png';
+import TeamTaskerLogo from '../../assets/TeamTasker-logos_transparent.png';
 import Avatar from '@mui/material/Avatar';
 import { ListItem, ListItemAvatar } from '@mui/material';
 
@@ -67,7 +67,7 @@ const Logo = () => {
       sx={{ display: 'block' }}
       disablePadding
     >
-      <ListItemAvatar>
+      <ListItemAvatar sx={{ display: 'flex', justifyContent: 'center' }}>
         <Avatar
           alt='TeamTasker'
           sx={{
@@ -76,6 +76,7 @@ const Logo = () => {
             height: '2.8em',
             justifyContent: 'center',
             marginBottom: '1em',
+            scale: '1.2',
           }}
           src={TeamTaskerLogo}
         />

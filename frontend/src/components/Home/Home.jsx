@@ -10,8 +10,7 @@ const Home = (props) => {
   const isAboveLG = useMediaQuery(theme.breakpoints.up('lg'));
 
   useEffect(() => {
-    // const colors = ['#F5C5BE', '#539D8B', '#53679D', '#9B539D', '#9D6153'];
-    const colors = ['#FFFFFF', '#000000', '#00008B', '#34282C', '#FFC0CB'];
+    const colors = ['#000000', '#00008B', '#34282C', '#FFC0CB'];
 
     const interval = setInterval(() => {
       const index = Math.floor(Math.random() * colors.length);
