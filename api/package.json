@@ -4,7 +4,8 @@
   "description": "TeamTasker is a web-based application that aims to streamline task management and collaboration within teams.",
   "main": "app.js",
   "scripts": {
-    "server": "TZ=utc nodemon app.js"
+    "server": "TZ=utc nodemon app.js",
+    "prod": "TZ=utc node app.js"
   },
   "repository": "https://github.com/lbihani9/TeamTasker",
   "author": "lbihani9",

@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
+const path = require('path');
 const { router } = require('./routers/routes');
 const { sequelize } = require('./db');
 const { redisStore, session } = require('./redis');
@@ -37,9 +38,21 @@ app.use(
 
 sequelize.sync();
 
+if (process.env.ENV === 'production') {
+  app.use(express.static(path.join(__dirname, '../client')));
+}
+
 app.use('/auth', authRouter);
 
 app.use('/api/v1', validateSession, router);
+
+app.get('*', (req, res) => {
+  if (process.env.ENV === 'production') {
+    res.sendFile(path.join(__dirname, '../client', 'index.html'));
+  } else {
+    res.status(404).json({});
+  }
+});
 
 app.listen(process.env.APP_PORT, () => {
   console.log(`Express server is listening on port ${process.env.APP_PORT}`);
