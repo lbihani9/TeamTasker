@@ -8,6 +8,7 @@ const usePostTask = () => {
   const [loading, setLoading] = useState(false);
   const currentProject = useSelector((state) => state.projects.current);
   const dispatch = useDispatch();
+  const userInfo = useSelector((state) => state.auth.info);
 
   const postTask = useCallback(async (body, taskableType) => {
     try {
@@ -25,7 +26,7 @@ const usePostTask = () => {
       } else {
         dispatch(
           addTask({
-            userId: 1,
+            userId: userInfo.id,
             task: res.data?.data ?? {},
           })
         );

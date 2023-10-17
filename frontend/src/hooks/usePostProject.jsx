@@ -8,6 +8,7 @@ const usePostProject = () => {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const currentTeam = useSelector((state) => state.teams.current);
+  const userInfo = useSelector((state) => state.auth.info);
 
   const postProject = useCallback(async (body, projectableType) => {
     try {
@@ -16,7 +17,9 @@ const usePostProject = () => {
 
       const res = await axios.post(`/api/v1/projects`, body);
       if (!projectableType) {
-        dispatch(addProject({ userId: 1, project: { ...res.data.data } }));
+        dispatch(
+          addProject({ userId: userInfo.id, project: { ...res.data.data } })
+        );
       } else {
         dispatch(
           addTeamProject({

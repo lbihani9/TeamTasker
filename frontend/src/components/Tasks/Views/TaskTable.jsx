@@ -47,10 +47,12 @@ export const TaskTable = () => {
   const theme = useTheme();
   const { projectId } = useParams();
   const { loading } = useTasks();
+  const userInfo = useSelector((state) => state.auth.info);
   const currentProject = useSelector((state) => state.projects.current);
   const taskItems = useSelector((state) => state.tasks.items);
   const tasks =
-    (projectId ? taskItems.project[projectId] : taskItems.other[1]) ?? [];
+    (projectId ? taskItems.project[projectId] : taskItems.other[userInfo.id]) ??
+    [];
   const navigate = useNavigate();
 
   const openTask = (id) => navigate(`/tasks/${id}`);
@@ -64,7 +66,7 @@ export const TaskTable = () => {
     >
       <TTBackdrop open={loading} />
 
-      {!loading && tasks.length === 0 && (
+      {!loading && tasks?.length === 0 && (
         <Typography
           variant='body1'
           component='p'
@@ -82,7 +84,7 @@ export const TaskTable = () => {
           [theme.breakpoints.up('md')]: {
             width: '90vw',
           },
-          display: (loading || tasks.length === 0) && 'none',
+          display: (loading || tasks?.length === 0) && 'none',
           borderRadius: '0.8rem',
         }}
       >

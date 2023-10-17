@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   clearTasks,
   setProjectTasks,
@@ -14,6 +14,7 @@ const useTasks = () => {
   const { projectId } = useParams();
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const userInfo = useSelector((state) => state.auth.info);
 
   useEffect(() => {
     if (typeof projectId === 'undefined') {
@@ -57,7 +58,7 @@ const useTasks = () => {
       const res = await axios.get(`/api/v1/@me/tasks`);
       dispatch(
         setTasks({
-          userId: 1,
+          userId: userInfo.id,
           tasks: res.data.data ?? [],
         })
       );

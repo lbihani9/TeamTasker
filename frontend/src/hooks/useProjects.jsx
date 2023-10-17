@@ -1,12 +1,13 @@
 import axios from 'axios';
 import { useCallback, useEffect, useState } from 'react';
 import { setProjects, updateStoreProject } from '../store/slices/projectsSlice';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { dismissNotifications, notify } from '../utils';
 
 const useProjects = () => {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const userInfo = useSelector((state) => state.auth.info);
 
   useEffect(() => {
     getProjects();
@@ -20,7 +21,7 @@ const useProjects = () => {
       const res = await axios.get(`/api/v1/@me/projects`);
       dispatch(
         setProjects({
-          userId: 1,
+          userId: userInfo.id,
           projects: res.data?.data ?? [],
         })
       );
@@ -43,7 +44,7 @@ const useProjects = () => {
 
       dispatch(
         updateStoreProject({
-          userId: 1,
+          userId: userInfo.id,
           project: res.data.data ?? {},
         })
       );

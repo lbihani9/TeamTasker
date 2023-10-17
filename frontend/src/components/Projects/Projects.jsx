@@ -7,8 +7,9 @@ import { useSelector } from 'react-redux';
 
 const Projects = (props) => {
   const { loading, updateProject } = useProjects();
+  const userInfo = useSelector((state) => state.auth.info);
   const projects = useSelector(
-    (state) => state.projects.items.private[1] ?? []
+    (state) => state.projects.items.private[userInfo.id] ?? []
   );
 
   return (
