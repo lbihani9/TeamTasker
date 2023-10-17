@@ -1,0 +1,26 @@
+version: '3'
+services:
+
+  tt-web:
+    build: ./Dockerfile.prod
+    ports:
+      - "5000:5000"
+    volumes:
+      - ".:/app"
+    links:
+      - "tt-db:tt-web"
+    depends_on:
+      - tt-db
+    
+  tt-db:
+    image: mysql
+    environment:
+      - "MYSQL_ROOT_PASSWORD=root"
+      - "MYSQL_USER=testuser"
+      - "MYSQL_PASSWORD=admin123"
+      - "MYSQL_DATABASE=backend"
+    volumes:
+      - "./db/init.sql:/app/init.sql"
+
+  tt-redis:
+    image: redis:6

@@ -1,0 +1,20 @@
+# Stage 1: Building client build
+FROM node:18-slim as frontend-builder
+
+WORKDIR /frontend
+COPY frontend .
+RUN yarn run build
+
+# Stage 2: Final image
+FROM node:18-slim
+
+WORKDIR /app
+
+COPY --from=frontend-builder /frontend/build ./client
+COPY api ./api
+
+WORKDIR /app/api
+
+RUN yarn install
+
+CMD ["/bin/sh", "-c", "yarn run prod"]
