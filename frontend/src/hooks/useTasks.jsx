@@ -22,10 +22,7 @@ const useTasks = () => {
     } else {
       getProjectTasks(projectId);
     }
-
-    return () => {
-      dispatch(clearTasks());
-    };
+    return () => {};
   }, []);
 
   const getProjectTasks = useCallback(async (projectId) => {

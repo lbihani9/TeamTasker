@@ -96,9 +96,9 @@ const TeamModal = ({ handleClose }) => {
           /> */}
         </Tabs>
 
-        {value === 1 && <TeamProjectsModal />}
+        {value === 1 && <TeamProjectsModal handleClose={handleClose} />}
 
-        {value === 2 && <TeamLabelsModal />}
+        {value === 2 && <TeamLabelsModal handleClose={handleClose} />}
       </DialogContent>
     </Dialog>
   );

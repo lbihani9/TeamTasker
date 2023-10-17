@@ -25,14 +25,17 @@ export const tasksSlice = createSlice({
     addProjectTask: (state, action) => {
       const { projectId, task } = action.payload;
       state.items.project[projectId] = [
-        ...state.items.project[projectId],
+        ...(state.items.project[projectId] ?? []),
         { ...task },
       ];
     },
 
     addTask: (state, action) => {
       const { userId, task } = action.payload;
-      state.items.other[userId] = [...state.items.other[userId], { ...task }];
+      state.items.other[userId] = [
+        ...(state.items.other[userId] ?? []),
+        { ...task },
+      ];
     },
 
     clearTasks: (state) => {

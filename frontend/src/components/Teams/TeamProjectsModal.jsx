@@ -57,6 +57,7 @@ const TeamProjectsModal = (props) => {
 
   const handleProjectClick = (project) => {
     navigate(`/projects/${project?.id}/tasks`);
+    props.handleClose();
   };
 
   return (
