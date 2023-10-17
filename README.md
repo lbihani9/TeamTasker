@@ -53,7 +53,7 @@ TeamTasker is a web-based application that aims to streamline task management an
     yarn install
     cd ..
    ```
- - Create a `.env` file and copy the contents from `.env.dev` and update the env variables.
+ - Create a `.env` in `/api` file and copy the contents from `env.dev` and update the env variables.
    - To find the IP of the redis container:
    ```
     docker inspect -f '{{range.NetworkSettings.Networks}}{{.IPAddress}}{{end}}' tt_redis
