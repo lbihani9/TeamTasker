@@ -16,9 +16,6 @@ mysql
 # testing
 /frontent/coverage
 
-# production
-/frontend/build
-
 # misc
 /frontend/.DS_Store
 /frontend/.env.local
