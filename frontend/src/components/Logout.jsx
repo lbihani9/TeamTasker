@@ -2,10 +2,10 @@ import React from 'react';
 import { ListItem, ListItemButton, Tooltip } from '@mui/material';
 import axios from 'axios';
 import LogoutIcon from '@mui/icons-material/Logout';
-import useUserInfo from '../hooks/useUserInfo';
+import useLogin from '../hooks/useLogin';
 
 const Logout = (props) => {
-  const { logout } = useUserInfo();
+  const { logout } = useLogin();
   const handleLogout = (e) => {
     e.stopPropagation();
     logout();

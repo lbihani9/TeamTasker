@@ -56,6 +56,7 @@ const useTasks = () => {
       setLoading(true);
       // notify('Loading...');
       const res = await axios.get(`/api/v1/@me/tasks`);
+      console.log('ran task');
       dispatch(
         setTasks({
           userId: userInfo.id,

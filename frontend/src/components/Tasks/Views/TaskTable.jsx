@@ -46,15 +46,15 @@ const headers = [
 export const TaskTable = () => {
   const theme = useTheme();
   const { projectId } = useParams();
-  const { loading } = useTasks();
   const userInfo = useSelector((state) => state.auth.info);
+  const { loading } = useTasks();
   const currentProject = useSelector((state) => state.projects.current);
   const taskItems = useSelector((state) => state.tasks.items);
   const tasks =
     (projectId ? taskItems.project[projectId] : taskItems.other[userInfo.id]) ??
     [];
+    
   const navigate = useNavigate();
-
   const openTask = (id) => navigate(`/tasks/${id}`);
 
   return (

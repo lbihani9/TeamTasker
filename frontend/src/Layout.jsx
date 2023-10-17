@@ -4,20 +4,12 @@ import Box from '@mui/material/Box';
 import SecondaryNavbar from './components/Navbar/SecondaryNavbar';
 import Navbar from './components/Navbar/Navbar';
 import useUserInfo from './hooks/useUserInfo';
+import TTBackdrop from './components/Templates/TTBackdrop';
 
 const Layout = () => {
   const [open, setOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState(-1);
-  const { getUserProfile, getLoginStatus } = useUserInfo();
-
-  useEffect(() => {
-    getUserProfile();
-    // const interval = setInterval(getLoginStatus, 5 * 60 * 1000);
-
-    // return () => {
-    //   clearInterval(interval);
-    // };
-  }, []);
+  const { loading } = useUserInfo();
 
   const handleDrawerOpen = (e, index) => {
     setOpen(true);
@@ -40,21 +32,26 @@ const Layout = () => {
         }}
       />
 
+      {loading && <TTBackdrop open={loading} />}
+
       <SecondaryNavbar
         open={open}
         handleDrawerClose={handleDrawerClose}
         activeIndex={activeIndex}
       />
-      <Box
-        component='main'
-        sx={{
-          flexGrow: 1,
-          p: 1,
-          height: '100vh',
-        }}
-      >
-        <Outlet />
-      </Box>
+
+      {!loading && (
+        <Box
+          component='main'
+          sx={{
+            flexGrow: 1,
+            p: 1,
+            height: '100vh',
+          }}
+        >
+          <Outlet />
+        </Box>
+      )}
     </Box>
   );
 };

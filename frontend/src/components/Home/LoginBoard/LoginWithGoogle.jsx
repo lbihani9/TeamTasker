@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Paper } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
-import useUserInfo from '../../../hooks/useUserInfo';
+import useLogin from '../../../hooks/useLogin';
 
 const LoginWithGoogle = (props) => {
-  const { login } = useUserInfo();
+  const { login } = useLogin();
 
   return (
     <Paper

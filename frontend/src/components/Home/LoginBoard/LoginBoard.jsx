@@ -1,16 +1,8 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Grid, Stack } from '@mui/material';
 import LoginWithGoogle from './LoginWithGoogle';
-import useUserInfo from '../../../hooks/useUserInfo';
 
 const Login = () => {
-  const { getLoginStatus } = useUserInfo();
-
-  useEffect(() => {
-    getLoginStatus();
-    return () => {};
-  }, []);
-
   return (
     <Grid
       item
