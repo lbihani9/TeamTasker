@@ -43,7 +43,7 @@ TeamTasker is a web-based application that aims to streamline task management an
    ```
    docker run --name tt_redis --network=tt_net -d redis
    docker exec -it tt_redis redis-cli
-   CONFIG SET requirepass "<your_password">
+   CONFIG SET requirepass "<your_password>"
    ```
  - Ensure that you're in the same directory as the Dockerfile and run the following commands:
    ```
