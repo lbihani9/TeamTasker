@@ -1,6 +1,8 @@
 ![TeamTasker-4](https://github.com/lbihani9/TeamTasker/assets/49104508/345fbf2c-cf44-46db-892f-a59cc8e282d8)
 
 # Demo
+**Note:** Sometimes the video doesn't load on mobile phones hence it's adviced to watch this on a desktop/laptop.
+
 [Demo](https://github.com/lbihani9/TeamTasker/assets/49104508/232f655c-d712-409a-8172-e2b40a802b89)
 
 # TeamTasker
