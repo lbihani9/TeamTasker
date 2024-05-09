@@ -1,0 +1,52 @@
+version: '3'
+services:
+
+  tt_server:
+    container_name: tt_server
+    build: 
+      context: .
+      dockerfile: Dockerfile.prod
+    image: lbihani9/teamtasker:latest
+    ports:
+      - "5000:5000"
+    environment:
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_PORT=3306
+      - DB_DATABASE=TeamTasker
+      - DB_USER=root
+      - DB_IP=tt_db
+      - APP_ORIGIN=https://teamtasker.in
+      - APP_PORT=5000
+      - ENV=production
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_REDIRECT_URI=https://teamtasker.in/auth/google/callback
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - REDIS_IP=tt_redis
+      - REDIS_PORT=6379
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - REDIS_USERNAME=${REDIS_USERNAME}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - REDIRECT_URL=https://teamtasker.in
+    depends_on:
+      - tt_db
+      - tt_redis
+    
+  tt_db:
+    container_name: tt_db
+    image: mysql:8
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${REDIS_PASSWORD}
+      - MYSQL_DATABASE=TeamTasker
+    volumes:
+      - ~/dbdata:/var/lib/mysql
+
+  tt_redis:
+    container_name: tt_redis
+    image: redis:6.2.14
+    ports:
+      - "6379:6379"
+    volumes:
+      - "/var/lib/redis:/data"
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
