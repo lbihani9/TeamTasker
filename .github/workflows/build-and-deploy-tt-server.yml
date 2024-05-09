@@ -56,7 +56,7 @@ jobs:
           key: ${{ secrets.TT_SSHKEY }}
           script: |
             docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
-            docker-compose -f ~/compose.yml down --rmi all
-            docker-compose -f ~/compose.yml pull
-            docker-compose -f ~/compose.yml up -d -e ${{ secrets.ENV_VARIABLES }}
+            docker compose -f ~/compose.yml down --rmi all
+            docker compose -f ~/compose.yml pull
+            docker compose -f ~/compose.yml up -d -e ${{ secrets.ENV_VARIABLES }}
       
