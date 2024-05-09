@@ -148,11 +148,7 @@ const oAuthCallback = async (req, res) => {
       });
     }
 
-    if (process.env.ENV === 'production') {
-      res.redirect(`${process.env.REDIRECT_PROD_BASE_URL}/@me/tasks`);
-    } else {
-      res.redirect(`${process.env.REDIRECT_DEV_BASE_URL}/@me/tasks`);
-    }
+    res.redirect(`${process.env.REDIRECT_URL}/@me/tasks`);
 
     // TODO: Send email to notify about login attempt.
   } catch (error) {

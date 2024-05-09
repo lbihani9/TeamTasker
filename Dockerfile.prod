@@ -1,12 +1,23 @@
+FROM node:18-slim AS CLIENT_BUILD
+
+WORKDIR /app
+
+COPY frontend .
+
+RUN yarn install 
+
+RUN REACT_APP_BASE_URL=https://teamtasker.in yarn run build
+
 FROM node:18-slim
 
 WORKDIR /app
 
-COPY /frontend/build ./client
-COPY api ./api
+COPY --from=CLIENT_BUILD /app/build ./client/build
 
-WORKDIR /app/api
+COPY api .
 
 RUN yarn install
+
+EXPOSE 5000
 
 CMD ["/bin/sh", "-c", "yarn run prod"]
