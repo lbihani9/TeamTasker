@@ -37,7 +37,7 @@ services:
     ports:
       - "3306:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=${REDIS_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
       - MYSQL_DATABASE=TeamTasker
     volumes:
       - ~/dbdata:/var/lib/mysql
