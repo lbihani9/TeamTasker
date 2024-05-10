@@ -61,8 +61,6 @@ if (process.env.ENV === 'production') {
   app.use(express.static(path.resolve(__dirname, './client/build')));
 }
 
-sequelize.sync();
-
 app.use('/auth', authRouter);
 
 app.use('/api/v1', validateSession, router);
