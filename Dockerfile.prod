@@ -15,6 +15,7 @@ WORKDIR /app
 COPY --from=CLIENT_BUILD /app/build ./client/build
 
 COPY api .
+
 COPY entrypoint.sh .
 
 RUN yarn install
