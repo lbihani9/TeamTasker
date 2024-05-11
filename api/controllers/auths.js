@@ -200,7 +200,6 @@ const getLoginStatus = async (req, res) => {
     }
 
     const { id } = req.session.session;
-    console.log(req.session);
 
     const session = await Sessions.findByPk(id);
     if (!session) {
