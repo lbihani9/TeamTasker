@@ -1,0 +1,128 @@
+---
+- hosts: tt_server
+  gather_facts: false
+  become: true
+  user: ubuntu
+
+  tasks:
+  - name: Install apache
+    tags: apache
+    apt:
+      name: apache2
+      update_cache: yes
+      state: present
+    register: apache
+
+  - name: Enable apache modules
+    tags: apache
+    apache2_module:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - ssl
+      - proxy
+      - rewrite
+      - headers
+      - proxy_http
+    ignore_errors: yes
+    notify: restart_apache
+
+  - name: Install certbot and python3-certbot-apache
+    tags: ssl
+    apt:
+      name: "{{ item }}"
+      state: present
+    loop:
+      - certbot
+      - python3-certbot-apache
+
+  - name: Add apache virtual host configurations
+    tags: apache,ssl
+    block:
+      - name: Check if virtual host exists
+        stat:
+          path: /etc/apache2/sites-available/{{ domain }}.conf
+        register: virtual_host
+      
+      - name: Add virtual host
+        template:
+          src: apache_virtual_host_config.j2
+          dest: /etc/apache2/sites-available/{{ domain }}.conf
+          owner: root
+          group: root
+          mode: 0644
+        when: not virtual_host.stat.exists
+        notify: reload_apache
+
+      - name: Enable virtual host
+        shell: a2ensite {{ domain }}
+        when: not virtual_host.stat.exists
+        notify: reload_apache
+
+      - name: Disable default apache virtual host
+        shell: |
+          a2dissite 000-default.conf
+          a2dissite default-ssl.conf
+        when: not virtual_host.stat.exists
+        notify: reload_apache
+
+  - name: Install docker and add user to docker group
+    tags: docker
+    block:
+      - name: Check if Docker executable exists
+        stat:
+          path: /usr/bin/docker
+        register: docker
+
+      - name: Install required packages
+        apt:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        when: not docker.stat.exists
+      
+      - name: Add docker GPG apt key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+        when: not docker.stat.exists
+
+      - name: Add docker repository
+        apt_repository:
+          repo: deb https://download.docker.com/linux/ubuntu focal stable
+          state: present
+        when: not docker.stat.exists
+
+      - name: Install Docker packages
+        apt:
+          name: "{{ item }}"
+          state: present
+        loop:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-compose
+        when: not docker.stat.exists
+
+      - name: Add user to Docker group
+        user:
+          name: "ubuntu"
+          groups: docker
+          append: yes
+        when: not docker.stat.exists
+
+  handlers:
+    - name: restart_apache
+      service:
+        name: apache2
+        state: restarted
+
+    - name: reload_apache
+      service:
+        name: apache2
+        state: reloaded

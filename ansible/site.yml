@@ -1,0 +1,5 @@
+- name: "Add dns record to cloudflare"
+  import_playbook: dns.yml
+
+- name: "Provision team tasker server"
+  import_playbook: provision_tt_server.yml
