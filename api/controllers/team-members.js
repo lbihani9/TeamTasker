@@ -1,5 +1,4 @@
-const { models } = require('../db/models');
-const { sequelize } = require('../db');
+const { db, sequelize } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createTeamMember = async (req, res) => {
@@ -25,11 +24,11 @@ const createTeamMember = async (req, res) => {
       });
     }
 
-    const team = await models.Teams.findOne({
+    const team = await db.Teams.findOne({
       where: {
         id: teamId,
       },
-      include: models.Organizations,
+      include: db.Organizations,
     });
 
     if (!team) {
@@ -43,7 +42,7 @@ const createTeamMember = async (req, res) => {
     }
 
     let teamMember;
-    const user = await models.Users.findOne({
+    const user = await db.Users.findOne({
       where: {
         email,
       },
@@ -60,7 +59,7 @@ const createTeamMember = async (req, res) => {
     }
 
     await sequelize.transaction(async (transaction) => {
-      teamMember = await models.TeamMembers.create(
+      teamMember = await db.TeamMembers.create(
         {
           teamId,
           userId: user.id,
@@ -68,7 +67,7 @@ const createTeamMember = async (req, res) => {
         { transaction }
       );
 
-      await models.OrganizationMembers.create(
+      await db.OrganizationMembers.create(
         {
           organizationId: team.organization.id,
           userId: user.id,
@@ -97,7 +96,7 @@ const createTeamMember = async (req, res) => {
 
 const deleteTeamMember = async (req, res) => {
   try {
-    await models.TeamMembers.destory({
+    await db.TeamMembers.destory({
       where: {
         id: req.params.id,
       },

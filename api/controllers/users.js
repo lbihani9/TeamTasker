@@ -1,9 +1,9 @@
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createUser = async (req, res) => {
   try {
-    const user = await models.Users.create(req.body);
+    const user = await db.Users.create(req.body);
 
     res.status(201).json({
       data: user,
@@ -28,7 +28,7 @@ const patchUser = async (req, res) => {
     delete req.body.username;
     delete req.body.email;
 
-    const user = await models.Users.findByPk(req.params.id);
+    const user = await db.Users.findByPk(req.params.id);
     if (!user) {
       return res.status(400).json({
         errors: [

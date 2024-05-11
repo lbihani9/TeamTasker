@@ -20,4 +20,4 @@ RUN yarn install
 
 EXPOSE 5000
 
-CMD ["/bin/sh", "-c", "yarn run prod"]
+CMD ["/bin/sh", "-c", "entrypoint.sh"]

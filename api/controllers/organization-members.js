@@ -1,4 +1,4 @@
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createOrganizationMember = async (req, res) => {
@@ -26,12 +26,12 @@ const createOrganizationMember = async (req, res) => {
 
     let organizationMember;
     if (users.length === 1) {
-      organizationMember = await models.OrganizationMembers.create({
+      organizationMember = await db.OrganizationMembers.create({
         organizationId,
         userId: users[0].id,
       });
     } else {
-      organizationMember = await models.OrganizationMembers.bulkCreate(
+      organizationMember = await db.OrganizationMembers.bulkCreate(
         users.map((user) => ({ organizationId, userId: user.id }))
       );
     }
@@ -56,10 +56,10 @@ const createOrganizationMember = async (req, res) => {
 
 const deleteOrganizationMember = async (req, res) => {
   try {
-    const member = await models.OrganizationMembers.findByPk(req.params.id);
+    const member = await db.OrganizationMembers.findByPk(req.params.id);
 
     await sequelize.transaction(async (transaction) => {
-      await models.TeamMembers.destroy({
+      await db.TeamMembers.destroy({
         where: {
           userId: member.userId,
           organizationId: member.organizationId,

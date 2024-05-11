@@ -1,4 +1,4 @@
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createTaskAssignee = async (req, res) => {
@@ -26,13 +26,13 @@ const createTaskAssignee = async (req, res) => {
 
     let assignee;
     if (userIds.length === 1) {
-      assignee = await models.TaskAssignees.create({
+      assignee = await db.TaskAssignees.create({
         taskId: req.body.taskId,
         userId: userIds[0],
       });
     } else {
       const uniqueUserIds = new Set(userIds.map((uid) => uid));
-      assignee = await models.TaskAssignees.bulkCreate(
+      assignee = await db.TaskAssignees.bulkCreate(
         [...uniqueUserIds].map((uid) => ({
           taskId: req.body.taskId,
           userId: uid,
@@ -68,7 +68,7 @@ const createTaskAssignee = async (req, res) => {
 
 const deleteTaskAssignee = async (req, res) => {
   try {
-    await models.TaskAssignees.destroy({
+    await db.TaskAssignees.destroy({
       where: {
         id: req.params.id,
       },

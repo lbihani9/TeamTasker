@@ -1,15 +1,14 @@
 const { Op } = require('sequelize');
-const { models } = require('../db/models');
+const { db, sequelize } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
-const { sequelize } = require('../db');
 
 const createTeam = async (req, res) => {
   try {
     let team;
     await sequelize.transaction(async (transaction) => {
-      team = await models.Teams.create(req.body, { transaction });
+      team = await db.Teams.create(req.body, { transaction });
 
-      await models.TeamMembers.create(
+      await db.TeamMembers.create(
         {
           teamId: team.id,
           userId: req.user.id,
@@ -38,7 +37,7 @@ const createTeam = async (req, res) => {
 
 const patchTeam = async (req, res) => {
   try {
-    const team = await models.Teams.update(req.body, {
+    const team = await db.Teams.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -71,7 +70,7 @@ const getTeamProjects = async (req, res) => {
         projectableId: req.params.id,
       },
       include: {
-        model: models.Users,
+        model: db.Users,
         as: 'projectAuthor',
       },
     };
@@ -82,7 +81,7 @@ const getTeamProjects = async (req, res) => {
       };
     }
 
-    const projects = await models.Projects.findAll(dbQuery);
+    const projects = await db.Projects.findAll(dbQuery);
 
     res.status(200).json({
       data: projects,
@@ -118,7 +117,7 @@ const getTeamLabels = async (req, res) => {
       };
     }
 
-    const labels = await models.Labels.findAll(dbQuery);
+    const labels = await db.Labels.findAll(dbQuery);
 
     res.status(200).json({
       data: labels,
@@ -141,12 +140,12 @@ const getTeamLabels = async (req, res) => {
 const getTeamMembers = async (req, res) => {
   try {
     const { rows: members, count: total } =
-      await models.TeamMembers.findAndCountAll({
+      await db.TeamMembers.findAndCountAll({
         where: {
           teamId: req.params.id,
         },
         include: {
-          model: models.Users,
+          model: db.Users,
         },
         order: [['createdAt', 'ASC']],
       });

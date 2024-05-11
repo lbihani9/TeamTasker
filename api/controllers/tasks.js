@@ -1,6 +1,5 @@
 const { Op } = require('sequelize');
-const { sequelize } = require('../db');
-const { models } = require('../db/models');
+const { db, sequelize } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createTask = async (req, res) => {
@@ -23,33 +22,33 @@ const createTask = async (req, res) => {
 
     let task;
     await sequelize.transaction(async (transaction) => {
-      task = await models.Tasks.create({
+      task = await db.Tasks.create({
         ...req.body,
         createdBy: req.user.id,
       });
 
       if (req.body.taskableType === 'user') {
-        await models.TaskAssignees.create({
+        await db.TaskAssignees.create({
           taskId: task.id,
           userId: req.user.id,
         });
       }
     });
 
-    task = await models.Tasks.findOne({
+    task = await db.Tasks.findOne({
       where: {
         id: task.id,
       },
       include: [
-        models.Statuses,
-        models.Projects,
-        models.Users,
+        db.Statuses,
+        db.Projects,
+        db.Users,
         {
-          model: models.Users,
+          model: db.Users,
           as: 'taskAuthor',
         },
         {
-          model: models.Labels,
+          model: db.Labels,
           through: {
             attributes: [],
           },
@@ -79,20 +78,20 @@ const patchTask = async (req, res) => {
   try {
     delete req.body.createdBy;
 
-    const task = await models.Tasks.findOne({
+    const task = await db.Tasks.findOne({
       where: {
         id: req.params.id,
       },
       include: [
-        models.Users,
-        models.Projects,
-        models.Statuses,
+        db.Users,
+        db.Projects,
+        db.Statuses,
         {
-          model: models.Users,
+          model: db.Users,
           as: 'taskAuthor',
         },
         {
-          model: models.Labels,
+          model: db.Labels,
           through: {
             attributes: [],
           },
@@ -132,7 +131,7 @@ const patchTask = async (req, res) => {
 
 const deleteTask = async (req, res) => {
   try {
-    const task = await models.Tasks.findByPk(req.params.id);
+    const task = await db.Tasks.findByPk(req.params.id);
     if (!task) {
       return res.status(202).json({
         data: null,
@@ -140,7 +139,7 @@ const deleteTask = async (req, res) => {
     }
 
     await sequelize.transaction(async (transaction) => {
-      await models.TaskLabels.destroy({
+      await db.TaskLabels.destroy({
         where: {
           taskId: task.id,
         },
@@ -148,7 +147,7 @@ const deleteTask = async (req, res) => {
         force: true,
       });
 
-      await models.TaskAssignees.destroy({
+      await db.TaskAssignees.destroy({
         where: {
           taskId: task.id,
         },
@@ -156,7 +155,7 @@ const deleteTask = async (req, res) => {
         force: true,
       });
 
-      await models.TaskComments.destroy({
+      await db.TaskComments.destroy({
         where: {
           taskId: task.id,
         },
@@ -186,12 +185,12 @@ const deleteTask = async (req, res) => {
 
 const getTaskComments = async (req, res) => {
   try {
-    const comments = await models.TaskComments.findAll({
+    const comments = await db.TaskComments.findAll({
       where: {
         taskId: req.params.id,
       },
       include: {
-        model: models.Users,
+        model: db.Users,
       },
       order: [['createdAt', 'ASC']],
     });
@@ -216,19 +215,19 @@ const getTaskComments = async (req, res) => {
 
 const getTask = async (req, res) => {
   try {
-    const task = await models.Tasks.findOne({
+    const task = await db.Tasks.findOne({
       where: {
         id: req.params.id,
       },
       include: [
         {
-          model: models.Labels,
+          model: db.Labels,
           through: {
             attributes: [],
           },
         },
         {
-          model: models.Users,
+          model: db.Users,
           as: 'taskAuthor',
         },
       ],
@@ -269,7 +268,7 @@ const bulkPatchTaskLabels = async (req, res) => {
     const { remove = [], create = [] } = req.body;
 
     if (remove.length > 0) {
-      await models.TaskLabels.destroy({
+      await db.TaskLabels.destroy({
         where: {
           [Op.and]: [
             {
@@ -285,16 +284,16 @@ const bulkPatchTaskLabels = async (req, res) => {
     }
 
     if (create.length > 0) {
-      await models.TaskLabels.bulkCreate(
+      await db.TaskLabels.bulkCreate(
         create.map((c) => ({ taskId: req.params.id, labelId: c }))
       );
     }
 
-    const taskLabels = await models.TaskLabels.findAll({
+    const taskLabels = await db.TaskLabels.findAll({
       where: {
         taskId: req.params.id,
       },
-      include: models.Labels,
+      include: db.Labels,
     });
 
     res.status(200).json({

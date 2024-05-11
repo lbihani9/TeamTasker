@@ -1,17 +1,17 @@
 const { Op } = require('sequelize');
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createTaskLabel = async (req, res) => {
   try {
     const { labelId } = req.body;
 
-    await models.TaskLabels.create({
+    await db.TaskLabels.create({
       taskId: req.body.taskId,
       labelId,
     });
 
-    const label = await models.Labels.findByPk(labelId);
+    const label = await db.Labels.findByPk(labelId);
 
     res.status(201).json({
       data: label,
@@ -33,7 +33,7 @@ const createTaskLabel = async (req, res) => {
 
 const deleteTaskLabel = async (req, res) => {
   try {
-    await models.TaskLabels.destroy({
+    await db.TaskLabels.destroy({
       where: {
         id: req.params.id,
       },
