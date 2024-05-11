@@ -6,6 +6,9 @@ on:
     paths:
       - 'api/**'
       - 'frontend/**'
+      - 'Dockerfile.prod'
+      - 'compose.yml'
+      - 'entrypoint.sh'
 
 jobs:
   build-and-push:
