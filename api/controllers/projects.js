@@ -1,4 +1,4 @@
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createProject = async (req, res) => {
@@ -19,20 +19,20 @@ const createProject = async (req, res) => {
       });
     }
 
-    let project = await models.Projects.create({
+    let project = await db.Projects.create({
       ...req.body,
       createdBy: req.user.id,
     });
 
-    project = await models.Projects.findOne({
+    project = await db.Projects.findOne({
       where: {
         id: project.id,
       },
       include: [
-        models.Users,
-        models.Teams,
+        db.Users,
+        db.Teams,
         {
-          model: models.Users,
+          model: db.Users,
           as: 'projectAuthor',
         },
       ],
@@ -61,11 +61,11 @@ const patchProject = async (req, res) => {
     delete req.body.projectableType;
     delete req.body.projectableId;
 
-    const project = await models.Projects.findOne({
+    const project = await db.Projects.findOne({
       where: {
         id: req.params.id,
       },
-      include: [models.Users, models.Teams],
+      include: [db.Users, db.Teams],
     });
 
     if (!project) {
@@ -103,14 +103,14 @@ const deleteProject = async (req, res) => {};
 
 const getProjectTasks = async (req, res) => {
   try {
-    const tasks = await models.Tasks.findAll({
+    const tasks = await db.Tasks.findAll({
       where: {
         taskableType: 'project',
         taskableId: req.params.id,
       },
       include: [
         {
-          model: models.Users,
+          model: db.Users,
           through: {
             attributes: [],
           },
@@ -118,14 +118,14 @@ const getProjectTasks = async (req, res) => {
           attributes: ['id', 'name', 'email', 'username', 'avatar'],
         },
         {
-          model: models.Labels,
-          through: models.TaskLabels,
+          model: db.Labels,
+          through: db.TaskLabels,
         },
-        models.Statuses,
+        db.Statuses,
       ],
     });
 
-    const project = await models.Projects.findByPk(req.params.id);
+    const project = await db.Projects.findByPk(req.params.id);
 
     res.status(200).json({
       data: {

@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config();
 
 module.exports = {
-  'config': path.resolve('db', 'index.js'),
+  'config': path.resolve('services/database', 'index.js'),
   'models-path': path.resolve('db', 'models'),
   'migrations-path': path.resolve('db', 'migrations'),
   'seeders-path': path.resolve('db', 'seeders'),

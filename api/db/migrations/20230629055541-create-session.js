@@ -16,8 +16,8 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      expiresIn: {
-        type: Sequelize.INTEGER,
+      expiresAt: {
+        type: Sequelize.DATE,
         allowNull: false,
       },
       ip: {

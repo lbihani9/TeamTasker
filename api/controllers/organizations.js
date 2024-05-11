@@ -1,12 +1,11 @@
-const { sequelize } = require('../db');
-const { models } = require('../db/models');
+const { db, sequelize } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createOrganization = async (req, res) => {
   try {
     let organization;
     await sequelize.transaction(async (transaction) => {
-      organization = await models.Organizations.create(
+      organization = await db.Organizations.create(
         {
           ...req.body,
           ownedBy: req.user.id,
@@ -14,7 +13,7 @@ const createOrganization = async (req, res) => {
         { transaction }
       );
 
-      await models.OrganizationMembers.create(
+      await db.OrganizationMembers.create(
         {
           organizationId: organization.id,
           userId: req.user.id,
@@ -45,7 +44,7 @@ const patchOrganization = async (req, res) => {
   try {
     delete req.body.username;
 
-    const organization = await models.Organizations.update(req.body, {
+    const organization = await db.Organizations.update(req.body, {
       where: {
         id: req.params.id,
       },
@@ -71,7 +70,7 @@ const patchOrganization = async (req, res) => {
 
 const getOrganizationTeams = async (req, res) => {
   try {
-    const teams = await models.Teams.findAll({
+    const teams = await db.Teams.findAll({
       where: {
         organizationId: req.params.id,
       },
@@ -98,17 +97,17 @@ const getOrganizationTeams = async (req, res) => {
 const getOrganizationMembers = async (req, res) => {
   try {
     const { organizationSlug } = req.params;
-    const members = await models.OrganizationMembers.findAll({
+    const members = await db.OrganizationMembers.findAll({
       include: [
         {
-          model: models.Organizations,
+          model: db.Organizations,
           where: {
             username: organizationSlug,
           },
           attributes: [],
         },
         {
-          model: models.Users,
+          model: db.Users,
         },
       ],
     });

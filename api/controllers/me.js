@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const getMyProfile = async (req, res) => {
@@ -21,21 +21,21 @@ const getMyProfile = async (req, res) => {
 
 const getMyProjects = async (req, res) => {
   try {
-    const projects = await models.Projects.findAll({
+    const projects = await db.Projects.findAll({
       where: {
         projectableType: 'user',
         projectableId: req.user.id,
       },
       include: [
         {
-          model: models.Users,
+          model: db.Users,
           as: 'projectAuthor',
         },
         {
-          model: models.Users,
+          model: db.Users,
         },
         {
-          model: models.Teams,
+          model: db.Teams,
         },
       ],
     });
@@ -60,17 +60,17 @@ const getMyProjects = async (req, res) => {
 
 const getMyLabels = async (req, res) => {
   try {
-    const { count: total, rows: labels } = await models.Labels.findAndCountAll({
+    const { count: total, rows: labels } = await db.Labels.findAndCountAll({
       where: {
         labelableType: 'user',
         labelableId: req.user.id,
       },
       include: [
         {
-          model: models.Users,
+          model: db.Users,
         },
         {
-          model: models.Teams,
+          model: db.Teams,
         },
       ],
     });
@@ -95,10 +95,10 @@ const getMyLabels = async (req, res) => {
 
 const getMyOrganizations = async (req, res) => {
   try {
-    const organizations = await models.Organizations.findAll({
+    const organizations = await db.Organizations.findAll({
       include: [
         {
-          model: models.Users,
+          model: db.Users,
           through: {
             attributes: [],
           },
@@ -130,22 +130,22 @@ const getMyOrganizations = async (req, res) => {
 
 const getMyTask = async (req, res) => {
   try {
-    const task = await models.Tasks.findOne({
+    const task = await db.Tasks.findOne({
       where: {
         id: req.params.id,
       },
       include: [
         {
-          model: models.Labels,
-          through: models.TaskLabels,
+          model: db.Labels,
+          through: db.TaskLabels,
         },
         {
-          model: models.Users,
+          model: db.Users,
           as: 'taskAuthor',
         },
-        models.Statuses,
-        models.Users,
-        models.Projects,
+        db.Statuses,
+        db.Users,
+        db.Projects,
       ],
     });
 
@@ -169,10 +169,10 @@ const getMyTask = async (req, res) => {
 
 const getMyTasks = async (req, res) => {
   try {
-    const tasks = await models.Tasks.findAll({
+    const tasks = await db.Tasks.findAll({
       include: [
         {
-          model: models.Users,
+          model: db.Users,
           through: {
             attributes: [],
           },
@@ -183,12 +183,12 @@ const getMyTasks = async (req, res) => {
           attributes: ['id', 'name', 'email', 'username', 'avatar'],
         },
         {
-          model: models.Labels,
-          through: models.TaskLabels,
+          model: db.Labels,
+          through: db.TaskLabels,
         },
-        models.Statuses,
-        models.Projects,
-        models.Users,
+        db.Statuses,
+        db.Projects,
+        db.Users,
       ],
     });
 

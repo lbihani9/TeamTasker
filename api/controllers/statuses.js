@@ -1,7 +1,6 @@
 const { Sequelize, Op } = require('sequelize');
-const { models } = require('../db/models');
+const { db, sequelize } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
-const { sequelize } = require('../db');
 
 const createStatus = async (req, res) => {
   try {
@@ -23,7 +22,7 @@ const createStatus = async (req, res) => {
 
     let status;
     await sequelize.transaction(async (transaction) => {
-      let maxOrder = await models.Statuses.max('order', {
+      let maxOrder = await db.Statuses.max('order', {
         where: {
           statusableType: req.body.statusableType,
           statusableId: req.body.statusableId,
@@ -35,7 +34,7 @@ const createStatus = async (req, res) => {
         maxOrder = 0;
       }
 
-      status = await models.Statuses.create(
+      status = await db.Statuses.create(
         {
           ...req.body,
           order: maxOrder + 1,
@@ -65,11 +64,11 @@ const createStatus = async (req, res) => {
 const patchStatus = async (req, res) => {
   try {
     let { order: newOrder } = req.body;
-    let status = await models.Statuses.findOne({
+    let status = await db.Statuses.findOne({
       where: {
         id: req.params.id,
       },
-      include: [models.Users, models.Projects],
+      include: [db.Users, db.Projects],
     });
 
     if (!status) {
@@ -105,7 +104,7 @@ const patchStatus = async (req, res) => {
 
     await sequelize.transaction(async (transaction) => {
       if (newOrder < currentOrder) {
-        await models.Statuses.update(
+        await db.Statuses.update(
           {
             order: Sequelize.literal('`order` + 1'),
           },
@@ -124,7 +123,7 @@ const patchStatus = async (req, res) => {
           }
         );
       } else {
-        await models.Statuses.update(
+        await db.Statuses.update(
           {
             order: Sequelize.literal('`order` - 1'),
           },
@@ -169,7 +168,7 @@ const patchStatus = async (req, res) => {
 
 const deleteStatus = async (req, res) => {
   try {
-    const status = await models.Statuses.findByPk(req.params.id);
+    const status = await db.Statuses.findByPk(req.params.id);
     if (!status) {
       return res.status(204).json({
         data: null,
@@ -179,7 +178,7 @@ const deleteStatus = async (req, res) => {
     const currentOrder = status.order;
 
     await sequelize.transaction(async (transaction) => {
-      await models.Statuses.update(
+      await db.Statuses.update(
         {
           order: Sequelize.literal('`order` - 1'),
         },

@@ -1,9 +1,9 @@
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createTaskComment = async (req, res) => {
   try {
-    const comment = await models.TaskComments.create({
+    const comment = await db.TaskComments.create({
       ...req.body,
       createdBy: req.user.id,
     });
@@ -37,12 +37,12 @@ const patchTaskComment = async (req, res) => {
   try {
     const { comment = null } = req.body;
 
-    const commentInstance = await models.TaskComments.findOne({
+    const commentInstance = await db.TaskComments.findOne({
       where: {
         id: req.params.id,
       },
       include: {
-        model: models.Users,
+        model: db.Users,
       },
     });
 
@@ -84,7 +84,7 @@ const patchTaskComment = async (req, res) => {
 
 const deleteTaskComment = async (req, res) => {
   try {
-    const commentInstance = await models.TaskComments.findByPk(req.params.id);
+    const commentInstance = await db.TaskComments.findByPk(req.params.id);
     if (!commentInstance) {
       return res.status(202).json({
         data: null,

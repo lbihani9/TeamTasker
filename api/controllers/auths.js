@@ -1,13 +1,11 @@
 const { default: axios } = require('axios');
 const { v4: uuidv4 } = require('uuid');
-const { models } = require('../db/models');
-const { Sessions, Users } = models;
+const { db } = require('../services/database');
+const { Sessions, Users } = db;
 const moment = require('moment');
-const { redisClient } = require('../redis');
-const {
-  SESSION_EXPIRY_TIME_IN_MS,
-  REDIS_SESSION_KEY_PREFIX,
-} = require('../utils/constants');
+const { SESSION_EXPIRY_TIME_IN_MS } = require('../utils/constants');
+const { Op } = require('sequelize');
+const nanoid = require('nanoid');
 
 const login = async (req, res) => {
   try {
@@ -92,60 +90,42 @@ const oAuthCallback = async (req, res) => {
     );
     const { email, name, picture, given_name } = userInfo.data;
 
-    let user = await Users.findOne({ where: { email } });
-    if (!user) {
-      /**
-       * uuids are very large (36 characters) and we only want to use it to make usernames unique.
-       * We can use the first 9 characters of uuidv4 because the probability of two uuids having same
-       * initial 9 characters is infinitesimally small, so we're good to go.
-       */
-      const usernameUUID = uuidv4().split('-')[0];
-      user = await Users.create({
+    /**
+     * uuids are very large (36 characters) and we only want to use it to make usernames unique.
+     * We can use the first 9 characters of uuidv4 because the probability of two uuids having same
+     * initial 9 characters is infinitesimally small, so we're good to go.
+     */
+    const usernameUUID = uuidv4().split('-')[0];
+    const [user, _] = await Users.findOrCreate({
+      where: {
+        email,
+      },
+      defaults: {
         email,
         name,
         username: `${given_name}-${usernameUUID}`,
         avatar: picture,
-      });
-    }
+      },
+    });
 
-    const session = await Sessions.findOne({ where: { userId: user.id } });
-    let sessionFound = session !== null;
-
-    if (session) {
-      const expireOn = moment(session.updatedAt).add(
-        session.expiresIn,
-        'milliseconds'
-      );
-      const isSessionActive = expireOn.isAfter(moment(session.updatedAt));
-
-      // It's because redis couldn't find the data maybe because connect.sid was missing, or the session expired so it was removed from redis.
-      if (session.sessionId !== req.session.id) {
-        await redisClient.del(
-          `${REDIS_SESSION_KEY_PREFIX}${session.sessionId}`
-        );
-
-        // TODO (Lokesh): Later implement session restoration.
-      }
-
-      // If session active, then redis will use prev session id but if session is inactive then redis will use new session id.
-      session.sessionId = req.session.id;
-
-      // In case session has expired, we'll update the expiry time.
-      if (!isSessionActive) {
-        session.expiresIn = SESSION_EXPIRY_TIME_IN_MS;
-      }
-    }
-
-    req.session.userId = user.id;
-
-    if (sessionFound) {
-      await session.save();
-    } else {
-      await Sessions.create({
+    const [session, isNewSession] = await Sessions.findOrCreate({
+      where: {
         userId: user.id,
-        sessionId: req.session.id,
-        expiresIn: SESSION_EXPIRY_TIME_IN_MS,
-      });
+        expiresAt: {
+          [Op.gt]: moment().toDate(),
+        },
+      },
+      defaults: {
+        userId: user.id,
+        expiresAt: moment()
+          .add(SESSION_EXPIRY_TIME_IN_MS, 'milliseconds')
+          .toDate(),
+        sessionId: nanoid(),
+      },
+    });
+
+    if (isNewSession || !req.session) {
+      req.session.session = session;
     }
 
     res.redirect(`${process.env.REDIRECT_URL}/@me/tasks`);
@@ -171,7 +151,7 @@ const logout = async (req, res) => {
      * 2. when session has expired.
      * 3. when somewhere in the codebase, this information was deleted.
      */
-    if (!req.session || !req.session.userId) {
+    if (!req.session?.session) {
       res.status(200).json({
         data: {
           url: 'login',
@@ -180,16 +160,18 @@ const logout = async (req, res) => {
       return;
     }
 
-    const session = await Sessions.findOne({
-      where: { userId: req.session.userId },
-    });
+    const { id } = req.session.session;
+    const session = await Sessions.findByPk(id);
+
     req.session.destroy(async (err) => {
       if (err) {
         console.log(err);
       }
+
       if (session) {
         await session.destroy({ force: true });
       }
+
       res.status(200).json({
         data: {
           url: 'login',
@@ -209,7 +191,7 @@ const logout = async (req, res) => {
 const getLoginStatus = async (req, res) => {
   try {
     let status = false;
-    if (!req.session || !req.session.userId) {
+    if (!req.session?.session) {
       return res.status(200).json({
         data: {
           status,
@@ -217,9 +199,10 @@ const getLoginStatus = async (req, res) => {
       });
     }
 
-    const session = await Sessions.findOne({
-      where: { userId: req.session.userId },
-    });
+    const { id } = req.session.session;
+    console.log(req.session);
+
+    const session = await Sessions.findByPk(id);
     if (!session) {
       return res.status(200).json({
         data: {

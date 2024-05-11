@@ -1,13 +1,33 @@
 require('dotenv').config();
+require('./services/logger').createLoggerInstance();
+require('./services/database').createDbInstance();
+require('./services/cache').createRedisInstance();
+
 const express = require('express');
-const app = express();
 const cors = require('cors');
 const path = require('path');
 const { router } = require('./routers/routes');
-const { sequelize } = require('./db');
-const { redisStore, session } = require('./redis');
 const { authRouter } = require('./routers/auths');
 const { validateSession } = require('./middlewares/validate-session');
+const session = require('express-session');
+const RedisStore = require('connect-redis').default;
+const { redis } = require('./services/cache');
+const { REDIS_SESSION_KEY_PREFIX } = require('./utils/constants');
+const morgan = require('morgan');
+const { logger } = require('./services/logger');
+
+const redisStore = new RedisStore({
+  client: redis,
+  prefix: REDIS_SESSION_KEY_PREFIX,
+});
+
+const app = express();
+
+app.use(
+  morgan(':method :url :status :res[content-length] - :response-time ms', {
+    stream: logger.stream,
+  })
+);
 
 if (process.env.ENV === 'production') {
   app.set('trust proxy', 1);
@@ -74,5 +94,5 @@ app.get('*', (req, res) => {
 });
 
 app.listen(process.env.APP_PORT, () => {
-  console.log(`Express server is listening on port ${process.env.APP_PORT}`);
+  logger.info(`Express server is listening on port ${process.env.APP_PORT}`);
 });

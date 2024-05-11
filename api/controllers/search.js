@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const { models } = require('../db/models');
+const { db } = require('../services/database');
 
 const getProjectActionItems = async (req, res) => {
   try {
@@ -20,7 +20,7 @@ const getProjectActionItems = async (req, res) => {
       };
     }
 
-    const projects = await models.Projects.findAll(dbQuery);
+    const projects = await db.Projects.findAll(dbQuery);
 
     res.status(200).json({
       data: projects,
@@ -41,12 +41,12 @@ const getLabelActionItems = async (req, res) => {
   try {
     const { taskId, text = null, fields = null } = req.query;
 
-    const task = await models.Tasks.findOne({
+    const task = await db.Tasks.findOne({
       where: {
         id: taskId,
       },
       include: {
-        model: models.Labels,
+        model: db.Labels,
         attributes: ['id'],
       },
     });
@@ -81,7 +81,7 @@ const getLabelActionItems = async (req, res) => {
       };
     }
 
-    const labels = await models.Labels.findAll(dbQuery);
+    const labels = await db.Labels.findAll(dbQuery);
     res.status(200).json({
       data: labels,
     });

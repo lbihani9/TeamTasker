@@ -1,5 +1,4 @@
-const { sequelize } = require('../db');
-const { models } = require('../db/models');
+const { db, sequelize } = require('../services/database');
 const { controllerErrorHandler } = require('../utils/utils');
 
 const createLabel = async (req, res) => {
@@ -20,12 +19,12 @@ const createLabel = async (req, res) => {
       });
     }
 
-    let label = await models.Labels.create(req.body);
-    label = await models.Labels.findOne({
+    let label = await db.Labels.create(req.body);
+    label = await db.Labels.findOne({
       where: {
         id: label.id,
       },
-      include: [models.Users, models.Teams],
+      include: [db.Users, db.Teams],
     });
 
     res.status(201).json({
@@ -51,11 +50,11 @@ const patchLabel = async (req, res) => {
     delete req.body.labelableType;
     delete req.body.labelableId;
 
-    const label = await models.Labels.findOne({
+    const label = await db.Labels.findOne({
       where: {
         id: req.params.id,
       },
-      include: [models.Users, models.Teams],
+      include: [db.Users, db.Teams],
     });
 
     if (!label) {
@@ -90,7 +89,7 @@ const patchLabel = async (req, res) => {
 
 const deleteLabel = async (req, res) => {
   try {
-    const label = await models.Labels.findByPk(req.params.id);
+    const label = await db.Labels.findByPk(req.params.id);
     if (!label) {
       return res.status(200).json({
         data: null,
@@ -98,7 +97,7 @@ const deleteLabel = async (req, res) => {
     }
 
     await sequelize.transaction(async (transaction) => {
-      await models.TaskLabels.destroy({
+      await db.TaskLabels.destroy({
         where: {
           labelId: label.id,
         },
