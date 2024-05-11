@@ -1,0 +1,14 @@
+---
+- hosts: localhost
+
+  tasks:
+  - name: Add DNS record
+    community.general.cloudflare_dns:
+      zone: "teamtasker.in"
+      record: "@"
+      type: "A"
+      value: "{{ tt_server_ip }}"
+      account_email: "{{ cf_account_email }}"
+      account_api_token: "{{ cf_api_key }}"
+      state: present
+    register: record
