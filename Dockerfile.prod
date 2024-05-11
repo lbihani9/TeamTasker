@@ -17,9 +17,10 @@ COPY --from=CLIENT_BUILD /app/build ./client/build
 COPY api .
 
 COPY entrypoint.sh .
+RUN chmod +x entrypoint.sh
 
 RUN yarn install
 
 EXPOSE 5000
 
-CMD ["/bin/sh", "-c", "entrypoint.sh"]
+CMD ["/bin/sh", "-c", "./entrypoint.sh"]
